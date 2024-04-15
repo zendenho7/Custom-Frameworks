@@ -10,6 +10,7 @@ Copyright (c) 2024 Zen Ho
 
 #include "..\Header\pch.hpp"
 #include "..\Resource\resource.h"
+#include "..\Header\Systems.hpp"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -23,16 +24,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(nCmdShow);
     
     sf::RenderWindow window(sf::VideoMode(1600, 900), "Baby Carlos", sf::Style::Default);
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+
+    CreateConsole();
     
     //Set Icon For Window
     if (HWND hwnd{ window.getSystemHandle() }) {
-        std::cout << "HERE" << '\n';
         HICON hMyIcon{ LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1)) };
         SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hMyIcon);
         SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hMyIcon);
     }
+
+    //Shape Init
+    sf::CircleShape shape(100.f);
+    shape.setFillColor(sf::Color::Green);
 
     while (window.isOpen())
     {
@@ -47,6 +51,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         window.draw(shape);
         window.display();
     }
+
+    // Free the console before exiting
+    FreeConsole();
 
     return 0;
 }
