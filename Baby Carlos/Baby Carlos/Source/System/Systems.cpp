@@ -21,6 +21,7 @@ Copyright (c) 2024 Zen Ho
 // ================================================================================
 
 Systems::EventHandler* systemEvents;
+Systems::FrameTime* timeKeeper;
 
 // ================================================================================
 // Function: Constructors Window & Event Handler
@@ -133,4 +134,23 @@ bool Systems::EventHandler::keyReleased(sf::Keyboard::Scancode keycode) {
     else {
         return false;
     }
+}
+
+// ================================================================================
+// Function: Frame & Time Handling
+// ================================================================================
+
+void Systems::FrameTime::UpdateFrameTime() {
+
+    //Elapsed Frame & Time Calculation
+    elapsedTime = clock.getElapsedTime();
+    ++elapsedFrame;
+
+    //Delta Time Calculation
+    currTime = elapsedTime;
+    deltaTime = currTime.asSeconds() - prevTime.asSeconds();
+    prevTime = currTime;
+
+    //FrameRate Calculation ( FPS )
+    frameRate = sf::seconds(1.0f).asSeconds() / deltaTime;
 }

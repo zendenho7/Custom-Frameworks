@@ -41,6 +41,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     systemEvents->CreateConsole(true);
     systemEvents = new Systems::EventHandler(sf::VideoMode(1600, 900), "Baby Carlos", sf::Style::Default);
     systemEvents->SetIcon(hInstance);
+    systemEvents->window.setFramerateLimit(60);
+
+    //Initialize Time Keeper
+    timeKeeper = new Systems::FrameTime();
 
     //Initialize GameState
     GSManager::GameStateInit(GSManager::GS_SPLASH_SCREEN);
@@ -64,10 +68,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
         //Game Update & Draw Loop
         while (GSCurrent == GSNext) {
+            //Update Time
+            timeKeeper->UpdateFrameTime();
+
+            //Update Loop
             while (systemEvents->pollEvents()) {
                 fpUpdate();
             }
 
+            //Draw
             fpDraw();
         }
 
@@ -86,6 +95,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     
     //Destroy Event Handler
     delete systemEvents;
+    delete timeKeeper;
 
     return 0;
 }

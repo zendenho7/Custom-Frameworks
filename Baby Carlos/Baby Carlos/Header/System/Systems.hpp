@@ -55,11 +55,35 @@ namespace Systems {
 		bool keyChecked(sf::Keyboard::Scancode keycode);
 		bool keyReleased(sf::Keyboard::Scancode keycode);
 	};
+
+	// ================================================================================
+	// Class: Frame & Time Handling
+	// ================================================================================
+
+	class FrameTime {
+	private:
+		sf::Clock clock;
+		sf::Time currTime;
+		sf::Time prevTime;
+	public:
+		sf::Time elapsedTime;
+		int elapsedFrame;
+
+		float frameRate;
+		float deltaTime;
+
+		//Constructor
+		FrameTime() : clock(), currTime(clock.getElapsedTime()), prevTime(clock.getElapsedTime()), elapsedTime(clock.getElapsedTime()), elapsedFrame{0}, frameRate{0.0f}, deltaTime{0.0f} {}
+		
+		//Update Time & Frame Components
+		void UpdateFrameTime();
+	};
 }
 
 // ================================================================================
 // External System & Events Handler Object
 // ================================================================================
 extern Systems::EventHandler* systemEvents;
+extern Systems::FrameTime* timeKeeper;
 
 #endif // !SYSTEMS_HPP

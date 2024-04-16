@@ -28,7 +28,7 @@ void SplashScreen::Update() {
 }
 
 void SplashScreen::Draw() {
-	systemEvents->window.display();
+
 }
 
 void SplashScreen::Free() {
