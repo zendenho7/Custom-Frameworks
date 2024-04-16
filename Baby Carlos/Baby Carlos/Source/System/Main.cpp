@@ -20,7 +20,6 @@ Copyright (c) 2024 Zen Ho
 // EXTERNALS
 // ================================================================================
 
-   Systems::EventHandler* systemEvents;
 
 // ================================================================================
 // WINMAIN ENTRY
@@ -47,12 +46,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     GSManager::GameStateInit(GSManager::GS_SPLASH_SCREEN);
 
     //Game Loop
-    while (current != GSManager::GS_EXIT)
+    while (GSCurrent != GSManager::GS_EXIT)
     {
         //Check If GameState Is Restarted
-        if (current == GSManager::GS_RESTART) {
-            current = previous;
-            next = previous;
+        if (GSCurrent == GSManager::GS_RESTART) {
+            GSCurrent = GSPrevious;
+            GSNext = GSPrevious;
         }
         else {
             //Load & Update GameState
@@ -64,7 +63,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         fpInit();
 
         //Game Update & Draw Loop
-        while (current == next) {
+        while (GSCurrent == GSNext) {
             while (systemEvents->pollEvents()) {
                 fpUpdate();
             }
@@ -76,13 +75,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         fpFree();
 
         //If Not Restart Unload
-        if (next != GSManager::GS_RESTART) {
+        if (GSNext != GSManager::GS_RESTART) {
             fpUnload();
         }
 
         //Store Previous & Set Current
-        previous = current;
-        current = next;
+        GSPrevious = GSCurrent;
+        GSCurrent = GSNext;
     }
     
     //Destroy Event Handler

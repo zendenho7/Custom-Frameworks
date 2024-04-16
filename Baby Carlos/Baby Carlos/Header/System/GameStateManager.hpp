@@ -42,4 +42,10 @@ namespace GSManager {
 	void GameStateUpdate(void);
 }
 
+// ================================================================================
+// External GameState Variables
+// ================================================================================
+extern GSManager::GameStates GSCurrent, GSNext, GSPrevious;
+extern GSManager::FP fpLoad, fpInit, fpUpdate, fpDraw, fpFree, fpUnload;
+
 #endif // !GS_MANAGER

@@ -57,4 +57,9 @@ namespace Systems {
 	};
 }
 
+// ================================================================================
+// External System & Events Handler Object
+// ================================================================================
+extern Systems::EventHandler* systemEvents;
+
 #endif // !SYSTEMS_HPP

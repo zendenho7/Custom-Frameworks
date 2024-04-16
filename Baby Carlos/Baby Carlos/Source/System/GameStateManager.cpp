@@ -18,19 +18,19 @@ Copyright (c) 2024 Zen Ho
 // EXTERNALS
 // ================================================================================
 
-GSManager::GameStates current = GSManager::GS_SPLASH_SCREEN, next = GSManager::GS_SPLASH_SCREEN, previous = GSManager::GS_SPLASH_SCREEN;
+GSManager::GameStates GSCurrent = GSManager::GS_SPLASH_SCREEN, GSNext = GSManager::GS_SPLASH_SCREEN, GSPrevious = GSManager::GS_SPLASH_SCREEN;
 GSManager::FP fpLoad = nullptr, fpInit = nullptr, fpUpdate = nullptr, fpDraw = nullptr, fpFree = nullptr, fpUnload = nullptr;
 
 // ================================================================================
 // Functions: GameState Management Functions
 // ================================================================================
 void GSManager::GameStateInit(GameStates startState) {
-	previous = current = next = startState;
+	GSPrevious = GSCurrent = GSNext = startState;
 }
 
 void GSManager::GameStateUpdate() {
 
-	switch (current) {
+	switch (GSCurrent) {
 	case GS_SPLASH_SCREEN:
 		fpLoad = SplashScreen::Load;
 		fpInit = SplashScreen::Init;

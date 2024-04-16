@@ -14,8 +14,13 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\System\pch.hpp"
 #include "..\..\Resource\resource.h"
 #include "..\..\Header\System\Systems.hpp"
-#include "..\..\Header\System\GameStateManager.hpp"
 #include "..\..\Header\System\Utils.hpp"
+
+// ================================================================================
+// EXTERNALS
+// ================================================================================
+
+Systems::EventHandler* systemEvents;
 
 // ================================================================================
 // Function: Constructors Window & Event Handler
@@ -72,7 +77,7 @@ bool Systems::EventHandler::pollEvents() {
     if ((event.type == sf::Event::Closed || keyTriggered(sf::Keyboard::Scancode::Escape)) && result) {
 
         //Break GameLoop
-        next = GSManager::GS_EXIT;
+       GSNext = GSManager::GS_EXIT;
 
         // Free the console before exiting
         if (GetConsoleWindow()) {

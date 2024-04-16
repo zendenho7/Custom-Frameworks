@@ -18,11 +18,4 @@ Copyright (c) 2024 Zen Ho
 // EXTERALS
 // ================================================================================
 
-//GameStates
-extern GSManager::GameStates current, next, previous;
-extern GSManager::FP fpLoad, fpInit, fpUpdate, fpDraw, fpFree, fpUnload;
-
-//Window & Events
-extern Systems::EventHandler* systemEvents;
-
 #endif // !UTILS_HPP
