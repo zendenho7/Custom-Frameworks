@@ -8,8 +8,8 @@
 Copyright (c) 2024 Zen Ho
 *****************************************************************************************************************/
 
-#include "..\Header\pch.hpp"
-#include "..\Header\Systems.hpp"
+#include "..\..\Header\System\pch.hpp"
+#include "..\..\Header\System\Systems.hpp"
 
 Systems::EventHandler* systemEvents;
 

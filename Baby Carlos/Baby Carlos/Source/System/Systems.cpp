@@ -1,7 +1,7 @@
 
-#include "..\Header\pch.hpp"
-#include "..\Resource\resource.h"
-#include "..\Header\Systems.hpp"
+#include "..\..\Header\System\pch.hpp"
+#include "..\..\Resource\resource.h"
+#include "..\..\Header\System\Systems.hpp"
 
 // ================================================================================
 // Function: Constructors Window & Event Handler
