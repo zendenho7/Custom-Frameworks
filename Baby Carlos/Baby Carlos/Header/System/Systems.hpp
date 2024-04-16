@@ -1,26 +1,40 @@
+/*****************************************************************************************************************
+@file         Systems.hpp
+@project      BABY CARLOS
+@author       Zen Ho
+@brief        This file contains the declarations of objects used to manage the application systems
+
+Copyright (c) 2024 Zen Ho
+*****************************************************************************************************************/
 
 #ifndef SYSTEMS_HPP
 #define SYSTEMS_HPP
 
 namespace Systems {
 
-	//Window Handling
+	// ================================================================================
+	// Class: Window Handler
+	// ================================================================================
 	class WindowHandler {
 	public:
 		//System Window
 		sf::RenderWindow window;
 
-		//Constructor
+		//Constructors
+		WindowHandler() : window() {}
 		WindowHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
 
 		void CreateConsole(bool debugging);
 
 		void SetIcon(HINSTANCE const& hInstance);
 
+		//Virtual Destructor
 		virtual ~WindowHandler(){}
 	};
 
-	//Events Handling
+	// ================================================================================
+	// Class: Event Handler Derived From WindowHandler
+	// ================================================================================
 	class EventHandler : public WindowHandler {
 	private:
 		//Input Handling For Events
@@ -29,7 +43,8 @@ namespace Systems {
 		//System Events
 		sf::Event event;
 
-		//Constructor
+		//Constructors
+		EventHandler() : WindowHandler(), triggered{ false }, event() {}
 		EventHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
 
 		//Polling Events

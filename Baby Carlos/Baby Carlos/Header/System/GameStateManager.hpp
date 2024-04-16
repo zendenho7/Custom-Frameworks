@@ -1,37 +1,45 @@
 /*****************************************************************************************************************
-@file         pch.hpp
+@file         GameStateManager.hpp
 @project      BABY CARLOS
 @author       Zen Ho
-@brief        This file includes all the external include header files
+@brief        This is the header file to the gamestate manager
 
 Copyright (c) 2024 Zen Ho
 *****************************************************************************************************************/
 
 #pragma once
 
-#ifndef PCH_HPP
-#define PCH_HPP
+#ifndef GS_MANAGER
+#define GS_MANAGER
 
 // ================================================================================
-// SFML INCLUDES
+// INCLUDES
 // ================================================================================
-#include <SFML/Graphics.hpp>
-#include<SFML/Audio.hpp>
-#include<SFML/System.hpp>
-#include <SFML/Window.hpp>
+
+#include "..\..\Header\Menu\SplashScreen.hpp"
+#include "..\..\Header\Menu\MainMenu.hpp"
 
 // ================================================================================
-// STL INCLUDES
+// GS Manager Namespace
 // ================================================================================
-#include <crtdbg.h> // To check for memory leaks
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <cmath>
-#include <vector>
-#include <array>
-#include <algorithm>
-#include <Windows.h>
-#include <memory>
 
-#endif // !PCH_HPP
+namespace GSManager {
+	//GameState Constants
+	enum GameStates : unsigned char {
+		GS_SPLASH_SCREEN = 0,
+		GS_MAIN_MENU,
+
+		//DONT TOUCH GS
+		GS_RESTART,
+		GS_EXIT
+	};
+
+	//Function Pointer
+	typedef void(*FP)(void);
+
+	//GameState Functions
+	void GameStateInit(GameStates startState);
+	void GameStateUpdate(void);
+}
+
+#endif // !GS_MANAGER

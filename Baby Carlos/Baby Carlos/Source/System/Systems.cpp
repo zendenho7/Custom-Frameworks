@@ -1,7 +1,21 @@
+/*****************************************************************************************************************
+@file         Systems.cpp
+@project      BABY CARLOS
+@author       Zen Ho
+@brief        This file contains the defintions of objects used to manage the application systems
+
+Copyright (c) 2024 Zen Ho
+*****************************************************************************************************************/
+
+// ================================================================================
+// INCLUDES
+// ================================================================================
 
 #include "..\..\Header\System\pch.hpp"
 #include "..\..\Resource\resource.h"
 #include "..\..\Header\System\Systems.hpp"
+#include "..\..\Header\System\GameStateManager.hpp"
+#include "..\..\Header\System\Utils.hpp"
 
 // ================================================================================
 // Function: Constructors Window & Event Handler
@@ -57,11 +71,15 @@ bool Systems::EventHandler::pollEvents() {
     //Check For Escaping Application Events
     if ((event.type == sf::Event::Closed || keyTriggered(sf::Keyboard::Scancode::Escape)) && result) {
 
+        //Break GameLoop
+        next = GSManager::GS_EXIT;
+
         // Free the console before exiting
         if (GetConsoleWindow()) {
             FreeConsole();
         }
 
+        //Close Window
         window.close();
     }
 
