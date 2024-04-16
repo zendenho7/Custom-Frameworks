@@ -11,6 +11,8 @@ Copyright (c) 2024 Zen Ho
 #include "..\Header\pch.hpp"
 #include "..\Header\Systems.hpp"
 
+Systems::EventHandler* systemEvents;
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
     _In_ LPWSTR    lpCmdLine,
@@ -21,39 +23,31 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
     UNREFERENCED_PARAMETER(nCmdShow);
 
-    //Create Debugging Console
-    CreateConsole(true);
-    
-    //Window System Init
-    sf::RenderWindow window(sf::VideoMode(1600, 900), "Baby Carlos", sf::Style::Default);
-
-    //Set Systems Icon
-    SetIcon(hInstance, window.getSystemHandle());
+    //Initialize Systems & Events
+    systemEvents->CreateConsole(true);
+    systemEvents = new Systems::EventHandler(sf::VideoMode(1600, 900), "Baby Carlos", sf::Style::Default);
+    systemEvents->SetIcon(hInstance);
 
     //Shape Init
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
 
-    while (window.isOpen())
+    while (systemEvents->window.isOpen())
     {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed) {
+        while (systemEvents->pollEvents()) {
 
-                // Free the console before exiting
-                if (GetConsoleWindow()) {
-                    FreeConsole();
-                }
-
-                window.close();
+            if (systemEvents->keyTriggered(sf::Keyboard::Scancode::A)) {
+                std::cout << systemEvents->event.key.scancode << '\n';
             }
         }
 
-        window.clear();
-        window.draw(shape);
-        window.display();
+        systemEvents->window.clear();
+        systemEvents->window.draw(shape);
+        systemEvents->window.display();
     }
+
+    //Delete Window System Events
+    delete systemEvents;
 
     return 0;
 }

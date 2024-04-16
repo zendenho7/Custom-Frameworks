@@ -26,5 +26,6 @@ Copyright (c) 2024 Zen Ho
 #include <array>
 #include <algorithm>
 #include <Windows.h>
+#include <memory>
 
 #endif // !PCH_HPP
