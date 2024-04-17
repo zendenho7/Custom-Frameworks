@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         SplashScreen.hpp
-@project      BABY CARLOS
+@project      SUPER CARLOS
 @author       Zen Ho
 @brief        This is the header file of our SplashScreen game state
 

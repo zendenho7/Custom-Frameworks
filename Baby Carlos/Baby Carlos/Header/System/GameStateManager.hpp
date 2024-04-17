@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         GameStateManager.hpp
-@project      BABY CARLOS
+@project      SUPER CARLOS
 @author       Zen Ho
 @brief        This is the header file to the gamestate manager
 

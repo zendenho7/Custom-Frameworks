@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Systems.cpp
-@project      BABY CARLOS
+@project      SUPER CARLOS
 @author       Zen Ho
 @brief        This file contains the defintions of objects used to manage the application systems
 
@@ -31,7 +31,7 @@ Systems::WindowHandler::WindowHandler(sf::VideoMode mode, const sf::String& titl
     : window(mode, title, style, settings) {}
 
 Systems::EventHandler::EventHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style, const sf::ContextSettings& settings)
-    : triggered{ false }, event{ sf::Event() }, WindowHandler(mode, title, style, settings) {}
+    : triggered{ false }, released{ false }, event{ sf::Event() }, WindowHandler(mode, title, style, settings) {}
 
 // ================================================================================
 // Function: System Input Handling
@@ -127,8 +127,14 @@ bool Systems::EventHandler::keyChecked(sf::Keyboard::Scancode keycode) {
 
 bool Systems::EventHandler::keyReleased(sf::Keyboard::Scancode keycode) {
 
+    //Released Flag Reset
+    if (event.type != sf::Event::KeyReleased) {
+        released = false;
+    }
+
     //Check For Key Released
-    if (event.type == sf::Event::KeyReleased && event.key.scancode == keycode) {
+    if ((event.type == sf::Event::KeyReleased && event.key.scancode == keycode) && !released) {
+        released = true;
         return true;
     }
     else {

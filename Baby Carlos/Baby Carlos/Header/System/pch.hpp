@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         pch.hpp
-@project      BABY CARLOS
+@project      SUPER CARLOS
 @author       Zen Ho
 @brief        This file includes all the external include header files
 
@@ -16,8 +16,8 @@ Copyright (c) 2024 Zen Ho
 // SFML INCLUDES
 // ================================================================================
 #include <SFML/Graphics.hpp>
-#include<SFML/Audio.hpp>
-#include<SFML/System.hpp>
+#include <SFML/Audio.hpp>
+#include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 
 // ================================================================================
@@ -33,5 +33,7 @@ Copyright (c) 2024 Zen Ho
 #include <algorithm>
 #include <Windows.h>
 #include <memory>
+#include <map>
+#include <functional>
 
 #endif // !PCH_HPP

@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         main.cpp
-@project      BABY CARLOS
+@project      SUPER CARLOS
 @author       Zen Ho
 @brief        This file is the starting point of the application
 
@@ -68,16 +68,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
         //Game Update & Draw Loop
         while (GSCurrent == GSNext) {
+
+            //Input Checks
+            systemEvents->pollEvents();
+            
+            //Update GameState
+            fpUpdate();
+
+            //Draw GameState
+            fpDraw();
+
+            //Display Window Contents
+            systemEvents->window.display();
+
             //Update Time
             timeKeeper->UpdateFrameTime();
-
-            //Update Loop
-            while (systemEvents->pollEvents()) {
-                fpUpdate();
-            }
-
-            //Draw
-            fpDraw();
         }
 
         //Free GamState

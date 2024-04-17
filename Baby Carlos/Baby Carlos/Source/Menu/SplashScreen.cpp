@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         SplashScreen.cpp
-@project      BABY CARLOS
+@project      SUPER CARLOS
 @author       Zen Ho
 @brief        This file contains our SplashScreen game state
 
@@ -14,6 +14,7 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\System\pch.hpp"
 #include "..\..\Header\Menu\SplashScreen.hpp"
 #include "..\..\Header\System\Utils.hpp"
+
 
 void SplashScreen::Load() {
 

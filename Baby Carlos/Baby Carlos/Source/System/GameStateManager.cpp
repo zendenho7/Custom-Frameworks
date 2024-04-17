@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         GameStateManager.cpp
-@project      BABY CARLOS
+@project      SUPER CARLOS
 @author       Zen Ho
 @brief        This file manages all of the different gamestates in this application
 

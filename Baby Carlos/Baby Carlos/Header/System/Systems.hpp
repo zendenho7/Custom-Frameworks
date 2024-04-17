@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Systems.hpp
-@project      BABY CARLOS
+@project      SUPER CARLOS
 @author       Zen Ho
 @brief        This file contains the declarations of objects used to manage the application systems
 
@@ -39,12 +39,13 @@ namespace Systems {
 	private:
 		//Input Handling For Events
 		bool triggered;
+		bool released;
 	public:
 		//System Events
 		sf::Event event;
 
 		//Constructors
-		EventHandler() : WindowHandler(), triggered{ false }, event() {}
+		EventHandler() : WindowHandler(), triggered{ false }, released{ false }, event() {}
 		EventHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
 
 		//Polling Events
