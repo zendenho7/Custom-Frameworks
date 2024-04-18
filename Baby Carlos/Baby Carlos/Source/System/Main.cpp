@@ -38,69 +38,73 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     //Initialize Event Handler & Create Window
-    systemEvents->CreateConsole(true);
-    systemEvents = new Systems::EventHandler(sf::VideoMode(1600, 900), "Baby Carlos", sf::Style::Default);
-    systemEvents->SetIcon(hInstance);
-    systemEvents->window.setFramerateLimit(60);
+    exSystemEvents->CreateConsole(true);
+    exSystemEvents = new Systems::EventHandler(sf::VideoMode(1600, 900), "Baby Carlos", sf::Style::Default);
+    exSystemEvents->SetIcon(hInstance);
+    exSystemEvents->window.setFramerateLimit(60);
 
     //Initialize Time Keeper
-    timeKeeper = new Systems::FrameTime();
+    exTimeKeeper = new Systems::FrameTime();
+
+    //Initialize Assets Handler
+    exAssets = new Load::Assets;
 
     //Initialize GameState
     GSManager::GameStateInit(GSManager::GS_SPLASH_SCREEN);
 
     //Game Loop
-    while (GSCurrent != GSManager::GS_EXIT)
+    while (exGSCurrent != GSManager::GS_EXIT)
     {
         //Check If GameState Is Restarted
-        if (GSCurrent == GSManager::GS_RESTART) {
-            GSCurrent = GSPrevious;
-            GSNext = GSPrevious;
+        if (exGSCurrent == GSManager::GS_RESTART) {
+            exGSCurrent = exGSPrevious;
+            exGSNext = exGSPrevious;
         }
         else {
             //Load & Update GameState
             GSManager::GameStateUpdate();
-            fpLoad();
+            exFPLoad();
         }
 
         //Init GameState
-        fpInit();
+        exFPInit();
 
         //Game Update & Draw Loop
-        while (GSCurrent == GSNext) {
+        while (exGSCurrent == exGSNext) {
 
             //Input Checks
-            systemEvents->pollEvents();
+            exSystemEvents->pollEvents();
             
             //Update GameState
-            fpUpdate();
+            exFPUpdate();
 
             //Draw GameState
-            fpDraw();
+            exFPDraw();
 
             //Display Window Contents
-            systemEvents->window.display();
+            exSystemEvents->window.display();
 
             //Update Time
-            timeKeeper->UpdateFrameTime();
+            exTimeKeeper->UpdateFrameTime();
         }
 
         //Free GamState
-        fpFree();
+        exFPFree();
 
         //If Not Restart Unload
-        if (GSNext != GSManager::GS_RESTART) {
-            fpUnload();
+        if (exGSNext != GSManager::GS_RESTART) {
+            exFPUnload();
         }
 
         //Store Previous & Set Current
-        GSPrevious = GSCurrent;
-        GSCurrent = GSNext;
+        exGSPrevious = exGSCurrent;
+        exGSCurrent = exGSNext;
     }
     
-    //Destroy Event Handler
-    delete systemEvents;
-    delete timeKeeper;
+    //Destroy External Handlers
+    delete exSystemEvents;
+    delete exTimeKeeper;
+    delete exAssets;
 
     return 0;
 }

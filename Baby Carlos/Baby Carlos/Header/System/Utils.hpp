@@ -10,9 +10,24 @@ Copyright (c) 2024 Zen Ho
 
 #include "..\..\Header\System\GameStateManager.hpp"
 #include "..\..\Header\System\Systems.hpp"
+#include "..\..\Header\System\Load.hpp"
 
 #ifndef UTILS_HPP
 #define UTILS_HPP
+
+namespace Entity {
+	class texEntity {
+
+	};
+
+	class rectEntity {
+
+	};
+
+	class circleEntity {
+
+	};
+}
 
 // ================================================================================
 // EXTERALS

@@ -20,8 +20,8 @@ Copyright (c) 2024 Zen Ho
 // EXTERNALS
 // ================================================================================
 
-Systems::EventHandler* systemEvents;
-Systems::FrameTime* timeKeeper;
+Systems::EventHandler* exSystemEvents;
+Systems::FrameTime* exTimeKeeper;
 
 // ================================================================================
 // Function: Constructors Window & Event Handler
@@ -78,7 +78,7 @@ bool Systems::EventHandler::pollEvents() {
     if ((event.type == sf::Event::Closed || keyTriggered(sf::Keyboard::Scancode::Escape)) && result) {
 
         //Break GameLoop
-       GSNext = GSManager::GS_EXIT;
+       exGSNext = GSManager::GS_EXIT;
 
         // Free the console before exiting
         if (GetConsoleWindow()) {

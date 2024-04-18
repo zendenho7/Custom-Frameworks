@@ -84,7 +84,7 @@ namespace Systems {
 // ================================================================================
 // External System & Events Handler Object
 // ================================================================================
-extern Systems::EventHandler* systemEvents;
-extern Systems::FrameTime* timeKeeper;
+extern Systems::EventHandler* exSystemEvents;
+extern Systems::FrameTime* exTimeKeeper;
 
 #endif // !SYSTEMS_HPP

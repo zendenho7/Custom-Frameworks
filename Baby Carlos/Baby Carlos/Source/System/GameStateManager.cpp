@@ -18,34 +18,34 @@ Copyright (c) 2024 Zen Ho
 // EXTERNALS
 // ================================================================================
 
-GSManager::GameStates GSCurrent = GSManager::GS_SPLASH_SCREEN, GSNext = GSManager::GS_SPLASH_SCREEN, GSPrevious = GSManager::GS_SPLASH_SCREEN;
-GSManager::FP fpLoad = nullptr, fpInit = nullptr, fpUpdate = nullptr, fpDraw = nullptr, fpFree = nullptr, fpUnload = nullptr;
+GSManager::GameStates exGSCurrent = GSManager::GS_SPLASH_SCREEN, exGSNext = GSManager::GS_SPLASH_SCREEN, exGSPrevious = GSManager::GS_SPLASH_SCREEN;
+GSManager::FP exFPLoad = nullptr, exFPInit = nullptr, exFPUpdate = nullptr, exFPDraw = nullptr, exFPFree = nullptr, exFPUnload = nullptr;
 
 // ================================================================================
 // Functions: GameState Management Functions
 // ================================================================================
 void GSManager::GameStateInit(GameStates startState) {
-	GSPrevious = GSCurrent = GSNext = startState;
+	exGSPrevious = exGSCurrent = exGSNext = startState;
 }
 
 void GSManager::GameStateUpdate() {
 
-	switch (GSCurrent) {
+	switch (exGSCurrent) {
 	case GS_SPLASH_SCREEN:
-		fpLoad = SplashScreen::Load;
-		fpInit = SplashScreen::Init;
-		fpUpdate = SplashScreen::Update;
-		fpDraw = SplashScreen::Draw;
-		fpFree = SplashScreen::Free;
-		fpUnload = SplashScreen::Unload;
+		exFPLoad = SplashScreen::Load;
+		exFPInit = SplashScreen::Init;
+		exFPUpdate = SplashScreen::Update;
+		exFPDraw = SplashScreen::Draw;
+		exFPFree = SplashScreen::Free;
+		exFPUnload = SplashScreen::Unload;
 		break;
 	case GS_MAIN_MENU:
-		fpLoad = MainMenu::Load;
-		fpInit = MainMenu::Init;
-		fpUpdate = MainMenu::Update;
-		fpDraw = MainMenu::Draw;
-		fpFree = MainMenu::Free;
-		fpUnload = MainMenu::Unload;
+		exFPLoad = MainMenu::Load;
+		exFPInit = MainMenu::Init;
+		exFPUpdate = MainMenu::Update;
+		exFPDraw = MainMenu::Draw;
+		exFPFree = MainMenu::Free;
+		exFPUnload = MainMenu::Unload;
 		break;
 	default:
 		break;

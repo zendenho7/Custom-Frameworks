@@ -1,51 +1,30 @@
 /*****************************************************************************************************************
-@file         GameStateManager.hpp
+@file         Load.cpp
 @project      SUPER CARLOS
 @author       Zen Ho
-@brief        This is the header file to the gamestate manager
+@brief        This file contains all the defintions of loading functionalities in the project
 
 Copyright (c) 2024 Zen Ho
 *****************************************************************************************************************/
 
-#pragma once
-
-#ifndef GS_MANAGER
-#define GS_MANAGER
+#include "..\..\Header\System\pch.hpp"
+#include "..\..\Header\System\Load.hpp"
 
 // ================================================================================
-// INCLUDES
+// External Load Assets Handler
 // ================================================================================
 
-#include "..\..\Header\Menu\SplashScreen.hpp"
-#include "..\..\Header\Menu\MainMenu.hpp"
+Load::Assets* exAssets;
 
 // ================================================================================
-// GS Manager Namespace
+// Function: Load Assets Constructor
 // ================================================================================
 
-namespace GSManager {
-	//GameState Constants
-	enum GameStates : unsigned char {
-		GS_SPLASH_SCREEN = 0,
-		GS_MAIN_MENU,
+// ================================================================================
+// Function: Add Texture Member Function
+// ================================================================================
 
-		//DONT TOUCH GS
-		GS_RESTART,
-		GS_EXIT
-	};
-
-	//Function Pointer
-	typedef void(*FP)(void);
-
-	//GameState Functions
-	void GameStateInit(GameStates startState);
-	void GameStateUpdate(void);
+void Load::Assets::addTexFromFile(std::string const& texIdentifier, std::string const& texturePath) {
+	textures.emplace(texIdentifier, sf::Texture());
+	textures[texIdentifier].loadFromFile(texturePath);
 }
-
-// ================================================================================
-// External GameState Variables
-// ================================================================================
-extern GSManager::GameStates exGSCurrent, exGSNext, exGSPrevious;
-extern GSManager::FP exFPLoad, exFPInit, exFPUpdate, exFPDraw, exFPFree, exFPUnload;
-
-#endif // !GS_MANAGER
