@@ -20,12 +20,16 @@ namespace Systems {
 		//System Window
 		sf::RenderWindow window;
 
+		//Frequently Used Window Components
+		sf::Vector2<float> windowSize;
+		sf::Vector2<float> windowCenter;
+
 		//Constructors
-		WindowHandler() : window() {}
+		WindowHandler() : window(), windowSize(), windowCenter(){}
 		WindowHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
 
+		//Other Window Functions
 		void CreateConsole(bool debugging);
-
 		void SetIcon(HINSTANCE const& hInstance);
 
 		//Virtual Destructor

@@ -28,7 +28,9 @@ Systems::FrameTime* exTimeKeeper;
 // ================================================================================
 
 Systems::WindowHandler::WindowHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style, const sf::ContextSettings& settings)
-    : window(mode, title, style, settings) {}
+    : window(mode, title, style, settings), 
+    windowSize(static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y)),
+    windowCenter(static_cast<float>(window.getSize().x) / 2.0f, static_cast<float>(window.getSize().y) / 2.0f) {}
 
 Systems::EventHandler::EventHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style, const sf::ContextSettings& settings)
     : triggered{ false }, released{ false }, event{ sf::Event() }, WindowHandler(mode, title, style, settings) {}
