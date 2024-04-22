@@ -20,6 +20,18 @@ Copyright (c) 2024 Zen Ho
 // EXTERNALS
 // ================================================================================
 
+//void* operator new(std::size_t size) {
+//    static int newCounter = 0;
+//    std::cout << "Allocating " << newCounter++ << '\n';
+//    return std::malloc(size);
+//}
+//
+//void operator delete(void* memory) noexcept {
+//    static int deleteCounter = 0;
+//    std::cout << "Deallocating " << deleteCounter++ << '\n';
+//    std::free(memory);
+//}
+
 
 // ================================================================================
 // WINMAIN ENTRY
@@ -41,10 +53,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     exSystemEvents->CreateConsole(true);
     exSystemEvents = new Systems::EventHandler(sf::VideoMode(1600, 900), "Baby Carlos", sf::Style::Default);
     exSystemEvents->SetIcon(hInstance);
-    exSystemEvents->window.setFramerateLimit(60);
+
 
     //Initialize Time Keeper
-    exTimeKeeper = new Systems::FrameTime();
+    exTimeKeeper = new Systems::FrameTime;
 
     //Initialize Assets Handler
     exAssets = new Load::Assets;
@@ -72,12 +84,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         //Game Update & Draw Loop
         while (exGSCurrent == exGSNext) {
 
-            //Clear Window
-            exSystemEvents->window.clear();
+            //Time Step
+            while (exTimeKeeper->UpdateFrameTime(60));
 
             //Input Checks
             exSystemEvents->pollEvents();
-            
+
             //Update GameState
             exFPUpdate();
 
@@ -86,9 +98,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
             //Display Window Contents
             exSystemEvents->window.display();
-
-            //Update Time
-            exTimeKeeper->UpdateFrameTime();
         }
 
         //Free GamState

@@ -55,7 +55,7 @@ namespace Systems {
 		EventHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
 
 		//Polling Events
-		bool pollEvents();
+		void pollEvents();
 
 		//Custom Events Input Handling
 		bool keyTriggered(sf::Keyboard::Scancode keycode);
@@ -87,7 +87,7 @@ namespace Systems {
 		FrameTime() : clock(), currTime(clock.getElapsedTime()), prevTime(clock.getElapsedTime()), elapsedTime(clock.getElapsedTime()), elapsedFrame{0}, frameRate{0.0f}, deltaTime{0.0f} {}
 		
 		//Update Time & Frame Components
-		void UpdateFrameTime();
+		bool UpdateFrameTime(unsigned int targetFPS);
 	};
 }
 

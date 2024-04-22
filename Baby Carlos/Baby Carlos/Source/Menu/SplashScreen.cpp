@@ -32,6 +32,7 @@ void SplashScreen::Update() {
 
 	//Rotate Entity
 	ssEntity->drawable.setRotation(ssEntity->drawable.getRotation() + 1);
+	ssEntity->bound.setRotation(ssEntity->drawable.getRotation());
 
 	//Enter MainMenu Game State
 	if (exSystemEvents->mouseTriggered(sf::Mouse::Button::Left)) {
@@ -40,6 +41,11 @@ void SplashScreen::Update() {
 }
 
 void SplashScreen::Draw() {
+
+	//Clear Window
+	exSystemEvents->window.clear();
+
+	//Draw To Window
 	exSystemEvents->window.draw(ssEntity->bound);
 	exSystemEvents->window.draw(ssEntity->drawable);
 }

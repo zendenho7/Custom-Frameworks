@@ -71,26 +71,23 @@ void Systems::WindowHandler::SetIcon(HINSTANCE const& hInstance) {
 // Function: Events Polling
 // ================================================================================
 
-bool Systems::EventHandler::pollEvents() {
+void Systems::EventHandler::pollEvents() {
 
     //Poll Events
-    bool result{ window.pollEvent(event) };
+    while (window.pollEvent(event)) {
+        //Check For Escaping Application Events
+        if ((event.type == sf::Event::Closed || keyTriggered(sf::Keyboard::Scancode::Escape))) {
 
-    //Check For Escaping Application Events
-    if ((event.type == sf::Event::Closed || keyTriggered(sf::Keyboard::Scancode::Escape)) && result) {
+            //Break GameLoop
+            exGSNext = GSManager::GS_EXIT;
 
-        //Break GameLoop
-       exGSNext = GSManager::GS_EXIT;
+            //Free the console before exiting (For Debugging)
+            FreeConsole();
 
-        //Free the console before exiting (For Debugging)
-        FreeConsole();
-
-        //Close Window
-        window.close();
+            //Close Window
+            window.close();
+        }
     }
-
-    //Return True If There Are Events
-    return result;
 }
 
 // ================================================================================
@@ -188,7 +185,7 @@ bool Systems::EventHandler::mouseReleased(sf::Mouse::Button btncode) {
 // Function: Frame & Time Handling
 // ================================================================================
 
-void Systems::FrameTime::UpdateFrameTime() {
+bool Systems::FrameTime::UpdateFrameTime(unsigned int targetFPS) {
 
     //Elapsed Frame & Time Calculation
     elapsedTime = clock.getElapsedTime();
@@ -197,8 +194,16 @@ void Systems::FrameTime::UpdateFrameTime() {
     //Delta Time Calculation
     currTime = elapsedTime;
     deltaTime = currTime.asSeconds() - prevTime.asSeconds();
-    prevTime = currTime;
 
     //FrameRate Calculation ( FPS )
     frameRate = sf::seconds(1.0f).asSeconds() / deltaTime;
+
+    //Time Step
+    if (deltaTime < (1.0f / targetFPS)) {
+        return true;
+    }
+    else {
+        prevTime = currTime;
+        return false;
+    }
 }
