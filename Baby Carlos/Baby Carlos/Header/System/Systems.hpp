@@ -21,8 +21,8 @@ namespace Systems {
 		sf::RenderWindow window;
 
 		//Frequently Used Window Components
-		sf::Vector2<float> windowSize;
-		sf::Vector2<float> windowCenter;
+		sf::Vector2f windowSize;
+		sf::Vector2f windowCenter;
 
 		//Constructors
 		WindowHandler() : window(), windowSize(), windowCenter(){}
@@ -33,7 +33,7 @@ namespace Systems {
 		void SetIcon(HINSTANCE const& hInstance);
 
 		//Virtual Destructor
-		virtual ~WindowHandler(){}
+		virtual ~WindowHandler() = default;
 	};
 
 	// ================================================================================
@@ -42,14 +42,16 @@ namespace Systems {
 	class EventHandler : public WindowHandler {
 	private:
 		//Input Handling For Events
-		bool triggered;
-		bool released;
+		bool bmouseTriggered;
+		bool bmouseReleased;
+		bool bkeyTriggered;
+		bool bkeyReleased;
 	public:
 		//System Events
 		sf::Event event;
 
 		//Constructors
-		EventHandler() : WindowHandler(), triggered{ false }, released{ false }, event() {}
+		EventHandler() : WindowHandler(), bmouseTriggered{ false }, bmouseReleased{ false }, bkeyTriggered{ false }, bkeyReleased{ false }, event() {}
 		EventHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
 
 		//Polling Events
@@ -59,6 +61,10 @@ namespace Systems {
 		bool keyTriggered(sf::Keyboard::Scancode keycode);
 		bool keyChecked(sf::Keyboard::Scancode keycode);
 		bool keyReleased(sf::Keyboard::Scancode keycode);
+
+		bool mouseTriggered(sf::Mouse::Button btncode);
+		bool mouseChecked(sf::Mouse::Button btncode);
+		bool mouseReleased(sf::Mouse::Button btncode);
 	};
 
 	// ================================================================================

@@ -72,6 +72,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         //Game Update & Draw Loop
         while (exGSCurrent == exGSNext) {
 
+            //Clear Window
+            exSystemEvents->window.clear();
+
             //Input Checks
             exSystemEvents->pollEvents();
             

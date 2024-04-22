@@ -16,15 +16,27 @@ Copyright (c) 2024 Zen Ho
 #define UTILS_HPP
 
 namespace Entity {
-	class texEntity {
+	class sprite {
+	private:
+		//Origin Management Flag ( Only For Centering Origin )
+		bool centerOrigin;
+		
+	public:
+		//Drawable
+		sf::Sprite drawable;
+
+		//Bound Rendering
+		sf::RectangleShape bound;
+
+		sprite() = default;
+		sprite(sf::Texture const& tex, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, sf::Uint8 opacity = 255, bool centerOrigin = true);
+	};
+
+	class rect {
 
 	};
 
-	class rectEntity {
-
-	};
-
-	class circleEntity {
+	class circle {
 
 	};
 }

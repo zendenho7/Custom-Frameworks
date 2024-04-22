@@ -17,6 +17,7 @@ Copyright (c) 2024 Zen Ho
 // ================================================================================
 
 namespace SplashScreen {
+
 	void Load();
 	void Init();
 	void Update();
