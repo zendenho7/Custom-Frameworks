@@ -12,26 +12,15 @@ Copyright (c) 2024 Zen Ho
 // ================================================================================
 
 #include "..\..\Header\System\pch.hpp"
-#include "..\..\Header\System\Systems.hpp"
-#include "..\..\Header\System\GameStateManager.hpp"
 #include "..\..\Header\System\Utils.hpp"
 
 // ================================================================================
 // EXTERNALS
 // ================================================================================
 
-//void* operator new(std::size_t size) {
-//    static int newCounter = 0;
-//    std::cout << "Allocating " << newCounter++ << '\n';
-//    return std::malloc(size);
-//}
-//
-//void operator delete(void* memory) noexcept {
-//    static int deleteCounter = 0;
-//    std::cout << "Deallocating " << deleteCounter++ << '\n';
-//    std::free(memory);
-//}
-
+Systems::EventHandler* exEvents;
+Systems::FrameTime* exTime;
+Load::Assets* exAssets;
 
 // ================================================================================
 // WINMAIN ENTRY
@@ -50,16 +39,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     //Initialize Event Handler & Create Window
-    exSystemEvents->CreateConsole(true);
-    exSystemEvents = new Systems::EventHandler(sf::VideoMode(1600, 900), "Baby Carlos", sf::Style::Default);
-    exSystemEvents->SetIcon(hInstance);
-
+    exEvents->CreateConsole(true);
+    exEvents = new Systems::EventHandler(sf::VideoMode(1600, 900), "Baby Carlos", sf::Style::Default);
+    exEvents->SetIcon(hInstance);
 
     //Initialize Time Keeper
-    exTimeKeeper = new Systems::FrameTime;
+    exTime = new Systems::FrameTime();
 
     //Initialize Assets Handler
-    exAssets = new Load::Assets;
+    exAssets = new Load::Assets();
 
     //Initialize GameState
     GSManager::GameStateInit(GSManager::GS_SPLASH_SCREEN);
@@ -85,10 +73,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         while (exGSCurrent == exGSNext) {
 
             //Time Step
-            while (exTimeKeeper->UpdateFrameTime(60));
+            while (exTime->UpdateFrameTime(60));
 
             //Input Checks
-            exSystemEvents->pollEvents();
+            exEvents->pollEvents();
 
             //Update GameState
             exFPUpdate();
@@ -97,7 +85,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             exFPDraw();
 
             //Display Window Contents
-            exSystemEvents->window.display();
+            exEvents->window.display();
         }
 
         //Free GamState
@@ -112,10 +100,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         exGSPrevious = exGSCurrent;
         exGSCurrent = exGSNext;
     }
-    
-    //Destroy External Handlers
-    delete exSystemEvents;
-    delete exTimeKeeper;
+
+    //Delete Singletons
+    delete exEvents;
+    delete exTime;
     delete exAssets;
 
     return 0;

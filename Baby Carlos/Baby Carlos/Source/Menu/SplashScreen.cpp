@@ -16,7 +16,7 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\System\Utils.hpp"
 
 namespace SplashScreen {
-	std::unique_ptr<Entity::sprite> ssEntity;
+	std::unique_ptr<Entity::rect> ssEntity;
 }
 
 void SplashScreen::Load() {
@@ -25,17 +25,17 @@ void SplashScreen::Load() {
 }
 
 void SplashScreen::Init() {
-	ssEntity = std::make_unique<Entity::sprite>(Entity::sprite(exAssets->textures["TEST"], { 300.0f, 300.0f }, exSystemEvents->windowCenter, 0.0f, 255, true));
+	ssEntity = std::make_unique<Entity::rect>(Entity::rect({255, 255, 255, 255}, {300.0f, 300.0f}, exEvents->windowCenter, 255));
 }
 
 void SplashScreen::Update() {
 
 	//Rotate Entity
-	ssEntity->drawable.setRotation(ssEntity->drawable.getRotation() + 1);
-	ssEntity->bound.setRotation(ssEntity->drawable.getRotation());
+	ssEntity->drawableRect.setRotation(ssEntity->drawableRect.getRotation() + 1);
+	//ssEntity->bound.setRotation(ssEntity->drawable.getRotation());
 
 	//Enter MainMenu Game State
-	if (exSystemEvents->mouseTriggered(sf::Mouse::Button::Left)) {
+	if (exEvents->mouseTriggered(sf::Mouse::Button::Left)) {
 		exGSNext = GSManager::GS_MAIN_MENU;
 	}
 }
@@ -43,11 +43,11 @@ void SplashScreen::Update() {
 void SplashScreen::Draw() {
 
 	//Clear Window
-	exSystemEvents->window.clear();
+	exEvents->window.clear();
 
 	//Draw To Window
-	exSystemEvents->window.draw(ssEntity->bound);
-	exSystemEvents->window.draw(ssEntity->drawable);
+	exEvents->window.draw(ssEntity->drawableRect);
+	//exEvents->window.draw(ssEntity->drawable);
 }
 
 void SplashScreen::Free() {

@@ -6,8 +6,56 @@
 Copyright (c) 2024 Zen Ho
 *****************************************************************************************************************/
 
+// ================================================================================
+// INCLUDES
+// ================================================================================
+
 #include "..\..\Header\System\pch.hpp"
 #include "..\..\Header\System\Utils.hpp"
+
+// ================================================================================
+// Class: Rect Entity Member Functions
+// ================================================================================
+
+Entity::rect::rect(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, Origin oPos)
+	: drawableRect(size), originPos{ oPos }
+{
+	//Set Entity Components
+	drawableRect.setPosition(pos);
+	drawableRect.setRotation(rotation);
+	drawableRect.setFillColor(color);
+
+	//Center Origin Of Entity
+	setOrigin(drawableRect, { drawableRect.getSize().x, drawableRect.getSize().y });
+}
+
+void Entity::rect::setOrigin(sf::Transformable& obj, sf::Vector2f const& size) {
+
+	//Switch Cases For Origin Setting
+	switch (originPos) {
+	case Origin::CENTER:
+		obj.setOrigin(size.x / 2, size.y / 2);
+		break;
+	case Origin::TOP_LEFT:
+		obj.setOrigin(0.0f, 0.0f);
+		break;
+	case Origin::TOP_RIGHT:
+		obj.setOrigin(size.x, 0.0f);
+		break;
+	case Origin::BOT_RIGHT:
+		obj.setOrigin(size.x, size.y);
+		break;
+	case Origin::BOT_LEFT:
+		obj.setOrigin(0.0f, size.y);
+		break;
+	default:
+		break;
+	}
+}
+
+// ================================================================================
+// Class: Sprite Entity Member Functions
+// ================================================================================
 
 Entity::sprite::sprite(sf::Texture const& tex, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, sf::Uint8 opacity, bool centerOrigin)
 : drawable(tex), centerOrigin{centerOrigin}, bound()

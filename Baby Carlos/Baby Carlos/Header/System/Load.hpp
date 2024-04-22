@@ -26,17 +26,11 @@ namespace Load {
 		std::map<std::string, sf::Sound> audios;
 
 		//Constructor
-		Assets(){}
+		Assets() = default;
 
 		//Add Texture Overload
 		void addTexFromFile(std::string const& texIdentifier, std::string const& texturePath);
 	};
 }
-
-// ================================================================================
-// External Load Assets Handler
-// ================================================================================
-
-extern Load::Assets* exAssets;
 
 #endif // !LOAD_HPP

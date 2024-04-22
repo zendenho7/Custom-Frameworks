@@ -29,7 +29,7 @@ void MainMenu::Update() {
 
 void MainMenu::Draw() {
 	//Clear Window
-	exSystemEvents->window.clear();
+	exEvents->window.clear();
 }
 
 void MainMenu::Free() {
