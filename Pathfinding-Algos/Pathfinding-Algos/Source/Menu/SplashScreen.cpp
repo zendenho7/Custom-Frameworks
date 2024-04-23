@@ -21,7 +21,7 @@ namespace SplashScreen {
 
 void SplashScreen::Load() {
 	//Load All Essential Assets For The Game Here
-	exAssets->addTexFromFile("TEST", "../Assets/playerFace.png");
+	//exAssets->addTexFromFile("TEST", "../Assets/playerFace.png");
 }
 
 void SplashScreen::Init() {
