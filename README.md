@@ -1,2 +1,2 @@
-# Baby Carlos
-Game Project Built With C++ &amp; SFML
+# PathFinding Algoithms
+Visualization Of Pathfinding Algos In C++ &amp; SFML
