@@ -15,9 +15,10 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\Menu\SplashScreen.hpp"
 #include "..\..\Header\Utility\Utils.hpp"
 #include "..\..\Header\Utility\Entity.hpp"
+#include "..\..\Header\Utility\UserInterface.hpp"
 
 namespace {
-	std::unique_ptr<Entity::sprite> ssEntity;
+	std::unique_ptr <Interface::RectButton> ssEntity;
 }
 
 void SplashScreen::Load() {
@@ -26,19 +27,20 @@ void SplashScreen::Load() {
 }
 
 void SplashScreen::Init() {
-	ssEntity = std::make_unique<Entity::sprite>(exAssets->textures["SFML"], sf::Vector2f(200.0f, 200.0f), exEvents->windowCenter);
+	ssEntity = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(200.0f, 200.0f), exEvents->windowCenter);
 }
 
 void SplashScreen::Update() {
 
 	//Rotate Entity
-	ssEntity->d_Sprite.setRotation(ssEntity->d_Sprite.getRotation() + 1);
-	ssEntity->updateBounding();
-
-	//Enter MainMenu Game State
-	if (exEvents->mouseTriggered(sf::Mouse::Button::Left)) {
+	if (ssEntity->isButtonClicked()) {
 		exGSNext = GSManager::GS_MAIN_MENU;
 	}
+
+	//Enter MainMenu Game State
+	//if (exEvents->mouseTriggered(sf::Mouse::Button::Left)) {
+	//	exGSNext = GSManager::GS_MAIN_MENU;
+	//}
 }
 
 void SplashScreen::Draw() {
@@ -48,7 +50,6 @@ void SplashScreen::Draw() {
 
 	//Draw To Window
 	exEvents->window.draw(ssEntity->d_Rect);
-	exEvents->window.draw(ssEntity->d_Sprite);
 }
 
 void SplashScreen::Free() {

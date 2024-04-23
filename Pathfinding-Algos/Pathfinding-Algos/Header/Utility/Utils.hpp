@@ -2,7 +2,7 @@
 @file         Utils.hpp
 @project      Pathfinding Algorithms
 @author       Zen Ho
-@brief        This is the header files for this application's utility functions
+@brief        This is the header file for this application's utility functions
 Copyright (c) 2024 Zen Ho
 *****************************************************************************************************************/
 

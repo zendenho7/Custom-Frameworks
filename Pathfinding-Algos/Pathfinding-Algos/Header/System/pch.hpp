@@ -2,7 +2,7 @@
 @file         pch.hpp
 @project      Pathfinding Algorithms
 @author       Zen Ho
-@brief        This file includes all the external include header files
+@brief        This file includes all the external include header file
 
 Copyright (c) 2024 Zen Ho
 *****************************************************************************************************************/

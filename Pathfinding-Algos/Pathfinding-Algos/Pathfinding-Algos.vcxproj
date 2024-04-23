@@ -26,6 +26,7 @@
     </ClCompile>
     <ClCompile Include="Source\System\Systems.cpp" />
     <ClCompile Include="Source\Utility\Entity.cpp" />
+    <ClCompile Include="Source\Utility\UserInterface.cpp" />
     <ClCompile Include="Source\Utility\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +37,7 @@
     <ClInclude Include="Header\System\pch.hpp" />
     <ClInclude Include="Header\System\Systems.hpp" />
     <ClInclude Include="Header\Utility\Entity.hpp" />
+    <ClInclude Include="Header\Utility\UserInterface.hpp" />
     <ClInclude Include="Header\Utility\Utils.hpp" />
     <ClInclude Include="Resource\resource.h" />
   </ItemGroup>

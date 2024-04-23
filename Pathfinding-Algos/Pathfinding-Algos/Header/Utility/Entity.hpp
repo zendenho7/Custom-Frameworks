@@ -2,7 +2,7 @@
 @file         Entity.hpp
 @project      Pathfinding Algorithms
 @author       Zen Ho
-@brief        This is the header files for the entitiy classes & objects
+@brief        This is the header file for the entitiy classes & objects
 Copyright (c) 2024 Zen Ho
 *****************************************************************************************************************/
 
@@ -38,9 +38,6 @@ namespace Entity {
 
 		//Set Origin Of Entity
 		void setOrigin(sf::Transformable& obj, sf::Vector2f const& size);
-
-		//Pure Virtual Function For Derived Classes
-		virtual void updateBounding() = 0;
 	};
 
 	//Sprite Entity Derived From Rect Entity ( Rect Represents Bounding Box In Sprite )
@@ -56,7 +53,7 @@ namespace Entity {
 		sprite(sf::Texture const& tex, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, sf::Uint8 opacity = 255, Origin oPos = Origin::CENTER);
 
 		//Update Bounding Box If Needed For Display Purposes
-		void updateBounding() override;
+		void updateBounding();
 	};
 
 	//Circle Entity Derived From Cirlce Entity ( Rect Represents Bounding Box In Circle )
@@ -72,7 +69,7 @@ namespace Entity {
 		circle(sf::Color const& color, float radius, sf::Vector2f const& pos, float rotation = 0.0f, Origin oPos = Origin::CENTER);
 
 		//Update Bounding Box If Needed For Display Purposes
-		void updateBounding() override;
+		void updateBounding();
 	};
 }
 
