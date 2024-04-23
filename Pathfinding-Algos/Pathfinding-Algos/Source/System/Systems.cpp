@@ -14,7 +14,7 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\System\pch.hpp"
 #include "..\..\Resource\resource.h"
 #include "..\..\Header\System\Systems.hpp"
-#include "..\..\Header\System\Utils.hpp"
+#include "..\..\Header\Utility\Utils.hpp"
 
 // ================================================================================
 // Function: Constructors Window & Event Handler
@@ -26,7 +26,7 @@ Systems::WindowHandler::WindowHandler(sf::VideoMode mode, const sf::String& titl
     windowCenter(static_cast<float>(window.getSize().x) / 2.0f, static_cast<float>(window.getSize().y) / 2.0f) {}
 
 Systems::EventHandler::EventHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style, const sf::ContextSettings& settings)
-    : bmouseTriggered{ false }, bmouseReleased{ false }, bkeyTriggered{ false }, bkeyReleased{ false }, event{ sf::Event() }, WindowHandler(mode, title, style, settings) {}
+    : WindowHandler(mode, title, style, settings), bmouseTriggered{ false }, bmouseReleased{ false }, bkeyTriggered{ false }, bkeyReleased{ false }, event{ sf::Event() } {}
 
 // ================================================================================
 // Function: System Input Handling

@@ -13,26 +13,27 @@ Copyright (c) 2024 Zen Ho
 
 #include "..\..\Header\System\pch.hpp"
 #include "..\..\Header\Menu\SplashScreen.hpp"
-#include "..\..\Header\System\Utils.hpp"
+#include "..\..\Header\Utility\Utils.hpp"
+#include "..\..\Header\Utility\Entity.hpp"
 
-namespace SplashScreen {
-	std::unique_ptr<Entity::rect> ssEntity;
+namespace {
+	std::unique_ptr<Entity::sprite> ssEntity;
 }
 
 void SplashScreen::Load() {
 	//Load All Essential Assets For The Game Here
-	//exAssets->addTexFromFile("TEST", "../Assets/playerFace.png");
+	exAssets->addTexFromFile("SFML", "../Assets/SFML Logo.png");
 }
 
 void SplashScreen::Init() {
-	ssEntity = std::make_unique<Entity::rect>(Entity::rect({255, 255, 255, 255}, {300.0f, 300.0f}, exEvents->windowCenter, 255));
+	ssEntity = std::make_unique<Entity::sprite>(exAssets->textures["SFML"], sf::Vector2f(200.0f, 200.0f), exEvents->windowCenter);
 }
 
 void SplashScreen::Update() {
 
 	//Rotate Entity
-	ssEntity->drawableRect.setRotation(ssEntity->drawableRect.getRotation() + 1);
-	//ssEntity->bound.setRotation(ssEntity->drawable.getRotation());
+	ssEntity->d_Sprite.setRotation(ssEntity->d_Sprite.getRotation() + 1);
+	ssEntity->updateBounding();
 
 	//Enter MainMenu Game State
 	if (exEvents->mouseTriggered(sf::Mouse::Button::Left)) {
@@ -46,8 +47,8 @@ void SplashScreen::Draw() {
 	exEvents->window.clear();
 
 	//Draw To Window
-	exEvents->window.draw(ssEntity->drawableRect);
-	//exEvents->window.draw(ssEntity->drawable);
+	exEvents->window.draw(ssEntity->d_Rect);
+	exEvents->window.draw(ssEntity->d_Sprite);
 }
 
 void SplashScreen::Free() {

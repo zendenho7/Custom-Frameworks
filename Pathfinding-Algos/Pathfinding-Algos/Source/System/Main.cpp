@@ -12,7 +12,9 @@ Copyright (c) 2024 Zen Ho
 // ================================================================================
 
 #include "..\..\Header\System\pch.hpp"
-#include "..\..\Header\System\Utils.hpp"
+#include "..\..\Header\System\GameStateManager.hpp"
+#include "..\..\Header\System\Systems.hpp"
+#include "..\..\Header\System\Load.hpp"
 
 // ================================================================================
 // EXTERNALS
@@ -38,12 +40,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     //Check For Memory Leaks
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
+    //If Debug Mode, Create Console
+    #ifdef _DEBUG
+        exEvents->CreateConsole(true);
+    #endif // _DEBUG
+
     //Initialize Event Handler & Create Window
-    exEvents->CreateConsole(true);
     exEvents = new Systems::EventHandler(sf::VideoMode(1600, 900), "Pathfinding Visualization", sf::Style::Default);
     exEvents->SetIcon(hInstance);
 
-    //Initialize Time Keeper
+    //Initialize Time Handler
     exTime = new Systems::FrameTime();
 
     //Initialize Assets Handler

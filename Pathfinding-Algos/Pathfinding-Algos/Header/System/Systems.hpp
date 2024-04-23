@@ -65,6 +65,8 @@ namespace Systems {
 		bool mouseTriggered(sf::Mouse::Button btncode);
 		bool mouseChecked(sf::Mouse::Button btncode);
 		bool mouseReleased(sf::Mouse::Button btncode);
+
+		~EventHandler() override = default;
 	};
 
 	// ================================================================================
