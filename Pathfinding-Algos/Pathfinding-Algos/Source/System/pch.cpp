@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         pch.cpp
-@project      SUPER CARLOS
+@project      Pathfinding Algorithms
 @author       Zen Ho
 @brief        This file is the point of compilation for all pch.hpp include files
 

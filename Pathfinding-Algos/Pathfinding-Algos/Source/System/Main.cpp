@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         main.cpp
-@project      SUPER CARLOS
+@project      Pathfinding Algorithms
 @author       Zen Ho
 @brief        This file is the starting point of the application
 
@@ -40,7 +40,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     //Initialize Event Handler & Create Window
     exEvents->CreateConsole(true);
-    exEvents = new Systems::EventHandler(sf::VideoMode(1600, 900), "Baby Carlos", sf::Style::Default);
+    exEvents = new Systems::EventHandler(sf::VideoMode(1600, 900), "Pathfinding Visualization", sf::Style::Default);
     exEvents->SetIcon(hInstance);
 
     //Initialize Time Keeper

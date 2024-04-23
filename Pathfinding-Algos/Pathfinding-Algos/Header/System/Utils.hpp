@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Utils.hpp
-@project      SUPER CARLOS
+@project      Pathfinding Algorithms
 @author       Zen Ho
 @brief        This is the header files for this application's utility functions
 Copyright (c) 2024 Zen Ho

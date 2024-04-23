@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Load.hpp
-@project      SUPER CARLOS
+@project      Pathfinding Algorithms
 @author       Zen Ho
 @brief        This is the header file for all assets loading functionalities in the application
 

@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         GameStateManager.hpp
-@project      SUPER CARLOS
+@project      Pathfinding Algorithms
 @author       Zen Ho
 @brief        This is the header file to the gamestate manager
 

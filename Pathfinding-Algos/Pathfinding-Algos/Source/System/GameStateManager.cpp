@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         GameStateManager.cpp
-@project      SUPER CARLOS
+@project      Pathfinding Algorithms
 @author       Zen Ho
 @brief        This file manages all of the different gamestates in this application
 

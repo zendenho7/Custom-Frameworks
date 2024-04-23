@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         SplashScreen.cpp
-@project      SUPER CARLOS
+@project      Pathfinding Algorithms
 @author       Zen Ho
 @brief        This file contains our SplashScreen game state
 

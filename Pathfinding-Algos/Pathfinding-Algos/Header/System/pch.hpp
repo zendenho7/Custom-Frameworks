@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         pch.hpp
-@project      SUPER CARLOS
+@project      Pathfinding Algorithms
 @author       Zen Ho
 @brief        This file includes all the external include header files
 

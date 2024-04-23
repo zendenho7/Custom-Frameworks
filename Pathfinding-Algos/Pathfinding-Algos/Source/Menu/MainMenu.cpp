@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         MainMenu.cpp
-@project      SUPER CARLOS
+@project      Pathfinding Algorithms
 @author       Zen Ho
 @brief        This file contains our main menu game state
 

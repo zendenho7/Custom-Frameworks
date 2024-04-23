@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         SplashScreen.hpp
-@project      SUPER CARLOS
+@project      Pathfinding Algorithms
 @author       Zen Ho
 @brief        This is the header file of our SplashScreen game state
 

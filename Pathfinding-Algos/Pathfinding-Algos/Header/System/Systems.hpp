@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Systems.hpp
-@project      SUPER CARLOS
+@project      Pathfinding Algorithms
 @author       Zen Ho
 @brief        This file contains the declarations of objects used to manage the application systems
 

@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Load.cpp
-@project      SUPER CARLOS
+@project      Pathfinding Algorithms
 @author       Zen Ho
 @brief        This file contains all the defintions of loading functionalities in the project
 
