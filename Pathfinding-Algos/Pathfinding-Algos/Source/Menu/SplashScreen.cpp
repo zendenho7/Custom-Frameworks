@@ -28,6 +28,8 @@ void SplashScreen::Load() {
 
 void SplashScreen::Init() {
 	ssEntity = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(200.0f, 200.0f), exEvents->windowCenter);
+
+	//ssEntity->setCustomHover(1.15f, 0.25f);
 }
 
 void SplashScreen::Update() {

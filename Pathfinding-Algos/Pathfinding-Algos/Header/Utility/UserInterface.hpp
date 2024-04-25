@@ -16,15 +16,17 @@ Copyright (c) 2024 Zen Ho
 
 namespace Interface {
 
-	//Interface Constants
+	//Interface Default Constants
 	const float HOVER_SCALE = 1.05f;	//Percentage Of Button Size
-	const float HOVER_TIME = 1.0f;		//Hover Time In Seconds
+	const float HOVER_TIME = 0.25f;		//Hover Time In Seconds
 
 	//Button Interface
 	class RectButton : public Entity::rect {
 	private:
 		//Hovering Operators
 		bool hoverEnabled;
+		float hoverScale;
+		float hoverDuration;
 
 		//Hover Operations
 		void hoverButton();
@@ -33,6 +35,9 @@ namespace Interface {
 		//Constructors
 		RectButton() = default;
 		RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, Entity::Origin oPos = Entity::Origin::CENTER, bool hover = true);
+
+		//Set Custom Hover Scale & Duration
+		void setCustomHover(float scale, float duration);
 
 		//Button Click Check
 		bool isButtonClicked();

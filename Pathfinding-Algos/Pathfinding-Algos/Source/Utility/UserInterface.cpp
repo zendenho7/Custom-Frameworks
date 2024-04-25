@@ -10,24 +10,29 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\Utility\UserInterface.hpp"
 
 Interface::RectButton::RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, Entity::Origin oPos, bool hover)
-	: rect(color, size, pos, rotation, oPos), hoverEnabled{ hover }
+	: rect(color, size, pos, rotation, oPos), hoverEnabled{ hover }, hoverScale{ HOVER_SCALE }, hoverDuration{ HOVER_TIME }
 {
 }
 
 void Interface::RectButton::hoverButton() {
 	//Hovering Speed Based On HoverTime
-	float hoverSpeed{ HOVER_SCALE / (HOVER_TIME / exTime->deltaTime) };
+	float hoverSpeed{ (hoverScale - 1.0f) / (hoverDuration / exTime->deltaTime) };
 
 	//Hovering Scaling Up Operations
-	d_Rect.setScale((d_Rect.getScale().x < HOVER_SCALE ? d_Rect.getScale().x + hoverSpeed : d_Rect.getScale().x), (d_Rect.getScale().y < HOVER_SCALE ? d_Rect.getScale().y + hoverSpeed : d_Rect.getScale().y));
+	d_Rect.setScale((d_Rect.getScale().x < hoverScale ? d_Rect.getScale().x + hoverSpeed : d_Rect.getScale().x), (d_Rect.getScale().y < hoverScale ? d_Rect.getScale().y + hoverSpeed : d_Rect.getScale().y));
 }
 
 void Interface::RectButton::normalButton() {
 	//Hovering Speed Based On HoverTime
-	float hoverSpeed{ HOVER_SCALE / (HOVER_TIME / exTime->deltaTime) };
+	float hoverSpeed{ (hoverScale - 1.0f) / (hoverDuration / exTime->deltaTime) };
 
 	//Hovering Scaling Down Operations
 	d_Rect.setScale((d_Rect.getScale().x > 1.0f ? d_Rect.getScale().x - hoverSpeed : d_Rect.getScale().x), (d_Rect.getScale().y > 1.0f ? d_Rect.getScale().y - hoverSpeed : d_Rect.getScale().y));
+}
+
+void Interface::RectButton::setCustomHover(float scale, float duration) {
+	hoverScale = scale;
+	hoverDuration = duration;
 }
 
 bool Interface::RectButton::isButtonClicked() {
@@ -57,6 +62,9 @@ bool Interface::RectButton::isButtonClicked() {
 		}
 	}
 
+	//Return Button Back To Origin State
+	if(d_Rect.getScale().x > 1.0f && d_Rect.getScale().y > 1.0f)
 	normalButton();
+
 	return false;
 }
