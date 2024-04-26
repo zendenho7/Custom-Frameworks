@@ -58,26 +58,25 @@ Entity::rect::rect(sf::Color const& color, sf::Vector2f const& size, sf::Vector2
 // ================================================================================
 
 Entity::sprite::sprite(sf::Texture const& tex, sf::Vector2i const& rowcolcount, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, sf::Uint8 opacity, Origin oPos)
-	: base(oPos), d_Sprite(tex), spriteRowCol{ rowcolcount }, spriteSize{ size }
+	: base(oPos), d_Sprite(tex), spriteRowCol{ rowcolcount }
 {
 	//Set Initial Sprite Size
-	d_Sprite.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), static_cast<sf::Vector2i>(spriteSize)));
+	d_Sprite.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(d_Sprite.getTexture()->getSize().x / spriteRowCol.x, d_Sprite.getTexture()->getSize().y / spriteRowCol.y)));
 
 	//Set Entity Components
-	d_Sprite.setScale(spriteSize.x / (d_Sprite.getLocalBounds().getSize().x / spriteRowCol.x), spriteSize.y / (d_Sprite.getLocalBounds().getSize().y / spriteRowCol.y));
-	std::cout << d_Sprite.getLocalBounds().getSize().x << '\n';
+	d_Sprite.setScale(size.x / (d_Sprite.getLocalBounds().getSize().x), size.y / (d_Sprite.getLocalBounds().getSize().y));
 	d_Sprite.setPosition(pos);
 	d_Sprite.setRotation(rotation);
 	d_Sprite.setColor({ 255, 255, 255, opacity });
 
 	//Set Origin
-	setOrigin(d_Sprite, spriteSize);
+	setOrigin(d_Sprite, d_Sprite.getLocalBounds().getSize());
 }
 
 void Entity::sprite::setTexture(sf::Texture const& tex, sf::Vector2i const& rowcolcount) {
 	spriteRowCol = rowcolcount;
 	d_Sprite.setTexture(tex);
-	d_Sprite.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), static_cast<sf::Vector2i>(spriteSize)));
+	d_Sprite.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(d_Sprite.getTexture()->getSize().x / spriteRowCol.x, d_Sprite.getTexture()->getSize().y / spriteRowCol.y)));
 }
 
 // ================================================================================

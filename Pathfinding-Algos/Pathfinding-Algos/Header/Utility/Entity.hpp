@@ -60,8 +60,8 @@ namespace Entity {
 	class sprite : public base {
 	private:
 		//For SpriteSheet
-		sf::Vector2f spriteSize;
 		sf::Vector2i spriteRowCol;
+
 	public:
 		//Drawable
 		sf::Sprite d_Sprite;
