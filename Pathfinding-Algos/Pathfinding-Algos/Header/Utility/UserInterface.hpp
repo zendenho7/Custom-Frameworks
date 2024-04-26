@@ -24,7 +24,7 @@ namespace Interface {
 	class RectButton : public Entity::rect {
 	private:
 		//Hovering Operators
-		bool hoverEnabled;
+		bool b_hoverEnabled;
 		float hoverScale;
 		float hoverDuration;
 

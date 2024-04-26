@@ -10,7 +10,7 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\Utility\UserInterface.hpp"
 
 Interface::RectButton::RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, Entity::Origin oPos, bool hover)
-	: rect(color, size, pos, rotation, oPos), hoverEnabled{ hover }, hoverScale{ HOVER_SCALE }, hoverDuration{ HOVER_TIME }
+	: rect(color, size, pos, rotation, oPos), b_hoverEnabled{ hover }, hoverScale{ HOVER_SCALE }, hoverDuration{ HOVER_TIME }
 {
 }
 
@@ -49,7 +49,7 @@ bool Interface::RectButton::isButtonClicked() {
 		mousePos.y < (buttonObj.top + buttonObj.height)) //Bottom Side
 	{
 		//Hover Button
-		if (hoverEnabled) {
+		if (b_hoverEnabled) {
 			hoverButton();
 		}
 

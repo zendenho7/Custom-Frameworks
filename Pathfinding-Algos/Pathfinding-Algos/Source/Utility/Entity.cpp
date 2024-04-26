@@ -10,22 +10,10 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\Utility\Entity.hpp"
 
 // ================================================================================
-// Class: Rect Entity Member Functions
+// Class: Base Entity Member Function
 // ================================================================================
 
-Entity::rect::rect(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, Origin oPos)
-	: d_Rect(size), originPos{ oPos }
-{
-	//Set Entity Components
-	d_Rect.setPosition(pos);
-	d_Rect.setRotation(rotation);
-	d_Rect.setFillColor(color);
-
-	//Center Origin Of Entity
-	setOrigin(d_Rect, d_Rect.getLocalBounds().getSize());
-}
-
-void Entity::rect::setOrigin(sf::Transformable& obj, sf::Vector2f const& size) {
+void Entity::base::setOrigin(sf::Transformable& obj, sf::Vector2f const& size) {
 
 	//Switch Cases For Origin Setting
 	switch (originPos) {
@@ -50,26 +38,46 @@ void Entity::rect::setOrigin(sf::Transformable& obj, sf::Vector2f const& size) {
 }
 
 // ================================================================================
+// Class: Rect Entity Member Functions
+// ================================================================================
+
+Entity::rect::rect(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, Origin oPos)
+	: base{ oPos }, d_Rect(size)
+{
+	//Set Entity Components
+	d_Rect.setPosition(pos);
+	d_Rect.setRotation(rotation);
+	d_Rect.setFillColor(color);
+
+	//Center Origin Of Entity
+	setOrigin(d_Rect, d_Rect.getLocalBounds().getSize());
+}
+
+// ================================================================================
 // Class: Sprite Entity Member Functions
 // ================================================================================
 
-Entity::sprite::sprite(sf::Texture const& tex, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, sf::Uint8 opacity, Origin oPos)
-	: rect(sf::Color::White, size, pos, rotation, oPos), d_Sprite(tex)
+Entity::sprite::sprite(sf::Texture const& tex, sf::Vector2i const& rowcolcount, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, sf::Uint8 opacity, Origin oPos)
+	: base(oPos), d_Sprite(tex), spriteRowCol{ rowcolcount }, spriteSize{ size }
 {
+	//Set Initial Sprite Size
+	d_Sprite.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), static_cast<sf::Vector2i>(spriteSize)));
+
 	//Set Entity Components
-	d_Sprite.setScale(size.x / d_Sprite.getLocalBounds().getSize().x, size.y / d_Sprite.getLocalBounds().getSize().y);
+	d_Sprite.setScale(spriteSize.x / (d_Sprite.getLocalBounds().getSize().x / spriteRowCol.x), spriteSize.y / (d_Sprite.getLocalBounds().getSize().y / spriteRowCol.y));
+	std::cout << d_Sprite.getLocalBounds().getSize().x << '\n';
 	d_Sprite.setPosition(pos);
 	d_Sprite.setRotation(rotation);
 	d_Sprite.setColor({ 255, 255, 255, opacity });
 
 	//Set Origin
-	setOrigin(d_Sprite, d_Sprite.getLocalBounds().getSize());
+	setOrigin(d_Sprite, spriteSize);
 }
 
-void Entity::sprite::updateBounding() {
-	d_Rect.setPosition(d_Sprite.getPosition());
-	d_Rect.setRotation(d_Sprite.getRotation());
-	d_Rect.setScale(d_Sprite.getLocalBounds().getSize().x * d_Sprite.getScale().x / d_Rect.getSize().x, d_Sprite.getLocalBounds().getSize().y * d_Sprite.getScale().y / d_Rect.getSize().y);
+void Entity::sprite::setTexture(sf::Texture const& tex, sf::Vector2i const& rowcolcount) {
+	spriteRowCol = rowcolcount;
+	d_Sprite.setTexture(tex);
+	d_Sprite.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), static_cast<sf::Vector2i>(spriteSize)));
 }
 
 // ================================================================================
@@ -77,7 +85,7 @@ void Entity::sprite::updateBounding() {
 // ================================================================================
 
 Entity::circle::circle(sf::Color const& color, float radius, sf::Vector2f const& pos, float rotation, Origin oPos)
-	: rect(sf::Color::White, {2 * radius, 2 * radius }, pos, rotation, oPos), d_Circle(radius)
+	: base(oPos), d_Circle(radius)
 {
 	//Set Entity Components
 	d_Circle.setPosition(pos);
@@ -86,10 +94,4 @@ Entity::circle::circle(sf::Color const& color, float radius, sf::Vector2f const&
 
 	//Set Origin
 	setOrigin(d_Circle, d_Circle.getLocalBounds().getSize());
-}
-
-void Entity::circle::updateBounding() {
-	d_Rect.setPosition(d_Circle.getPosition());
-	d_Rect.setRotation(d_Circle.getRotation());
-	d_Rect.setScale(d_Circle.getScale());
 }

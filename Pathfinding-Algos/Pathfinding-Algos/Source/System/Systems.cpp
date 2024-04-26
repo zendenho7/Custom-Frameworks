@@ -26,7 +26,7 @@ Systems::WindowHandler::WindowHandler(sf::VideoMode mode, const sf::String& titl
     windowCenter(static_cast<float>(window.getSize().x) / 2.0f, static_cast<float>(window.getSize().y) / 2.0f) {}
 
 Systems::EventHandler::EventHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style, const sf::ContextSettings& settings)
-    : WindowHandler(mode, title, style, settings), bmouseTriggered{ false }, bmouseReleased{ false }, bkeyTriggered{ false }, bkeyReleased{ false }, event{ sf::Event() } {}
+    : WindowHandler(mode, title, style, settings), b_mouseTriggered{ false }, b_mouseReleased{ false }, b_keyTriggered{ false }, b_keyReleased{ false }, event{ sf::Event() } {}
 
 // ================================================================================
 // Function: System Input Handling
@@ -91,12 +91,12 @@ bool Systems::EventHandler::keyTriggered(sf::Keyboard::Scancode keycode) {
 
     //Reset Boolean When Key Released
     if (keyReleased(keycode)) {
-        bkeyTriggered = false;
+        b_keyTriggered = false;
     }
 
     //Check If Key Triggered
-    if (keyChecked(keycode) && !bkeyTriggered) {
-        bkeyTriggered = true;
+    if (keyChecked(keycode) && !b_keyTriggered) {
+        b_keyTriggered = true;
         return true;
     }
     else {
@@ -119,12 +119,12 @@ bool Systems::EventHandler::keyReleased(sf::Keyboard::Scancode keycode) {
 
     //Released Flag Reset
     if (event.type != sf::Event::KeyReleased) {
-        bkeyReleased = false;
+        b_keyReleased = false;
     }
 
     //Check For Key Released
-    if ((event.type == sf::Event::KeyReleased && event.key.scancode == keycode) && !bkeyReleased) {
-        bkeyReleased = true;
+    if ((event.type == sf::Event::KeyReleased && event.key.scancode == keycode) && !b_keyReleased) {
+        b_keyReleased = true;
         return true;
     }
     else {
@@ -135,12 +135,12 @@ bool Systems::EventHandler::keyReleased(sf::Keyboard::Scancode keycode) {
 bool Systems::EventHandler::mouseTriggered(sf::Mouse::Button btncode) {
     //Reset Boolean When Key Released
     if (mouseReleased(btncode)) {
-        bmouseTriggered = false;
+        b_mouseTriggered = false;
     }
 
     //Check If Key Triggered
-    if (mouseChecked(btncode) && !bmouseTriggered) {
-        bmouseTriggered = true;
+    if (mouseChecked(btncode) && !b_mouseTriggered) {
+        b_mouseTriggered = true;
         return true;
     }
     else {
@@ -161,12 +161,12 @@ bool Systems::EventHandler::mouseChecked(sf::Mouse::Button btncode) {
 bool Systems::EventHandler::mouseReleased(sf::Mouse::Button btncode) {
     //Released Flag Reset
     if (event.type != sf::Event::MouseButtonReleased) {
-        bmouseReleased = false;
+        b_mouseReleased = false;
     }
 
     //Check For Key Released
-    if ((event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == btncode) && !bmouseReleased) {
-        bmouseReleased = true;
+    if ((event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == btncode) && !b_mouseReleased) {
+        b_mouseReleased = true;
         return true;
     }
     else {

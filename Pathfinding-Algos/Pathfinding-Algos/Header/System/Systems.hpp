@@ -42,16 +42,16 @@ namespace Systems {
 	class EventHandler : public WindowHandler {
 	private:
 		//Input Handling For Events
-		bool bmouseTriggered;
-		bool bmouseReleased;
-		bool bkeyTriggered;
-		bool bkeyReleased;
+		bool b_mouseTriggered;
+		bool b_mouseReleased;
+		bool b_keyTriggered;
+		bool b_keyReleased;
 	public:
 		//System Events
 		sf::Event event;
 
 		//Constructors
-		EventHandler() : WindowHandler(), bmouseTriggered{ false }, bmouseReleased{ false }, bkeyTriggered{ false }, bkeyReleased{ false }, event() {}
+		EventHandler() : WindowHandler(), b_mouseTriggered{ false }, b_mouseReleased{ false }, b_keyTriggered{ false }, b_keyReleased{ false }, event() {}
 		EventHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
 
 		//Polling Events
