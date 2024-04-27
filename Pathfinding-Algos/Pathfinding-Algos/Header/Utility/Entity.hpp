@@ -59,8 +59,6 @@ namespace Entity {
 	//Sprite Entity Derived From Rect Entity ( Rect Represents Bounding Box In Sprite )
 	class sprite : public base {
 	private:
-		//For SpriteSheet
-		sf::Vector2i spriteRowCol;
 
 	public:
 		//Drawable
@@ -71,9 +69,10 @@ namespace Entity {
 
 		//Constructors
 		sprite() = default;
-		sprite(sf::Texture const& tex, sf::Vector2i const& rowcolcount, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, sf::Uint8 opacity = 255, Origin oPos = Origin::CENTER);
+		sprite(sf::Texture const& tex, sf::IntRect const& spritePos, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, sf::Uint8 opacity = 255, Origin oPos = Origin::CENTER);
 
-		void setTexture(sf::Texture const& tex, sf::Vector2i const& rowcolcount);
+		//Set Texture
+		void setTexture(sf::Texture const& tex, sf::IntRect const& spritePos);
 	};
 
 	//Circle Entity Derived From Cirlce Entity ( Rect Represents Bounding Box In Circle )

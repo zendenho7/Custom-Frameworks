@@ -14,28 +14,29 @@ Copyright (c) 2024 Zen Ho
 // ================================================================================
 
 //Constructor
-Animation::SheetAnimator::SheetAnimator(sf::Vector2i const& sheetsize, sf::Vector2i const& spritesize, float animatespeed, bool pingpong, sf::Vector2i const& start, sf::Vector2i const& end)
+Animation::SheetAnimator::SheetAnimator(sf::Vector2u const& sheetsize, sf::Vector2i const& spritesize, float animatespeed, bool pingpong, sf::Vector2u const& startIndex, sf::Vector2u const& endIndex)
 	:	sheetSize{ sheetsize }, spriteSize{ spritesize }, 
 		animationSpeed{ animatespeed }, timer(), b_pingpong{ pingpong }, b_reverse{ false },
-		startSprite{ start }, endSprite{ end }, currSprite{ startSprite } {}
+		startSprite{ startIndex.x * spriteSize.x, startIndex.y * spriteSize.y }, endSprite{ endIndex.x * spriteSize.x, endIndex.y * spriteSize.y }, currSprite{ startSprite } {}
 
 //Setters
-void Animation::SheetAnimator::SetSpriteSheet(sf::Vector2i const& sheetsize, sf::Vector2i const& spritesize, float animatespeed, bool pingpong, sf::Vector2i const& start, sf::Vector2i const& end) {
+void Animation::SheetAnimator::SetSpriteSheet(sf::Vector2u const& sheetsize, sf::Vector2i const& spritesize, float animatespeed, bool pingpong, sf::Vector2u const& startIndex, sf::Vector2u const& endIndex) {
 	sheetSize = sheetsize;
-	spriteSize = spritesize;
+	spriteSize = static_cast<sf::Vector2u>(spritesize);
 	animationSpeed = animatespeed;
-	startSprite = start;
-	endSprite = end;
+	startSprite = { startIndex.x * spriteSize.x, startIndex.y* spriteSize.y };
+	endSprite = { endIndex.x * spriteSize.x, endIndex.y * spriteSize.y };
 	b_pingpong = pingpong;
 }
 
+//Reset Animator Iterator
 void Animation::SheetAnimator::resetCurrSprite() {
 	currSprite = startSprite;
 }
 
 //Animators
 void Animation::SheetAnimator::animateTexture(sf::Shape& obj) {
-	obj.setTextureRect(sf::IntRect(currSprite, spriteSize));
+	obj.setTextureRect(sf::IntRect(static_cast<sf::Vector2i>(currSprite), static_cast<sf::Vector2i>(spriteSize)));
 
 	//Iterate Sprites
 	if (currSprite.x < sheetSize.x - spriteSize.x) {
@@ -99,7 +100,7 @@ void Animation::SheetAnimator::iterateBackWard() {
 void Animation::SheetAnimator::animateTexture(sf::Sprite& obj) {
 
 	//Set TextureRect
-	obj.setTextureRect(sf::IntRect(currSprite, spriteSize));
+	obj.setTextureRect(sf::IntRect(static_cast<sf::Vector2i>(currSprite), static_cast<sf::Vector2i>(spriteSize)));
 
 	//Wait For Next Iteration
 	if (timer.getElapsedTime().asSeconds() >= animationSpeed) {

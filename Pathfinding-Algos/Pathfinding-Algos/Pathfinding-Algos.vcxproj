@@ -113,7 +113,7 @@
       <AdditionalLibraryDirectories>C:\Solo Projects\Libraries\SFML-2.6.1\lib;</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q
+      <Command>xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q
 xcopy "C:\Solo Projects\Libraries\SFML-2.6.1\bin\openal32.dll" "$(OutDir)" /s /r /y /q</Command>
     </PostBuildEvent>
     <ProjectReference>
@@ -145,7 +145,7 @@ xcopy "C:\Solo Projects\Libraries\SFML-2.6.1\bin\openal32.dll" "$(OutDir)" /s /r
       </IgnoreAllDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q
+      <Command>xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q
 xcopy "C:\Solo Projects\Libraries\SFML-2.6.1\bin\openal32.dll" "$(OutDir)" /s /r /y /q</Command>
     </PostBuildEvent>
     <ProjectReference>

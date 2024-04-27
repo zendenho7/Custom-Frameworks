@@ -24,15 +24,14 @@ namespace {
 
 void SplashScreen::Load() {
 	//Load All Essential Assets For The Game Here
-	exAssets->addTexFromFile("SFML", "../Assets/SFML Logo.png");
-	exAssets->addTexFromFile("AME", "../Assets/ame.png");
+	exAssets->addTexFromFile("SFML", "Assets/SFML Logo.png");
+	exAssets->addTexFromFile("AME", "Assets/ame.png");
 }
 
 void SplashScreen::Init() {
 	ssEntity = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(200.0f, 200.0f), exEvents->windowCenter);
-	spriteEntity = std::make_unique<Entity::sprite>(exAssets->textures["AME"], sf::Vector2i(4, 5), sf::Vector2f(200.0f, 200.0f), exEvents->windowCenter);
-
-	spriteEntity->animate.SetSpriteSheet(sf::Vector2i(2000, 2500), sf::Vector2i(500, 500), 0.5f, true, sf::Vector2i(0, 0), sf::Vector2i(1000, 2000));
+	spriteEntity = std::make_unique<Entity::sprite>(exAssets->textures["AME"], sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(500, 500)), sf::Vector2f(200.0f, 200.0f), exEvents->windowCenter);
+	spriteEntity->animate.SetSpriteSheet(spriteEntity->d_Sprite.getTexture()->getSize(), spriteEntity->d_Sprite.getTextureRect().getSize(), 0.15f, true, sf::Vector2u(0, 0), sf::Vector2u(2, 4));
 }
 
 void SplashScreen::Update() {
