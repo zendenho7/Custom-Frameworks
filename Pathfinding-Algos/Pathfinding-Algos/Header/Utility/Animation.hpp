@@ -69,7 +69,7 @@ namespace Animation {
 		/// <param name="pingpong">PingPong Function Defaulted To False</param>
 		/// <param name="startIndex">Starting Index Of Iterator</param>
 		/// <param name="endIndex">Ending Index Of Iterator</param>
-		void SetSpriteSheet(sf::Vector2u const& sheetsize, sf::Vector2i const& spritesize, float animatespeed = ANIMATE_SPEED, bool pingpong = false, sf::Vector2u const& startIndex = sf::Vector2u(0, 0), sf::Vector2u const& endIndex = sf::Vector2u(0, 0));
+		void setAnimation(sf::Vector2u const& sheetsize, sf::Vector2i const& spritesize, float animatespeed = ANIMATE_SPEED, bool pingpong = false, sf::Vector2u const& startIndex = sf::Vector2u(0, 0), sf::Vector2u const& endIndex = sf::Vector2u(0, 0));
 		void resetCurrSprite();
 
 		//Animte Sprite Sheet Function Call ( If Start == End, Animation Will Go Through The Whole Spritesheet )

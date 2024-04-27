@@ -9,17 +9,26 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\System\pch.hpp"
 #include "..\..\Header\Utility\UserInterface.hpp"
 
-Interface::RectButton::RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, Entity::Origin oPos, bool hover)
-	: rect(color, size, pos, rotation, oPos), b_hoverEnabled{ hover }, hoverScale{ HOVER_SCALE }, hoverDuration{ HOVER_TIME }
+// ================================================================================
+// Class: Rect Button Constructor
+// ================================================================================
+
+Interface::RectButton::RectButton(sf::Color const& color, std::string const& text, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, Drawables::Origin oPos, bool hover)
+	: btnTxt{ text }, b_hoverEnabled { hover }, hoverScale{ HOVER_SCALE }, hoverDuration{ HOVER_TIME }, drawable() 
 {
+	Drawables::initRectShape(drawable, color, size, pos, rotation, oPos);
 }
+
+// ================================================================================
+// Class: Rect Button Private Hover Operations
+// ================================================================================
 
 void Interface::RectButton::hoverButton() {
 	//Hovering Speed Based On HoverTime
 	float hoverSpeed{ (hoverScale - 1.0f) / (hoverDuration / exTime->deltaTime) };
 
 	//Hovering Scaling Up Operations
-	d_Rect.setScale((d_Rect.getScale().x < hoverScale ? d_Rect.getScale().x + hoverSpeed : d_Rect.getScale().x), (d_Rect.getScale().y < hoverScale ? d_Rect.getScale().y + hoverSpeed : d_Rect.getScale().y));
+	drawable.setScale((drawable.getScale().x < hoverScale ? drawable.getScale().x + hoverSpeed : drawable.getScale().x), (drawable.getScale().y < hoverScale ? drawable.getScale().y + hoverSpeed : drawable.getScale().y));
 }
 
 void Interface::RectButton::normalButton() {
@@ -27,20 +36,41 @@ void Interface::RectButton::normalButton() {
 	float hoverSpeed{ (hoverScale - 1.0f) / (hoverDuration / exTime->deltaTime) };
 
 	//Hovering Scaling Down Operations
-	d_Rect.setScale((d_Rect.getScale().x > 1.0f ? d_Rect.getScale().x - hoverSpeed : d_Rect.getScale().x), (d_Rect.getScale().y > 1.0f ? d_Rect.getScale().y - hoverSpeed : d_Rect.getScale().y));
+	drawable.setScale((drawable.getScale().x > 1.0f ? drawable.getScale().x - hoverSpeed : drawable.getScale().x), (drawable.getScale().y > 1.0f ? drawable.getScale().y - hoverSpeed : drawable.getScale().y));
 }
 
-void Interface::RectButton::setCustomHover(float scale, float duration) {
+// ================================================================================
+// Class: Rect Button Getters
+// ================================================================================
+
+std::string const& Interface::RectButton::getButtonText() const{
+	return btnTxt;
+}
+
+// ================================================================================
+// Class: Rect Button Setters
+// ================================================================================
+
+void Interface::RectButton::setHoverSettings(bool hover, float scale, float duration) {
+	b_hoverEnabled = hover;
 	hoverScale = scale;
 	hoverDuration = duration;
 }
+
+void Interface::RectButton::setButtonText(std::string const& text) {
+	btnTxt = text;
+}
+
+// ================================================================================
+// Class: Rect Button Hover & Clicked Check
+// ================================================================================
 
 bool Interface::RectButton::isButtonClicked() {
 	//Get Mouse Position
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(exEvents->window));
 
 	//Get Button Bound & Size
-	sf::FloatRect buttonObj = d_Rect.getGlobalBounds();
+	sf::FloatRect buttonObj = drawable.getGlobalBounds();
 
 	//Check For Mouse Click Within Bounds
 	if (mousePos.x > (buttonObj.left) && //Left Side
@@ -63,7 +93,7 @@ bool Interface::RectButton::isButtonClicked() {
 	}
 
 	//Return Button Back To Origin State
-	if(d_Rect.getScale().x > 1.0f && d_Rect.getScale().y > 1.0f)
+	if(drawable.getScale().x > 1.0f && drawable.getScale().y > 1.0f)
 	normalButton();
 
 	return false;

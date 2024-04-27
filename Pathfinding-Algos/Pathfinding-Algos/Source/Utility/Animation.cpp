@@ -26,7 +26,7 @@ Animation::SheetAnimator::SheetAnimator(sf::Vector2u const& sheetsize, sf::Vecto
 // Class: Sprite Sheet Setters & Resetters
 // ================================================================================
 
-void Animation::SheetAnimator::SetSpriteSheet(sf::Vector2u const& sheetsize, sf::Vector2i const& spritesize, float animatespeed, bool pingpong, sf::Vector2u const& startIndex, sf::Vector2u const& endIndex) {
+void Animation::SheetAnimator::setAnimation(sf::Vector2u const& sheetsize, sf::Vector2i const& spritesize, float animatespeed, bool pingpong, sf::Vector2u const& startIndex, sf::Vector2u const& endIndex) {
 	sheetSize = sheetsize;
 	spriteSize = static_cast<sf::Vector2u>(spritesize);
 	animationSpeed = animatespeed;

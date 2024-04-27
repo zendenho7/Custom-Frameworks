@@ -14,12 +14,14 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\System\pch.hpp"
 #include "..\..\Header\Menu\SplashScreen.hpp"
 #include "..\..\Header\Utility\Utils.hpp"
-#include "..\..\Header\Utility\Entity.hpp"
+#include "..\..\Header\Utility\Drawables.hpp"
+#include "..\..\Header\Utility\Animation.hpp"
 #include "..\..\Header\Utility\UserInterface.hpp"
 
 namespace {
 	std::unique_ptr <Interface::RectButton> ssEntity;
-	std::unique_ptr <Entity::sprite> spriteEntity;
+	std::unique_ptr <sf::Sprite> spriteEntity;
+	std::unique_ptr <Animation::SheetAnimator> spriteAnimator;
 }
 
 void SplashScreen::Load() {
@@ -29,19 +31,21 @@ void SplashScreen::Load() {
 }
 
 void SplashScreen::Init() {
-	ssEntity = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(200.0f, 200.0f), exEvents->windowCenter);
-	spriteEntity = std::make_unique<Entity::sprite>(exAssets->textures["AME"], sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(500, 500)), sf::Vector2f(200.0f, 200.0f), exEvents->windowCenter);
-	spriteEntity->animate.SetSpriteSheet(spriteEntity->d_Sprite.getTexture()->getSize(), spriteEntity->d_Sprite.getTextureRect().getSize(), 0.15f, true, sf::Vector2u(0, 0), sf::Vector2u(2, 4));
+	ssEntity = std::make_unique<Interface::RectButton>(sf::Color::White, "test", sf::Vector2f(200.0f, 200.0f), exEvents->windowCenter);
+	spriteEntity = std::make_unique<sf::Sprite>();
+	Drawables::initSprite(*spriteEntity, exAssets->textures["AME"], sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(500, 500)), sf::Vector2f(200.0f, 200.0f), exEvents->windowCenter);
+	spriteAnimator = std::make_unique<Animation::SheetAnimator>(spriteEntity->getTexture()->getSize(), spriteEntity->getTextureRect().getSize(), 0.15f, true, sf::Vector2u(0, 0), sf::Vector2u(2, 4));
 }
 
 void SplashScreen::Update() {
 
-	spriteEntity->animate.animateTexture(spriteEntity->d_Sprite);
+	spriteAnimator->animateTexture(*spriteEntity);
 
 	//Rotate Entity
 	if (ssEntity->isButtonClicked()) {
 		exGSNext = GSManager::GS_MAIN_MENU;
 	}
+
 	//Enter MainMenu Game State
 	//if (exEvents->mouseTriggered(sf::Mouse::Button::Left)) {
 	//	exGSNext = GSManager::GS_MAIN_MENU;
@@ -54,8 +58,8 @@ void SplashScreen::Draw() {
 	exEvents->window.clear();
 
 	//Draw To Window
-	exEvents->window.draw(ssEntity->d_Rect);
-	exEvents->window.draw(spriteEntity->d_Sprite);
+	exEvents->window.draw(ssEntity->drawable);
+	exEvents->window.draw(*spriteEntity);
 }
 
 void SplashScreen::Free() {

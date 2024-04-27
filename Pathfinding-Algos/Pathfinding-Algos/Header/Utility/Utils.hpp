@@ -8,12 +8,12 @@ Copyright (c) 2024 Zen Ho
 
 #pragma once
 
+#ifndef UTILS_HPP
+#define UTILS_HPP
+
 #include "..\..\Header\System\GameStateManager.hpp"
 #include "..\..\Header\System\Systems.hpp"
 #include "..\..\Header\System\Load.hpp"
-
-#ifndef UTILS_HPP
-#define UTILS_HPP
 
 // ================================================================================
 // EXTERNALS

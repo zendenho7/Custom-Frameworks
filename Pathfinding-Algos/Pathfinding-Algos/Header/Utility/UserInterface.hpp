@@ -11,8 +11,8 @@ Copyright (c) 2024 Zen Ho
 #ifndef USERINTERFACE_HPP
 #define USERINTERFACE_HPP
 
-#include "..\..\Header\Utility\Entity.hpp"
 #include "..\..\Header\Utility\Utils.hpp"
+#include "..\..\Header\Utility\Drawables.hpp"
 
 namespace Interface {
 
@@ -21,23 +21,33 @@ namespace Interface {
 	const float HOVER_TIME = 0.25f;		//Hover Time In Seconds
 
 	//Button Interface
-	class RectButton : public Entity::rect {
+	class RectButton {
 	private:
 		//Hovering Operators
 		bool b_hoverEnabled;
 		float hoverScale;
 		float hoverDuration;
 
+		//Button Display Text
+		std::string btnTxt;
+
 		//Hover Operations
 		void hoverButton();
 		void normalButton();
 	public:
+		//Drawable
+		sf::RectangleShape drawable;
+
 		//Constructors
 		RectButton() = default;
-		RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, Entity::Origin oPos = Entity::Origin::CENTER, bool hover = true);
+		RectButton(sf::Color const& color, std::string const& text, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, Drawables::Origin oPos = Drawables::Origin::CENTER, bool hover = true);
 
 		//Set Custom Hover Scale & Duration
-		void setCustomHover(float scale, float duration);
+		void setHoverSettings(bool hover, float scale, float duration);
+
+		//Set Button Text
+		void setButtonText(std::string const& text);
+		std::string const& getButtonText() const;
 
 		//Button Click Check
 		bool isButtonClicked();
