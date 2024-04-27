@@ -20,10 +20,10 @@ namespace Load {
 	class Assets {
 	public:
 		// <Type Of Texture, Loaded Texture>
-		std::map<std::string, sf::Texture> textures;
+		std::unordered_map<std::string, sf::Texture> textures;
 
 		// <Type Of Sound, Loaded Sound>
-		std::map<std::string, sf::Sound> audios;
+		std::unordered_map<std::string, sf::Sound> audios;
 
 		//Constructor
 		Assets() = default;
