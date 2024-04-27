@@ -38,6 +38,10 @@ namespace Entity {
 		//Set Origin Of Entity
 		void setOrigin(sf::Transformable& obj, sf::Vector2f const& size);
 
+		//Set Texture
+		void setTexture(sf::Shape& obj, sf::Texture const& tex, sf::IntRect const& spritePos);
+		void setTexture(sf::Sprite& obj, sf::Texture const& tex, sf::IntRect const& spritePos);
+
 		//Virtual Destructor
 		virtual ~base() = default;
 	};
@@ -70,9 +74,6 @@ namespace Entity {
 		//Constructors
 		sprite() = default;
 		sprite(sf::Texture const& tex, sf::IntRect const& spritePos, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, sf::Uint8 opacity = 255, Origin oPos = Origin::CENTER);
-
-		//Set Texture
-		void setTexture(sf::Texture const& tex, sf::IntRect const& spritePos);
 	};
 
 	//Circle Entity Derived From Cirlce Entity ( Rect Represents Bounding Box In Circle )

@@ -12,12 +12,14 @@ Copyright (c) 2024 Zen Ho
 #define ANIMATION_HPP
 
 namespace Animation {
-	//Animation Constants
+	// ================================================================================
+	// CONSTANTS
+	// ================================================================================
 	const float ANIMATE_SPEED = 0.1f;
 
-
-	//SheetAnimation Class ( Only For Uniform Sprite Spritesheet )
-	//Animation Goes From Left To Right & Top To Bottom
+	// ================================================================================
+	// Class: Sprite Sheet Animation Class ( Top Left To Bot Right Iteration )
+	// ================================================================================
 	class SheetAnimator {
 	private:
 		//Sprite Sheet Sizes

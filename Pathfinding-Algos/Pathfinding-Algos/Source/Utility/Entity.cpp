@@ -70,11 +70,6 @@ Entity::sprite::sprite(sf::Texture const& tex, sf::IntRect const& spritePos, sf:
 	setOrigin(d_Sprite, d_Sprite.getLocalBounds().getSize());
 }
 
-void Entity::sprite::setTexture(sf::Texture const& tex, sf::IntRect const& spritePos) {
-	d_Sprite.setTexture(tex);
-	d_Sprite.setTextureRect(spritePos);
-}
-
 // ================================================================================
 // Class: Circle Entity Member Functions
 // ================================================================================
