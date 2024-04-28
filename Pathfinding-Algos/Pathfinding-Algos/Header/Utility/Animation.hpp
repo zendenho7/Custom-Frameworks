@@ -52,23 +52,23 @@ namespace Animation {
 		/// <summary>
 		/// Arguement Constructor For Sprite Sheet Animation
 		/// </summary>
-		/// <param name="sheetsize">Size Of Sprite Sheet</param>
-		/// <param name="spritesize">Size Of Sprite Within Spritesheet ( Applies Only To Same Size Sprite )</param>
-		/// <param name="animatespeed">Speed Of Animation</param>
-		/// <param name="pingpong">PingPong Function Defaulted To False</param>
-		/// <param name="startIndex">Starting Index Of Iterator</param>
-		/// <param name="endIndex">Ending Index Of Iterator</param>
+		/// <param name="sheetsize">: Size Of Sprite Sheet</param>
+		/// <param name="spritesize">: Size Of Sprite Within Spritesheet ( Applies Only To Same Size Sprite )</param>
+		/// <param name="animatespeed">: Speed Of Animation</param>
+		/// <param name="pingpong">: PingPong Function Defaulted To False</param>
+		/// <param name="startIndex">: Starting Index Of Iterator</param>
+		/// <param name="endIndex">: Ending Index Of Iterator</param>
 		SheetAnimator(sf::Vector2u const& sheetsize, sf::Vector2i const& spritesize, float animatespeed = ANIMATE_SPEED, bool pingpong = false, sf::Vector2u const& startIndex = sf::Vector2u(0, 0), sf::Vector2u const& endIndex = sf::Vector2u(0, 0));
 
 		/// <summary>
 		/// SpriteSheet Animation Setter
 		/// </summary>
-		/// <param name="sheetsize">Size Of Sprite Sheet</param>
-		/// <param name="spritesize">Size Of Sprite Within Spritesheet ( Applies Only To Same Size Sprite )</param>
-		/// <param name="animatespeed">Speed Of Animation</param>
-		/// <param name="pingpong">PingPong Function Defaulted To False</param>
-		/// <param name="startIndex">Starting Index Of Iterator</param>
-		/// <param name="endIndex">Ending Index Of Iterator</param>
+		/// <param name="sheetsize">: Size Of Sprite Sheet</param>
+		/// <param name="spritesize">: Size Of Sprite Within Spritesheet ( Applies Only To Same Size Sprite )</param>
+		/// <param name="animatespeed">: Speed Of Animation</param>
+		/// <param name="pingpong">: PingPong Function Defaulted To False</param>
+		/// <param name="startIndex">: Starting Index Of Iterator</param>
+		/// <param name="endIndex">: Ending Index Of Iterator</param>
 		void setAnimation(sf::Vector2u const& sheetsize, sf::Vector2i const& spritesize, float animatespeed = ANIMATE_SPEED, bool pingpong = false, sf::Vector2u const& startIndex = sf::Vector2u(0, 0), sf::Vector2u const& endIndex = sf::Vector2u(0, 0));
 		void resetCurrSprite();
 

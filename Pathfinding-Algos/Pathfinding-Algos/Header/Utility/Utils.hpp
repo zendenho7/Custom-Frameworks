@@ -23,4 +23,17 @@ extern Systems::EventHandler* exEvents;
 extern Systems::FrameTime* exTime;
 extern Load::Assets* exAssets;
 
+// ================================================================================
+// MATHEMATICAL HELPERS
+// ================================================================================
+
+/// <summary>
+/// Pythagoreom Function To Find a, b or c
+/// </summary>
+/// <param name="a">: a, b or c</param>
+/// <param name="b">: a, b or c</param>
+/// <param name="hyp">: looking for hyp if true, else looking for edge</param>
+/// <returns></returns>
+float PythagoreomFunction(float a, float b, bool hyp);
+
 #endif // !UTILS_HPP

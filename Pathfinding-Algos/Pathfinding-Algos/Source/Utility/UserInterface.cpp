@@ -13,10 +13,9 @@ Copyright (c) 2024 Zen Ho
 // Class: Rect Button Constructor
 // ================================================================================
 
-Interface::RectButton::RectButton(sf::Color const& color, std::string const& text, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, Drawables::Origin oPos, bool hover)
-	: btnTxt{ text }, b_hoverEnabled { hover }, hoverScale{ HOVER_SCALE }, hoverDuration{ HOVER_TIME }, drawable() 
+Interface::RectButton::RectButton(sf::Color const& color, std::string const& text, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Drawables::Origin oPos, bool hover)
+	: D_RoundedRectangle(color, size, pos, rounding, rotation, oPos), btnTxt{ text }, b_hoverEnabled { hover }, hoverScale{ HOVER_SCALE }, hoverDuration{ HOVER_TIME }
 {
-	Drawables::initRectShape(drawable, color, size, pos, rotation, oPos);
 }
 
 // ================================================================================
@@ -28,7 +27,7 @@ void Interface::RectButton::hoverButton() {
 	float hoverSpeed{ (hoverScale - 1.0f) / (hoverDuration / exTime->deltaTime) };
 
 	//Hovering Scaling Up Operations
-	drawable.setScale((drawable.getScale().x < hoverScale ? drawable.getScale().x + hoverSpeed : drawable.getScale().x), (drawable.getScale().y < hoverScale ? drawable.getScale().y + hoverSpeed : drawable.getScale().y));
+	setScale((getScale().x < hoverScale ? getScale().x + hoverSpeed : getScale().x), (getScale().y < hoverScale ? getScale().y + hoverSpeed : getScale().y));
 }
 
 void Interface::RectButton::normalButton() {
@@ -36,7 +35,7 @@ void Interface::RectButton::normalButton() {
 	float hoverSpeed{ (hoverScale - 1.0f) / (hoverDuration / exTime->deltaTime) };
 
 	//Hovering Scaling Down Operations
-	drawable.setScale((drawable.getScale().x > 1.0f ? drawable.getScale().x - hoverSpeed : drawable.getScale().x), (drawable.getScale().y > 1.0f ? drawable.getScale().y - hoverSpeed : drawable.getScale().y));
+	setScale((getScale().x > 1.0f ? getScale().x - hoverSpeed : getScale().x), (getScale().y > 1.0f ? getScale().y - hoverSpeed : getScale().y));
 }
 
 // ================================================================================
@@ -70,7 +69,7 @@ bool Interface::RectButton::isButtonClicked() {
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(exEvents->window));
 
 	//Get Button Bound & Size
-	sf::FloatRect buttonObj = drawable.getGlobalBounds();
+	sf::FloatRect buttonObj = getGlobalBounds();
 
 	//Check For Mouse Click Within Bounds
 	if (mousePos.x > (buttonObj.left) && //Left Side
@@ -93,7 +92,7 @@ bool Interface::RectButton::isButtonClicked() {
 	}
 
 	//Return Button Back To Origin State
-	if(drawable.getScale().x > 1.0f && drawable.getScale().y > 1.0f)
+	if(getScale().x > 1.0f && getScale().y > 1.0f)
 	normalButton();
 
 	return false;

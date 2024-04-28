@@ -21,7 +21,7 @@ namespace Interface {
 	const float HOVER_TIME = 0.25f;		//Hover Time In Seconds
 
 	//Button Interface
-	class RectButton {
+	class RectButton : public Drawables::D_RoundedRectangle {
 	private:
 		//Hovering Operators
 		bool b_hoverEnabled;
@@ -35,12 +35,10 @@ namespace Interface {
 		void hoverButton();
 		void normalButton();
 	public:
-		//Drawable
-		sf::RectangleShape drawable;
 
 		//Constructors
 		RectButton() = default;
-		RectButton(sf::Color const& color, std::string const& text, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, Drawables::Origin oPos = Drawables::Origin::CENTER, bool hover = true);
+		RectButton(sf::Color const& color, std::string const& text, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, float rotation = 0.0f, Drawables::Origin oPos = Drawables::Origin::CENTER, bool hover = true);
 
 		//Set Custom Hover Scale & Duration
 		void setHoverSettings(bool hover, float scale, float duration);
