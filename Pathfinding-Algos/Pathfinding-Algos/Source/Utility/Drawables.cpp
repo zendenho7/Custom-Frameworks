@@ -15,27 +15,31 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\Utility\Utils.hpp"
 
 // ================================================================================
-// Transformable Origin Setter
+// Class: Template Base Drawable Class
 // ================================================================================
 
-void Drawables::setOrigin(sf::Transformable& drawables, sf::Vector2f const& size, Origin oPos) {
+template<typename T>
+void Drawables::D_Base<T>::Custom_SetOrigin(Origin oPos) {
+
+	//Size Of Object
+	sf::Vector2f size{ T::getLocalBounds().getSize() };
 
 	//Switch Cases For Origin Setting
 	switch (oPos) {
 	case Origin::CENTER:
-		drawables.setOrigin(size.x / 2, size.y / 2);
+		T::setOrigin(size.x / 2, size.y / 2);
 		break;
 	case Origin::TOP_LEFT:
-		drawables.setOrigin(0.0f, 0.0f);
+		T::setOrigin(0.0f, 0.0f);
 		break;
 	case Origin::TOP_RIGHT:
-		drawables.setOrigin(size.x, 0.0f);
+		T::setOrigin(size.x, 0.0f);
 		break;
 	case Origin::BOT_RIGHT:
-		drawables.setOrigin(size.x, size.y);
+		T::setOrigin(size.x, size.y);
 		break;
 	case Origin::BOT_LEFT:
-		drawables.setOrigin(0.0f, size.y);
+		T::setOrigin(0.0f, size.y);
 		break;
 	default:
 		break;
@@ -47,7 +51,7 @@ void Drawables::setOrigin(sf::Transformable& drawables, sf::Vector2f const& size
 // ================================================================================
 
 Drawables::D_RoundedRectangle::D_RoundedRectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Origin oPos)
-	: ConvexShape(4), cornerRounding{rounding}
+	: D_Base<sf::ConvexShape>(), cornerRounding{rounding}
 {
 	//Center Point Of Rectangle
 	sf::Vector2f centerPoint{ size.x / 2, size.y / 2 };
@@ -73,7 +77,7 @@ Drawables::D_RoundedRectangle::D_RoundedRectangle(sf::Color const& color, sf::Ve
 	setRotation(rotation);
 
 	//Set Origin Of Rect
-	Drawables::setOrigin(*this, getLocalBounds().getSize(), oPos);
+	Custom_SetOrigin(oPos);
 }
 
 void Drawables::D_RoundedRectangle::setPoints() {
@@ -88,7 +92,7 @@ void Drawables::D_RoundedRectangle::setPoints() {
 		rectTotalPoints.reserve((RECT_EDGES * ROUNDING_POINTS_PER_EDGE));
 
 		//Calculate Offset From Rect Edegs Angle & Length
-		float offsetAngle{ (5.0f / 8.0f) * (FULL_RAD_ROTATION) };
+		float offsetAngle{ (5.0f / 8.0f) * static_cast<float>(ROTFULL) };
 		float offsetHyp{ PythagoreomFunction(cornerRounding, cornerRounding, true) };
 
 		//Initialize Every Point In Rounded Rect
@@ -99,13 +103,14 @@ void Drawables::D_RoundedRectangle::setPoints() {
 
 			for (int j{ 0 }; j < ROUNDING_POINTS_PER_EDGE; j++) {
 				//Calculate Angle To Set Point From Offset Position
-				float angle = (FULL_RAD_ROTATION * ((ROUNDING_POINTS_PER_EDGE * i) + j)) / (RECT_EDGES * ROUNDING_POINTS_PER_EDGE);
+				float angle{ (static_cast<float>(ROTFULL) * ((ROUNDING_POINTS_PER_EDGE * i) + j)) / (RECT_EDGES * ROUNDING_POINTS_PER_EDGE) };
 				rectTotalPoints.push_back({ offsetPos.x + cornerRounding * std::cos(angle), offsetPos.y - cornerRounding * std::sin(angle) });
 			}
 		}
 	}
 	else {
 		//If No Rounding ( 4 Points Reserved )
+		setPointCount(RECT_EDGES);
 		rectTotalPoints.reserve(RECT_EDGES);
 
 		for (int i{ 0 }; i < RECT_EDGES; i++) {
@@ -139,15 +144,16 @@ float Drawables::D_RoundedRectangle::getCornerRounding() const {
 // ================================================================================
 
 Drawables::D_Rectangle::D_Rectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, Origin oPos)
-	: RectangleShape(size)
+	: D_Base<RectangleShape>()
 {
 	//Set Drawables Components
+	setSize(size);
 	setPosition(pos);
 	setRotation(rotation);
 	setFillColor(color);
 
 	//Set Origin
-	Drawables::setOrigin(*this, getLocalBounds().getSize(), oPos);
+	Custom_SetOrigin(oPos);
 }
 
 // ================================================================================
@@ -155,15 +161,16 @@ Drawables::D_Rectangle::D_Rectangle(sf::Color const& color, sf::Vector2f const& 
 // ================================================================================
 
 Drawables::D_Circle::D_Circle(sf::Color const& color, float radius, sf::Vector2f const& pos, float rotation, Origin oPos)
-	: CircleShape(radius)
+	: D_Base<CircleShape>()
 {
 	//Set Drawables Components
+	setRadius(radius);
 	setPosition(pos);
 	setRotation(rotation);
 	setFillColor(color);
 
 	//Set Origin
-	Drawables::setOrigin(*this, getLocalBounds().getSize(), oPos);
+	Custom_SetOrigin(oPos);
 }
 
 // ================================================================================
@@ -171,14 +178,16 @@ Drawables::D_Circle::D_Circle(sf::Color const& color, float radius, sf::Vector2f
 // ================================================================================
 
 Drawables::D_Sprite::D_Sprite(sf::Texture const& tex, sf::IntRect const& spritePos, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, sf::Uint8 opacity, Origin oPos)
-	: Sprite(tex, spritePos)
+	: D_Base<Sprite>()
 {
 	//Set Drawables Components
+	setTexture(tex);
+	setTextureRect(spritePos);
 	setScale(size.x / (getLocalBounds().getSize().x), size.y / (getLocalBounds().getSize().y));
 	setPosition(pos);
 	setRotation(rotation);
 	setColor({ 255, 255, 255, opacity });
 
 	//Set Origin
-	Drawables::setOrigin(*this, getLocalBounds().getSize(), oPos);
+	Custom_SetOrigin(oPos);
 }

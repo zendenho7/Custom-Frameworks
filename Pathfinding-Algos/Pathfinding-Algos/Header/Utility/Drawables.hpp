@@ -13,7 +13,9 @@ Copyright (c) 2024 Zen Ho
 
 namespace Drawables {
 
-	//Drawables Origin Positions
+	// ================================================================================
+	// Enums: Defined Origin Types
+	// ================================================================================
 	enum class Origin : sf::Uint8 {
 		CENTER = 0,
 		TOP_LEFT,
@@ -22,16 +24,29 @@ namespace Drawables {
 		BOT_LEFT
 	};
 
-	//Set Origin Of Drawables
-	void setOrigin(sf::Transformable& drawables, sf::Vector2f const& size, Origin oPos = Origin::CENTER);
+	// ================================================================================
+	// Class: Template Base Drawable
+	// ================================================================================
+	template<typename T>
+	class D_Base : public T {
+	private:
 
-	//Rounded Rect Custom Convex Shape
-	class D_RoundedRectangle : public sf::ConvexShape {
+	public:
+		//Constructors
+		D_Base() = default;
+
+		//Custom Member Functions
+		void Custom_SetOrigin(Origin oPos = Origin::CENTER);
+	};
+
+	// ================================================================================
+	// Class: Drawable Rounded Rectangle
+	// ================================================================================
+	class D_RoundedRectangle : public D_Base<sf::ConvexShape> {
 	private:
 		//Rounded Rect Constants
 		const int	RECT_EDGES{ 4 };
 		const int	ROUNDING_POINTS_PER_EDGE{ 10 };
-		const float	FULL_RAD_ROTATION{ static_cast<float>(2.0f * M_PI) };
 
 		//Vertex Manager
 		sf::Vector2f rectVertex[4];
@@ -42,9 +57,8 @@ namespace Drawables {
 		//Update Points Positioning
 		void setPoints();
 
-	protected:
-
 	public:
+		//Constructors
 		D_RoundedRectangle() = default;
 		D_RoundedRectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, float rotation = 0.0f, Origin oPos = Origin::CENTER);
 
@@ -53,26 +67,38 @@ namespace Drawables {
 		float getCornerRounding() const;
 	};
 
-	class D_Rectangle : public sf::RectangleShape {
+	// ================================================================================
+	// Class: Drawable Rectangle
+	// ================================================================================
+	class D_Rectangle : public D_Base<sf::RectangleShape> {
 	private:
 
 	public:
+		//Constructors
 		D_Rectangle() = default;
 		D_Rectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, Origin oPos = Origin::CENTER);
 	};
 
-	class D_Circle : public sf::CircleShape {
+	// ================================================================================
+	// Class: Drawable Circle
+	// ================================================================================
+	class D_Circle : public D_Base<sf::CircleShape> {
 	private:
 
 	public:
+		//Constructors
 		D_Circle() = default;
 		D_Circle(sf::Color const& color, float radius, sf::Vector2f const& pos, float rotation = 0.0f, Origin oPos = Origin::CENTER);
 	};
 
-	class D_Sprite : public sf::Sprite {
+	// ================================================================================
+	// Class: Drawable Sprite
+	// ================================================================================	
+	class D_Sprite : public D_Base<sf::Sprite> {
 	private:
 
 	public:
+		//Constructors
 		D_Sprite() = default;
 		D_Sprite(sf::Texture const& tex, sf::IntRect const& spritePos, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, sf::Uint8 opacity = 255, Origin oPos = Origin::CENTER);
 	};

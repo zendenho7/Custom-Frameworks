@@ -27,7 +27,7 @@ void Interface::RectButton::hoverButton() {
 	float hoverSpeed{ (hoverScale - 1.0f) / (hoverDuration / exTime->deltaTime) };
 
 	//Hovering Scaling Up Operations
-	setScale((getScale().x < hoverScale ? getScale().x + hoverSpeed : getScale().x), (getScale().y < hoverScale ? getScale().y + hoverSpeed : getScale().y));
+	setScale(std::clamp(getScale().x + hoverSpeed, 1.0f, hoverScale), std::clamp(getScale().x + hoverSpeed, 1.0f, hoverScale));
 }
 
 void Interface::RectButton::normalButton() {
@@ -35,7 +35,7 @@ void Interface::RectButton::normalButton() {
 	float hoverSpeed{ (hoverScale - 1.0f) / (hoverDuration / exTime->deltaTime) };
 
 	//Hovering Scaling Down Operations
-	setScale((getScale().x > 1.0f ? getScale().x - hoverSpeed : getScale().x), (getScale().y > 1.0f ? getScale().y - hoverSpeed : getScale().y));
+	setScale(std::clamp(getScale().x - hoverSpeed, 1.0f, hoverScale), std::clamp(getScale().x - hoverSpeed, 1.0f, hoverScale));
 }
 
 // ================================================================================
