@@ -17,35 +17,38 @@ Copyright (c) 2024 Zen Ho
 namespace Interface {
 
 	//Interface Default Constants
-	const float HOVER_SCALE = 1.05f;	//Percentage Of Button Size
-	const float HOVER_TIME = 0.25f;		//Hover Time In Seconds
+	const sf::Vector2f	HOVER_SCALE{ 1.05f, 1.05f };	//Percentage Of Button Size
+	const float			HOVER_TIME{ 0.25f };		//Hover Time In Seconds
 
 	//Button Interface
 	class RectButton : public Drawables::D_RoundedRectangle {
 	private:
 		//Hovering Operators
 		bool b_hoverEnabled;
-		float hoverScale;
+		sf::Vector2f hoverScale;
 		float hoverDuration;
-
-		//Button Display Text
-		std::string btnTxt;
 
 		//Hover Operations
 		void hoverButton();
 		void normalButton();
+
+		//Text Drawable
+		Drawables::D_Text btnTxt;
 	public:
 
 		//Constructors
 		RectButton() = default;
-		RectButton(sf::Color const& color, std::string const& text, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, float rotation = 0.0f, Drawables::Origin oPos = Drawables::Origin::CENTER, bool hover = true);
+		RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, float rotation = 0.0f, Drawables::Origin oPos = Drawables::Origin::CENTER, bool hover = true);
 
 		//Set Custom Hover Scale & Duration
-		void setHoverSettings(bool hover, float scale, float duration);
+		void setHoverSettings(bool hover, sf::Vector2f const& scale, float duration);
+
+		//Initialize Button Text
+		void initButtonText(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Uint8 charSize = 54, Drawables::Origin oPos = Drawables::Origin::CENTER);
 
 		//Set Button Text
-		void setButtonText(std::string const& text);
-		std::string const& getButtonText() const;
+		void setButtonText(std::string const& txt);
+		Drawables::D_Text& getButtonText();
 
 		//Button Click Check
 		bool isButtonClicked();

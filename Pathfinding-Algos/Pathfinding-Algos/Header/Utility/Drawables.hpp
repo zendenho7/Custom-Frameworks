@@ -30,13 +30,61 @@ namespace Drawables {
 	template<typename T>
 	class D_Base : public T {
 	private:
+		sf::Vector2f fixedScale;
 
 	public:
 		//Constructors
-		D_Base() = default;
+		D_Base() : fixedScale{ 1.0f, 1.0f } {}
 
 		//Custom Member Functions
-		void Custom_SetOrigin(Origin oPos = Origin::CENTER);
+		void Custom_SetOrigin(Origin oPos = Origin::CENTER) {
+			//Size Of Object
+			sf::Vector2f size{ T::getLocalBounds().getSize() };
+
+			//Switch Cases For Origin Setting
+			switch (oPos) {
+			case Origin::CENTER:
+				T::setOrigin(size.x / 2, size.y / 2);
+				break;
+			case Origin::TOP_LEFT:
+				T::setOrigin(0.0f, 0.0f);
+				break;
+			case Origin::TOP_RIGHT:
+				T::setOrigin(size.x, 0.0f);
+				break;
+			case Origin::BOT_RIGHT:
+				T::setOrigin(size.x, size.y);
+				break;
+			case Origin::BOT_LEFT:
+				T::setOrigin(0.0f, size.y);
+				break;
+			default:
+				break;
+			}
+		}
+
+		//Set Fixed Scale ( For Size Manipulation )
+		void Custom_SetFixedScale() {
+			fixedScale = T::getScale();
+		}
+
+		//Get Fixed Scale
+		sf::Vector2f const& Custom_GetFixedScale() const {
+			return fixedScale;
+		}
+	};
+
+	// ================================================================================
+	// Class: Drawable Text
+	// ================================================================================
+
+	class D_Text : public D_Base<sf::Text> {
+	private:
+
+	public:
+		//Constructors
+		D_Text() = default;
+		D_Text(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& pos, sf::Uint8 charSize = 54, float rotation = 0.0f, Origin oPos = Origin::CENTER);
 	};
 
 	// ================================================================================

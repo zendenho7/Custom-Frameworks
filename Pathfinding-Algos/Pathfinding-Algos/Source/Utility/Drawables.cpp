@@ -18,32 +18,22 @@ Copyright (c) 2024 Zen Ho
 // Class: Template Base Drawable Class
 // ================================================================================
 
-template<typename T>
-void Drawables::D_Base<T>::Custom_SetOrigin(Origin oPos) {
+// ================================================================================
+// Class: Text Drawable
+// ================================================================================
 
-	//Size Of Object
-	sf::Vector2f size{ T::getLocalBounds().getSize() };
+Drawables::D_Text::D_Text(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& pos, sf::Uint8 charSize, float rotation, Origin oPos)
+	: D_Base<sf::Text>()
+{
+	setFont(font);
+	setString(txt);
+	setCharacterSize(charSize);
+	setFillColor(color);
+	setPosition(pos);
+	setRotation(rotation);
 
-	//Switch Cases For Origin Setting
-	switch (oPos) {
-	case Origin::CENTER:
-		T::setOrigin(size.x / 2, size.y / 2);
-		break;
-	case Origin::TOP_LEFT:
-		T::setOrigin(0.0f, 0.0f);
-		break;
-	case Origin::TOP_RIGHT:
-		T::setOrigin(size.x, 0.0f);
-		break;
-	case Origin::BOT_RIGHT:
-		T::setOrigin(size.x, size.y);
-		break;
-	case Origin::BOT_LEFT:
-		T::setOrigin(0.0f, size.y);
-		break;
-	default:
-		break;
-	}
+	//Set Origin Of Text
+	Custom_SetOrigin(oPos);
 }
 
 // ================================================================================
@@ -92,18 +82,18 @@ void Drawables::D_RoundedRectangle::setPoints() {
 		rectTotalPoints.reserve((RECT_EDGES * ROUNDING_POINTS_PER_EDGE));
 
 		//Calculate Offset From Rect Edegs Angle & Length
-		float offsetAngle{ (5.0f / 8.0f) * static_cast<float>(ROTFULL) };
+		float offsetAngle{ (5.0f / 8.0f) * static_cast<float>(2 * M_PI) };
 		float offsetHyp{ PythagoreomFunction(cornerRounding, cornerRounding, true) };
 
 		//Initialize Every Point In Rounded Rect
-		for (int i{ 0 }; i < RECT_EDGES; i++, offsetAngle += static_cast<float>(M_PI / 2)) {
+		for (int i{ 0 }; i < RECT_EDGES; i++, offsetAngle += static_cast<float>(M_PI_2)) {
 
 			//Caulate Offset Position Based On Rounding Size
 			sf::Vector2f offsetPos{ rectVertex[i].x + (std::cos(offsetAngle) * offsetHyp),  rectVertex[i].y - (std::sin(offsetAngle) * offsetHyp) };
 
 			for (int j{ 0 }; j < ROUNDING_POINTS_PER_EDGE; j++) {
 				//Calculate Angle To Set Point From Offset Position
-				float angle{ (static_cast<float>(ROTFULL) * ((ROUNDING_POINTS_PER_EDGE * i) + j)) / (RECT_EDGES * ROUNDING_POINTS_PER_EDGE) };
+				float angle{ (static_cast<float>(2 * M_PI) * ((ROUNDING_POINTS_PER_EDGE * i) + j)) / (RECT_EDGES * ROUNDING_POINTS_PER_EDGE) };
 				rectTotalPoints.push_back({ offsetPos.x + cornerRounding * std::cos(angle), offsetPos.y - cornerRounding * std::sin(angle) });
 			}
 		}
@@ -184,6 +174,7 @@ Drawables::D_Sprite::D_Sprite(sf::Texture const& tex, sf::IntRect const& spriteP
 	setTexture(tex);
 	setTextureRect(spritePos);
 	setScale(size.x / (getLocalBounds().getSize().x), size.y / (getLocalBounds().getSize().y));
+	Custom_SetFixedScale();
 	setPosition(pos);
 	setRotation(rotation);
 	setColor({ 255, 255, 255, opacity });

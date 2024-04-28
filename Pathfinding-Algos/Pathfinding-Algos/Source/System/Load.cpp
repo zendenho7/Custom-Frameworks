@@ -7,6 +7,10 @@
 Copyright (c) 2024 Zen Ho
 *****************************************************************************************************************/
 
+// ================================================================================
+// INCLUDES
+// ================================================================================
+
 #include "..\..\Header\System\pch.hpp"
 #include "..\..\Header\System\Load.hpp"
 
@@ -15,10 +19,19 @@ Copyright (c) 2024 Zen Ho
 // ================================================================================
 
 // ================================================================================
-// Function: Add Texture Member Function
+// Function: Load Texture Member Function
 // ================================================================================
 
-void Load::Assets::addTexFromFile(std::string const& texIdentifier, std::string const& texturePath) {
+void Load::Assets::loadTexFromFile(std::string const& texIdentifier, std::string const& texturePath) {
 	textures.emplace(texIdentifier, sf::Texture());
 	textures[texIdentifier].loadFromFile(texturePath);
+}
+
+// ================================================================================
+// Function: Load Font Member Function
+// ================================================================================
+
+void Load::Assets::loadFontFromFile(std::string const& fontIdentifier, std::string const& fontPath) {
+	fonts.emplace(fontIdentifier, sf::Font());
+	fonts[fontIdentifier].loadFromFile(fontPath);
 }

@@ -22,14 +22,20 @@ namespace Load {
 		// <Type Of Texture, Loaded Texture>
 		std::unordered_map<std::string, sf::Texture> textures;
 
+		// <Type Of Font, Loaded Font>
+		std::unordered_map<std::string, sf::Font> fonts;
+
 		// <Type Of Sound, Loaded Sound>
 		std::unordered_map<std::string, sf::Sound> audios;
 
 		//Constructor
 		Assets() = default;
 
-		//Add Texture Overload
-		void addTexFromFile(std::string const& texIdentifier, std::string const& texturePath);
+		//Load Textures
+		void loadTexFromFile(std::string const& texIdentifier, std::string const& texturePath);
+
+		//Load Fonts
+		void loadFontFromFile(std::string const& fontIdentifier, std::string const& fontPath);
 	};
 }
 

@@ -20,24 +20,23 @@ Copyright (c) 2024 Zen Ho
 
 namespace {
 	std::unique_ptr <Interface::RectButton> ssEntity;
-	//std::unique_ptr <sf::Sprite> spriteEntity;
-	//std::unique_ptr <Animation::SheetAnimator> spriteAnimator;
-
 }
 
 void SplashScreen::Load() {
-	//Load All Essential Assets For The Game Here
-	exAssets->addTexFromFile("SFML", "Assets/SFML Logo.png");
-	exAssets->addTexFromFile("AME", "Assets/ame.png");
+	//Load Textures
+	exAssets->loadTexFromFile("SFML", "Assets/Textures/SFML Logo.png");
+	exAssets->loadTexFromFile("AME", "Assets/Textures/ame.png");
+
+	//Load Fonts
+	exAssets->loadFontFromFile("COMIC", "Assets/Fonts/SuperComic.ttf");
+	exAssets->loadFontFromFile("MONTSERRAT", "Assets/Fonts/Montserrat-Bold.ttf");
 }
 
 void SplashScreen::Init() {
-	ssEntity = std::make_unique<Interface::RectButton>(sf::Color::White, "test", sf::Vector2f(200.0f, 200.0f), exEvents->windowCenter, 25.0f);
+	ssEntity = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(377.0f, 62.0f), exEvents->windowCenter, 5.0f);
+	ssEntity->initButtonText("BUTTON", exAssets->fonts["COMIC"], sf::Color::Black, 72);
 	ssEntity->setOutlineThickness(10.0f);
 	ssEntity->setOutlineColor(sf::Color::Red);
-	//spriteEntity = std::make_unique<sf::Sprite>();
-	//Drawables::initSprite(*spriteEntity, exAssets->textures["AME"], sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(500, 500)), sf::Vector2f(200.0f, 200.0f), exEvents->windowCenter);
-	//spriteAnimator = std::make_unique<Animation::SheetAnimator>(spriteEntity->getTexture()->getSize(), spriteEntity->getTextureRect().getSize(), 0.15f, true, sf::Vector2u(0, 0), sf::Vector2u(2, 4));
 }
 
 void SplashScreen::Update() {
@@ -62,6 +61,7 @@ void SplashScreen::Draw() {
 
 	//Draw To Window
 	exEvents->window.draw(*ssEntity);
+	exEvents->window.draw(ssEntity->getButtonText());
 }
 
 void SplashScreen::Free() {
