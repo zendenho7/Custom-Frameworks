@@ -36,6 +36,11 @@ Drawables::D_Text::D_Text(std::string const& txt, sf::Font const& font, sf::Colo
 	Custom_SetOrigin(oPos);
 }
 
+void Drawables::D_Text::Custom_OffsetToCenter() {
+	//Offset To Center Of Bounding Box
+	move(0.0f, -(getGlobalBounds().getSize().y * 1.0f / 4.0f));
+}
+
 // ================================================================================
 // Class: Rounded Rect Convex Shape
 // ================================================================================
@@ -82,8 +87,12 @@ void Drawables::D_RoundedRectangle::setPoints() {
 		rectTotalPoints.reserve((RECT_EDGES * ROUNDING_POINTS_PER_EDGE));
 
 		//Calculate Offset From Rect Edegs Angle & Length
-		float offsetAngle{ (5.0f / 8.0f) * static_cast<float>(2 * M_PI) };
+		float offsetAngle{ (5.0f / 8.0f) * static_cast<float>(2.0 * M_PI) };
 		float offsetHyp{ PythagoreomFunction(cornerRounding, cornerRounding, true) };
+
+		//Calculating Angle Of Curve Points
+		float angleIncr { static_cast<float>((2.0 * M_PI) / (RECT_EDGES * (ROUNDING_POINTS_PER_EDGE - 2))) };
+		float angle{ 0.0f };
 
 		//Initialize Every Point In Rounded Rect
 		for (int i{ 0 }; i < RECT_EDGES; i++, offsetAngle += static_cast<float>(M_PI_2)) {
@@ -91,11 +100,17 @@ void Drawables::D_RoundedRectangle::setPoints() {
 			//Caulate Offset Position Based On Rounding Size
 			sf::Vector2f offsetPos{ rectVertex[i].x + (std::cos(offsetAngle) * offsetHyp),  rectVertex[i].y - (std::sin(offsetAngle) * offsetHyp) };
 
-			for (int j{ 0 }; j < ROUNDING_POINTS_PER_EDGE; j++) {
+			//Before Curve Points ( Safeguard The Shape Of Rectangle )
+			rectTotalPoints.push_back({ offsetPos.x + (cornerRounding * std::cos(angle)), offsetPos.y - (cornerRounding * std::sin(angle)) });
+
+			for (int j{ 0 }; j < (ROUNDING_POINTS_PER_EDGE - 2); j++) {
 				//Calculate Angle To Set Point From Offset Position
-				float angle{ (static_cast<float>(2 * M_PI) * ((ROUNDING_POINTS_PER_EDGE * i) + j)) / (RECT_EDGES * ROUNDING_POINTS_PER_EDGE) };
-				rectTotalPoints.push_back({ offsetPos.x + cornerRounding * std::cos(angle), offsetPos.y - cornerRounding * std::sin(angle) });
+				angle += angleIncr;
+				rectTotalPoints.push_back({ offsetPos.x + (cornerRounding * std::cos(angle)), offsetPos.y - (cornerRounding * std::sin(angle)) });
 			}
+
+			//After Curve Points ( Safeguard The Shape Of Rectangle )
+			rectTotalPoints.push_back({ offsetPos.x + (cornerRounding * std::cos(angle)), offsetPos.y - (cornerRounding * std::sin(angle)) });
 		}
 	}
 	else {

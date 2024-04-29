@@ -14,7 +14,7 @@ Copyright (c) 2024 Zen Ho
 // ================================================================================
 
 Interface::RectButton::RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Drawables::Origin oPos, bool hover)
-	: D_RoundedRectangle(color, size, pos, rounding, rotation, oPos), btnTxt(), b_hoverEnabled{hover}, hoverScale{HOVER_SCALE}, hoverDuration{HOVER_TIME}
+	: b_hoverEnabled{ hover }, hoverScale{ HOVER_SCALE }, hoverDuration{ HOVER_TIME }, textToBtnRatio{ 0.0f, 0.0f }, D_Rect(color, size, pos, rounding, rotation, oPos), D_Text()
 {
 }
 
@@ -24,30 +24,22 @@ Interface::RectButton::RectButton(sf::Color const& color, sf::Vector2f const& si
 
 void Interface::RectButton::hoverButton() {
 	//Hovering Speed Based On HoverTime
-	sf::Vector2f btnHoverSpeed{ ((Custom_GetFixedScale().x * hoverScale.x) - Custom_GetFixedScale().x) / (hoverDuration / exTime->deltaTime), ((Custom_GetFixedScale().y * hoverScale.y) - Custom_GetFixedScale().y) / (hoverDuration / exTime->deltaTime) };
-	sf::Vector2f txtHoverSpeed{ ((btnTxt.Custom_GetFixedScale().x * hoverScale.x) - btnTxt.Custom_GetFixedScale().x) / (hoverDuration / exTime->deltaTime),  ((btnTxt.Custom_GetFixedScale().y * hoverScale.y) - btnTxt.Custom_GetFixedScale().y) / (hoverDuration / exTime->deltaTime) };
+	sf::Vector2f btnHoverSpeed{ ((D_Rect.Custom_GetFixedScale().x * hoverScale.x) - D_Rect.Custom_GetFixedScale().x) / (hoverDuration / exTime->deltaTime), ((D_Rect.Custom_GetFixedScale().y * hoverScale.y) - D_Rect.Custom_GetFixedScale().y) / (hoverDuration / exTime->deltaTime) };
+	sf::Vector2f txtHoverSpeed{ ((D_Text.Custom_GetFixedScale().x * hoverScale.x) - D_Text.Custom_GetFixedScale().x) / (hoverDuration / exTime->deltaTime),  ((D_Text.Custom_GetFixedScale().y * hoverScale.y) - D_Text.Custom_GetFixedScale().y) / (hoverDuration / exTime->deltaTime) };
 
 	//Hovering Scaling Up Operations
-	setScale(std::clamp(getScale().x + btnHoverSpeed.x, Custom_GetFixedScale().x, Custom_GetFixedScale().x * hoverScale.x), std::clamp(getScale().x + btnHoverSpeed.x, Custom_GetFixedScale().y, Custom_GetFixedScale().y * hoverScale.y));
-	btnTxt.setScale(std::clamp(btnTxt.getScale().x + txtHoverSpeed.x, btnTxt.Custom_GetFixedScale().x, btnTxt.Custom_GetFixedScale().x * hoverScale.x), std::clamp(btnTxt.getScale().y + txtHoverSpeed.y, btnTxt.Custom_GetFixedScale().y, btnTxt.Custom_GetFixedScale().y * hoverScale.y));
+	D_Rect.setScale(std::clamp(D_Rect.getScale().x + btnHoverSpeed.x, D_Rect.Custom_GetFixedScale().x, D_Rect.Custom_GetFixedScale().x * hoverScale.x), std::clamp(D_Rect.getScale().y + btnHoverSpeed.y, D_Rect.Custom_GetFixedScale().y, D_Rect.Custom_GetFixedScale().y * hoverScale.y));
+	D_Text.setScale(std::clamp(D_Text.getScale().x + txtHoverSpeed.x, D_Text.Custom_GetFixedScale().x, D_Text.Custom_GetFixedScale().x * hoverScale.x), std::clamp(D_Text.getScale().y + txtHoverSpeed.y, D_Text.Custom_GetFixedScale().y, D_Text.Custom_GetFixedScale().y * hoverScale.y));
 }
 
 void Interface::RectButton::normalButton() {
 	//Hovering Speed Based On HoverTime
-	sf::Vector2f btnHoverSpeed{ ((Custom_GetFixedScale().x * hoverScale.x) - Custom_GetFixedScale().x) / (hoverDuration / exTime->deltaTime), ((Custom_GetFixedScale().y * hoverScale.y) - Custom_GetFixedScale().y) / (hoverDuration / exTime->deltaTime) };
-	sf::Vector2f txtHoverSpeed{ ((btnTxt.Custom_GetFixedScale().x * hoverScale.x) - btnTxt.Custom_GetFixedScale().x) / (hoverDuration / exTime->deltaTime),  ((btnTxt.Custom_GetFixedScale().y * hoverScale.y) - btnTxt.Custom_GetFixedScale().y) / (hoverDuration / exTime->deltaTime) };
+	sf::Vector2f btnHoverSpeed{ ((D_Rect.Custom_GetFixedScale().x * hoverScale.x) - D_Rect.Custom_GetFixedScale().x) / (hoverDuration / exTime->deltaTime), ((D_Rect.Custom_GetFixedScale().y * hoverScale.y) - D_Rect.Custom_GetFixedScale().y) / (hoverDuration / exTime->deltaTime) };
+	sf::Vector2f txtHoverSpeed{ ((D_Text.Custom_GetFixedScale().x * hoverScale.x) - D_Text.Custom_GetFixedScale().x) / (hoverDuration / exTime->deltaTime),  ((D_Text.Custom_GetFixedScale().y * hoverScale.y) - D_Text.Custom_GetFixedScale().y) / (hoverDuration / exTime->deltaTime) };
 
 	//Hovering Scaling Down Operations
-	setScale(std::clamp(getScale().x - btnHoverSpeed.x, Custom_GetFixedScale().x, Custom_GetFixedScale().x * hoverScale.x), std::clamp(getScale().x - btnHoverSpeed.x, Custom_GetFixedScale().y, Custom_GetFixedScale().y * hoverScale.y));
-	btnTxt.setScale(std::clamp(btnTxt.getScale().x - txtHoverSpeed.x, btnTxt.Custom_GetFixedScale().x, btnTxt.Custom_GetFixedScale().x * hoverScale.x), std::clamp(btnTxt.getScale().y - txtHoverSpeed.y, btnTxt.Custom_GetFixedScale().y, btnTxt.Custom_GetFixedScale().y * hoverScale.y));
-}
-
-// ================================================================================
-// Class: Rect Button Getters
-// ================================================================================
-
-Drawables::D_Text& Interface::RectButton::getButtonText() {
-	return btnTxt;
+	D_Rect.setScale(std::clamp(D_Rect.getScale().x - btnHoverSpeed.x, D_Rect.Custom_GetFixedScale().x, D_Rect.Custom_GetFixedScale().x * hoverScale.x), std::clamp(D_Rect.getScale().y - btnHoverSpeed.y, D_Rect.Custom_GetFixedScale().y, D_Rect.Custom_GetFixedScale().y * hoverScale.y));
+	D_Text.setScale(std::clamp(D_Text.getScale().x - txtHoverSpeed.x, D_Text.Custom_GetFixedScale().x, D_Text.Custom_GetFixedScale().x * hoverScale.x), std::clamp(D_Text.getScale().y - txtHoverSpeed.y, D_Text.Custom_GetFixedScale().y, D_Text.Custom_GetFixedScale().y * hoverScale.y));
 }
 
 // ================================================================================
@@ -60,24 +52,41 @@ void Interface::RectButton::setHoverSettings(bool hover, sf::Vector2f const& sca
 	hoverDuration = duration;
 }
 
-void Interface::RectButton::initButtonText(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Uint8 charSize, Drawables::Origin oPos) {
-	
-	//Init Text
-	btnTxt.setFont(font);
-	btnTxt.setString(txt);
-	btnTxt.setCharacterSize(charSize);
-	btnTxt.setFillColor(color);
-
-	//Set Based On Btn Attributes
-	btnTxt.setPosition(getPosition());
-	btnTxt.setRotation(getRotation());
-
-	//Set Origin Of Rect
-	btnTxt.Custom_SetOrigin(oPos);
+void Interface::RectButton::setTextToButtonRatio(sf::Vector2f const& ratio) {
+	textToBtnRatio = ratio;
 }
 
-void Interface::RectButton::setButtonText(std::string const& txt) {
-	 btnTxt.setString(txt);
+void Interface::RectButton::initButtonText(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& txtBtnRatio, sf::Uint8 charSize, Drawables::Origin oPos) {
+	
+	//Set Txt Ratio
+	textToBtnRatio = txtBtnRatio;
+
+	//Init Text
+	D_Text.setFont(font);
+	D_Text.setString(txt);
+	D_Text.setCharacterSize(charSize);
+	D_Text.setFillColor(color);
+
+	//Calculate Scale
+	sf::Vector2f txtratio { D_Text.getLocalBounds().getSize().x / D_Rect.getLocalBounds().getSize().x, D_Text.getLocalBounds().getSize().y / D_Rect.getLocalBounds().getSize().y };
+	float maxScale{ std::min(D_Rect.getLocalBounds().getSize().x / D_Text.getLocalBounds().getSize().x, D_Rect.getLocalBounds().getSize().y / D_Text.getLocalBounds().getSize().y) };
+	float txtscale{ txtratio.x - textToBtnRatio.x > txtratio.y - textToBtnRatio.y 
+		? std::clamp((D_Rect.getLocalBounds().getSize().x * textToBtnRatio.x) / D_Text.getLocalBounds().getSize().x, 0.0f, maxScale)
+		: std::clamp((D_Rect.getLocalBounds().getSize().y * textToBtnRatio.y) / D_Text.getLocalBounds().getSize().y, 0.0f, maxScale) };
+
+	//Set Scale
+	D_Text.setScale(txtscale, txtscale);
+	D_Text.Custom_SetFixedScale();
+
+	//Set Based On Btn Attributes
+	D_Text.setPosition(D_Rect.getPosition());
+	D_Text.setRotation(D_Rect.getRotation());
+
+	//Offset To Center Of Bounding Box
+	D_Text.Custom_OffsetToCenter();
+
+	//Set Origin Of Rect
+	D_Text.Custom_SetOrigin(oPos);
 }
 
 // ================================================================================
@@ -89,7 +98,7 @@ bool Interface::RectButton::isButtonClicked() {
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(exEvents->window));
 
 	//Get Button Bound & Size
-	sf::FloatRect buttonObj = getGlobalBounds();
+	sf::FloatRect buttonObj = D_Rect.getGlobalBounds();
 
 	//Check For Mouse Click Within Bounds
 	if (mousePos.x > (buttonObj.left) && //Left Side
@@ -112,8 +121,19 @@ bool Interface::RectButton::isButtonClicked() {
 	}
 
 	//Return Button Back To Origin State
-	if(getScale().x > 1.0f && getScale().y > 1.0f)
+	if(D_Rect.getScale().x > D_Rect.Custom_GetFixedScale().x && D_Rect.getScale().y > D_Rect.Custom_GetFixedScale().y)
 	normalButton();
 
 	return false;
+}
+
+void Interface::RectButton::drawButton() {
+
+	//Draw Rect Button
+	exEvents->window.draw(D_Rect);
+
+	//Draw BtnTxt If Text Is Present
+	if (!D_Text.getString().isEmpty()) {
+		exEvents->window.draw(D_Text);
+	}
 }

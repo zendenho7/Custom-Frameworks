@@ -19,22 +19,29 @@ namespace Interface {
 	//Interface Default Constants
 	const sf::Vector2f	HOVER_SCALE{ 1.05f, 1.05f };	//Percentage Of Button Size
 	const float			HOVER_TIME{ 0.25f };		//Hover Time In Seconds
+	const sf::Vector2f	DEF_TXT_TO_BTN_RATIO{ 0.5f, 0.5f };
 
 	//Button Interface
-	class RectButton : public Drawables::D_RoundedRectangle {
+	class RectButton {
 	private:
 		//Hovering Operators
 		bool b_hoverEnabled;
 		sf::Vector2f hoverScale;
 		float hoverDuration;
 
+		//Text To Button Ratio ( Text Will Fit Within This Ratio )
+		sf::Vector2f textToBtnRatio;
+
 		//Hover Operations
 		void hoverButton();
 		void normalButton();
+	public:
+
+		//Rect Drawable
+		Drawables::D_RoundedRectangle D_Rect;
 
 		//Text Drawable
-		Drawables::D_Text btnTxt;
-	public:
+		Drawables::D_Text D_Text;
 
 		//Constructors
 		RectButton() = default;
@@ -44,14 +51,16 @@ namespace Interface {
 		void setHoverSettings(bool hover, sf::Vector2f const& scale, float duration);
 
 		//Initialize Button Text
-		void initButtonText(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Uint8 charSize = 54, Drawables::Origin oPos = Drawables::Origin::CENTER);
+		void initButtonText(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& txtBtnRatio = DEF_TXT_TO_BTN_RATIO, sf::Uint8 charSize = Drawables::DEF_CHAR_SIZE, Drawables::Origin oPos = Drawables::Origin::CENTER);
 
-		//Set Button Text
-		void setButtonText(std::string const& txt);
-		Drawables::D_Text& getButtonText();
+		//Set Text To Button Ratio ( Text Will Be Fit Within This Ratio )
+		void setTextToButtonRatio(sf::Vector2f const& ratio);
 
 		//Button Click Check
 		bool isButtonClicked();
+
+		//Draw Button Onto Render Target
+		void drawButton();
 	};
 }
 

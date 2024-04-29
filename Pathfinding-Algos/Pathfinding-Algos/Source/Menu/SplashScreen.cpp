@@ -33,35 +33,25 @@ void SplashScreen::Load() {
 }
 
 void SplashScreen::Init() {
-	ssEntity = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(377.0f, 62.0f), exEvents->windowCenter, 5.0f);
-	ssEntity->initButtonText("BUTTON", exAssets->fonts["COMIC"], sf::Color::Black, 72);
-	ssEntity->setOutlineThickness(10.0f);
-	ssEntity->setOutlineColor(sf::Color::Red);
+	ssEntity = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter, 10.0f, 0.0f);
+	ssEntity->initButtonText("CLICK THIS BUTTON", exAssets->fonts["COMIC"], sf::Color::Black, {0.75f, 0.4f});
 }
 
 void SplashScreen::Update() {
 
-	//spriteAnimator->animateTexture(*spriteEntity);
-
-	//Rotate Entity
+	//Button To Enter Next Game State
 	if (ssEntity->isButtonClicked()) {
 		exGSNext = GSManager::GS_MAIN_MENU;
 	}
-
-	//Enter MainMenu Game State
-	//if (exEvents->mouseTriggered(sf::Mouse::Button::Left)) {
-	//	exGSNext = GSManager::GS_MAIN_MENU;
-	//}
 }
 
 void SplashScreen::Draw() {
 
 	//Clear Window
-	exEvents->window.clear();
+	exEvents->window.clear({100, 100, 100, 255});
 
 	//Draw To Window
-	exEvents->window.draw(*ssEntity);
-	exEvents->window.draw(ssEntity->getButtonText());
+	ssEntity->drawButton();
 }
 
 void SplashScreen::Free() {

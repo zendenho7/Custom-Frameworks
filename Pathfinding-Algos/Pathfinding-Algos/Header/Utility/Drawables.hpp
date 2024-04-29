@@ -14,6 +14,11 @@ Copyright (c) 2024 Zen Ho
 namespace Drawables {
 
 	// ================================================================================
+	// Constants
+	// ================================================================================
+	const sf::Uint8  DEF_CHAR_SIZE{ 72 };
+
+	// ================================================================================
 	// Enums: Defined Origin Types
 	// ================================================================================
 	enum class Origin : sf::Uint8 {
@@ -84,7 +89,12 @@ namespace Drawables {
 	public:
 		//Constructors
 		D_Text() = default;
-		D_Text(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& pos, sf::Uint8 charSize = 54, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+		D_Text(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& pos, sf::Uint8 charSize = DEF_CHAR_SIZE, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+
+		/// <summary>
+		/// To Be Called Only After Setting Position
+		/// </summary>
+		void Custom_OffsetToCenter();
 	};
 
 	// ================================================================================
