@@ -36,6 +36,19 @@ Drawables::D_Text::D_Text(std::string const& txt, sf::Font const& font, sf::Colo
 	Custom_SetOrigin(oPos);
 }
 
+void Drawables::D_Text::setD_Text(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& pos, sf::Uint8 charSize, float rotation, Origin oPos)
+{
+	setFont(font);
+	setString(txt);
+	setCharacterSize(charSize);
+	setFillColor(color);
+	setPosition(pos);
+	setRotation(rotation);
+
+	//Set Origin Of Text
+	Custom_SetOrigin(oPos);
+}
+
 void Drawables::D_Text::Custom_OffsetToCenter() {
 	//Offset To Center Of Bounding Box
 	move(0.0f, -(getGlobalBounds().getSize().y * 1.0f / 4.0f));
@@ -46,8 +59,40 @@ void Drawables::D_Text::Custom_OffsetToCenter() {
 // ================================================================================
 
 Drawables::D_RoundedRectangle::D_RoundedRectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Origin oPos)
-	: D_Base<sf::ConvexShape>(), cornerRounding{rounding}
+	: cornerRounding{ rounding }, D_Base<sf::ConvexShape>()
 {
+	//Center Point Of Rectangle
+	sf::Vector2f centerPoint{ size.x / 2, size.y / 2 };
+
+	//Vertex Points Of Rectangle
+	rectVertex[0] = { centerPoint.x + (size.x / 2), centerPoint.y - (size.y / 2) };
+	rectVertex[1] = { centerPoint.x - (size.x / 2), centerPoint.y - (size.y / 2) };
+	rectVertex[2] = { centerPoint.x - (size.x / 2), centerPoint.y + (size.y / 2) };
+	rectVertex[3] = { centerPoint.x + (size.x / 2), centerPoint.y + (size.y / 2) };
+
+	//Clamp Cornder Rounding
+	cornerRounding = std::clamp(rounding, 0.0f, (size.x < size.y ? size.x / 2 : size.y / 2));
+
+	//Update Points Of Rectangle
+	setPoints();
+	update();
+
+	//Set FillColor
+	setFillColor(color);
+
+	//Set Position & Rotation
+	setPosition(pos);
+	setRotation(rotation);
+
+	//Set Origin Of Rect
+	Custom_SetOrigin(oPos);
+}
+
+void Drawables::D_RoundedRectangle::setD_RoundedRectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Origin oPos)
+{
+	//Init Corner Rounding
+	cornerRounding = rounding;
+
 	//Center Point Of Rectangle
 	sf::Vector2f centerPoint{ size.x / 2, size.y / 2 };
 
@@ -161,6 +206,18 @@ Drawables::D_Rectangle::D_Rectangle(sf::Color const& color, sf::Vector2f const& 
 	Custom_SetOrigin(oPos);
 }
 
+void Drawables::D_Rectangle::setD_Rectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, Origin oPos)
+{
+	//Set Drawables Components
+	setSize(size);
+	setPosition(pos);
+	setRotation(rotation);
+	setFillColor(color);
+
+	//Set Origin
+	Custom_SetOrigin(oPos);
+}
+
 // ================================================================================
 // Circle Shape Initializer
 // ================================================================================
@@ -178,12 +235,39 @@ Drawables::D_Circle::D_Circle(sf::Color const& color, float radius, sf::Vector2f
 	Custom_SetOrigin(oPos);
 }
 
+void Drawables::D_Circle::setD_Circle(sf::Color const& color, float radius, sf::Vector2f const& pos, float rotation, Origin oPos)
+{
+	//Set Drawables Components
+	setRadius(radius);
+	setPosition(pos);
+	setRotation(rotation);
+	setFillColor(color);
+
+	//Set Origin
+	Custom_SetOrigin(oPos);
+}
+
 // ================================================================================
 // Sprite Initializer
 // ================================================================================
 
 Drawables::D_Sprite::D_Sprite(sf::Texture const& tex, sf::IntRect const& spritePos, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, sf::Uint8 opacity, Origin oPos)
 	: D_Base<Sprite>()
+{
+	//Set Drawables Components
+	setTexture(tex);
+	setTextureRect(spritePos);
+	setScale(size.x / (getLocalBounds().getSize().x), size.y / (getLocalBounds().getSize().y));
+	Custom_SetFixedScale();
+	setPosition(pos);
+	setRotation(rotation);
+	setColor({ 255, 255, 255, opacity });
+
+	//Set Origin
+	Custom_SetOrigin(oPos);
+}
+
+void Drawables::D_Sprite::setD_Sprite(sf::Texture const& tex, sf::IntRect const& spritePos, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, sf::Uint8 opacity, Origin oPos)
 {
 	//Set Drawables Components
 	setTexture(tex);

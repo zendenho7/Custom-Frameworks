@@ -24,8 +24,8 @@ Interface::RectButton::RectButton(sf::Color const& color, sf::Vector2f const& si
 
 void Interface::RectButton::hoverButton() {
 	//Hovering Speed Based On HoverTime
-	sf::Vector2f btnHoverSpeed{ ((D_Rect.Custom_GetFixedScale().x * hoverScale.x) - D_Rect.Custom_GetFixedScale().x) / (hoverDuration / exTime->deltaTime), ((D_Rect.Custom_GetFixedScale().y * hoverScale.y) - D_Rect.Custom_GetFixedScale().y) / (hoverDuration / exTime->deltaTime) };
-	sf::Vector2f txtHoverSpeed{ ((D_Text.Custom_GetFixedScale().x * hoverScale.x) - D_Text.Custom_GetFixedScale().x) / (hoverDuration / exTime->deltaTime),  ((D_Text.Custom_GetFixedScale().y * hoverScale.y) - D_Text.Custom_GetFixedScale().y) / (hoverDuration / exTime->deltaTime) };
+	sf::Vector2f btnHoverSpeed{ ((D_Rect.Custom_GetFixedScale().x * hoverScale.x) - D_Rect.Custom_GetFixedScale().x) / (hoverDuration / exTime->getDeltaTime()), ((D_Rect.Custom_GetFixedScale().y * hoverScale.y) - D_Rect.Custom_GetFixedScale().y) / (hoverDuration / exTime->getDeltaTime()) };
+	sf::Vector2f txtHoverSpeed{ ((D_Text.Custom_GetFixedScale().x * hoverScale.x) - D_Text.Custom_GetFixedScale().x) / (hoverDuration / exTime->getDeltaTime()),  ((D_Text.Custom_GetFixedScale().y * hoverScale.y) - D_Text.Custom_GetFixedScale().y) / (hoverDuration / exTime->getDeltaTime()) };
 
 	//Hovering Scaling Up Operations
 	D_Rect.setScale(std::clamp(D_Rect.getScale().x + btnHoverSpeed.x, D_Rect.Custom_GetFixedScale().x, D_Rect.Custom_GetFixedScale().x * hoverScale.x), std::clamp(D_Rect.getScale().y + btnHoverSpeed.y, D_Rect.Custom_GetFixedScale().y, D_Rect.Custom_GetFixedScale().y * hoverScale.y));
@@ -34,8 +34,8 @@ void Interface::RectButton::hoverButton() {
 
 void Interface::RectButton::normalButton() {
 	//Hovering Speed Based On HoverTime
-	sf::Vector2f btnHoverSpeed{ ((D_Rect.Custom_GetFixedScale().x * hoverScale.x) - D_Rect.Custom_GetFixedScale().x) / (hoverDuration / exTime->deltaTime), ((D_Rect.Custom_GetFixedScale().y * hoverScale.y) - D_Rect.Custom_GetFixedScale().y) / (hoverDuration / exTime->deltaTime) };
-	sf::Vector2f txtHoverSpeed{ ((D_Text.Custom_GetFixedScale().x * hoverScale.x) - D_Text.Custom_GetFixedScale().x) / (hoverDuration / exTime->deltaTime),  ((D_Text.Custom_GetFixedScale().y * hoverScale.y) - D_Text.Custom_GetFixedScale().y) / (hoverDuration / exTime->deltaTime) };
+	sf::Vector2f btnHoverSpeed{ ((D_Rect.Custom_GetFixedScale().x * hoverScale.x) - D_Rect.Custom_GetFixedScale().x) / (hoverDuration / exTime->getDeltaTime()), ((D_Rect.Custom_GetFixedScale().y * hoverScale.y) - D_Rect.Custom_GetFixedScale().y) / (hoverDuration / exTime->getDeltaTime()) };
+	sf::Vector2f txtHoverSpeed{ ((D_Text.Custom_GetFixedScale().x * hoverScale.x) - D_Text.Custom_GetFixedScale().x) / (hoverDuration / exTime->getDeltaTime()),  ((D_Text.Custom_GetFixedScale().y * hoverScale.y) - D_Text.Custom_GetFixedScale().y) / (hoverDuration / exTime->getDeltaTime()) };
 
 	//Hovering Scaling Down Operations
 	D_Rect.setScale(std::clamp(D_Rect.getScale().x - btnHoverSpeed.x, D_Rect.Custom_GetFixedScale().x, D_Rect.Custom_GetFixedScale().x * hoverScale.x), std::clamp(D_Rect.getScale().y - btnHoverSpeed.y, D_Rect.Custom_GetFixedScale().y, D_Rect.Custom_GetFixedScale().y * hoverScale.y));

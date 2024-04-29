@@ -28,13 +28,21 @@ namespace Load {
 		// <Type Of Sound, Loaded Sound>
 		std::unordered_map<std::string, sf::Sound> audios;
 
-		//Constructor
+		//Default Constructor
 		Assets() = default;
 
-		//Load Textures
+		/// <summary>
+		/// Load Texture From File
+		/// </summary>
+		/// <param name="texIdentifier">: String Identifier For Unordered Map</param>
+		/// <param name="texturePath">: File Path To Texture</param>
 		void loadTexFromFile(std::string const& texIdentifier, std::string const& texturePath);
 
-		//Load Fonts
+		/// <summary>
+		/// Load Font From File
+		/// </summary>
+		/// <param name="fontIdentifier">: String Identifier For Unordered Map</param>
+		/// <param name="fontPath">: File Path To Font</param>
 		void loadFontFromFile(std::string const& fontIdentifier, std::string const& fontPath);
 	};
 }

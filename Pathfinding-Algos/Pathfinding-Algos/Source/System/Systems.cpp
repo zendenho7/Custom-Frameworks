@@ -200,3 +200,11 @@ bool Systems::FrameTime::UpdateFrameTime(unsigned int targetFPS) {
         return false;
     }
 }
+
+float Systems::FrameTime::getFrameRate() const {
+    return frameRate;
+}
+
+float Systems::FrameTime::getDeltaTime() const {
+    return deltaTime;
+}

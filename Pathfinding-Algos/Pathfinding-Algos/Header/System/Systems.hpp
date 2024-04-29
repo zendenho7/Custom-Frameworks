@@ -24,12 +24,22 @@ namespace Systems {
 		sf::Vector2f windowSize;
 		sf::Vector2f windowCenter;
 
-		//Constructors
+		//Default Constructor
 		WindowHandler() : window(), windowSize(), windowCenter(){}
+
+		/// <summary>
+		/// WindowHandler Constructor
+		/// </summary>
+		/// <param name="mode">: Size Of Window</param>
+		/// <param name="title">: Title Of Window</param>
+		/// <param name="style">: Window Style</param>
+		/// <param name="settings">: Window Settings</param>
 		WindowHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
 
-		//Other Window Functions
+		//Create Console
 		void CreateConsole(bool debugging);
+
+		//Set Icon Based On Loaded Resource
 		void SetIcon(HINSTANCE const& hInstance);
 
 		//Virtual Destructor
@@ -50,11 +60,19 @@ namespace Systems {
 		//System Events
 		sf::Event event;
 
-		//Constructors
+		//Default Constructor
 		EventHandler() : WindowHandler(), b_mouseTriggered{ false }, b_mouseReleased{ false }, b_keyTriggered{ false }, b_keyReleased{ false }, event() {}
+
+		/// <summary>
+		/// EventHandler Constructor ( Contains Window Handler & Other Event Functions )
+		/// </summary>
+		/// <param name="mode">: Size Of Window</param>
+		/// <param name="title">: Title Of Window</param>
+		/// <param name="style">: Window Style</param>
+		/// <param name="settings">: Window Settings</param>
 		EventHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
 
-		//Polling Events
+		//Poll Events ( Input etc. )
 		void pollEvents();
 
 		//Custom Events Input Handling
@@ -66,30 +84,45 @@ namespace Systems {
 		bool mouseChecked(sf::Mouse::Button btncode);
 		bool mouseReleased(sf::Mouse::Button btncode);
 
+		//Destructor
 		~EventHandler() override = default;
 	};
 
 	// ================================================================================
 	// Class: Frame & Time Handling
 	// ================================================================================
-
 	class FrameTime {
 	private:
+
+		//Time Calculation & Management
 		sf::Clock clock;
 		sf::Time currTime;
 		sf::Time prevTime;
-	public:
+
+		//Elapsed Time
 		sf::Time elapsedTime;
+
+		//Elapsed Frame
 		int elapsedFrame;
 
+		//Frame Rate
 		float frameRate;
-		float deltaTime;
 
-		//Constructor
+		//Delta Time
+		float deltaTime;
+	public:
+
+		//Default Constructor
 		FrameTime() : clock(), currTime(clock.getElapsedTime()), prevTime(clock.getElapsedTime()), elapsedTime(clock.getElapsedTime()), elapsedFrame{0}, frameRate{0.0f}, deltaTime{0.0f} {}
 		
 		//Update Time & Frame Components
 		bool UpdateFrameTime(unsigned int targetFPS);
+
+		//Get Frame Rate
+		float getFrameRate() const;
+
+		//Get Delta Time
+		float getDeltaTime() const;
 	};
 }
 

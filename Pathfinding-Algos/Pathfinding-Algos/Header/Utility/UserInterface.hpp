@@ -37,20 +37,44 @@ namespace Interface {
 		void normalButton();
 	public:
 
-		//Rect Drawable
+		//Drawable Rect ( Base Of Button )
 		Drawables::D_RoundedRectangle D_Rect;
 
-		//Text Drawable
+		//Drawable Text
 		Drawables::D_Text D_Text;
 
-		//Constructors
+		//Default Constructor
 		RectButton() = default;
+
+		/// <summary>
+		/// RectButton Constructor
+		/// </summary>
+		/// <param name="color">: Color Of Button</param>
+		/// <param name="size">: Size Of Button</param>
+		/// <param name="pos">: Position Of Button</param>
+		/// <param name="rounding">: Rounding Of Button</param>
+		/// <param name="rotation">: Rotation Of Button</param>
+		/// <param name="oPos">: Origin Of Button</param>
+		/// <param name="hover">: Hovering Enabled(true) or Disabled(false)</param>
 		RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, float rotation = 0.0f, Drawables::Origin oPos = Drawables::Origin::CENTER, bool hover = true);
 
-		//Set Custom Hover Scale & Duration
+		/// <summary>
+		/// Hover Settings
+		/// </summary>
+		/// <param name="hover">: Hovering Enabled(true) or Disabled(false)</param>
+		/// <param name="scale">: Target Scale Of Button When Hovering</param>
+		/// <param name="duration">: Speed Of Hover Increase Till Target Hover Scale</param>
 		void setHoverSettings(bool hover, sf::Vector2f const& scale, float duration);
 
-		//Initialize Button Text
+		/// <summary>
+		/// Init Button Text If Needed
+		/// </summary>
+		/// <param name="txt">: Text String</param>
+		/// <param name="font">: Font Of Text</param>
+		/// <param name="color">: Color Of Text</param>
+		/// <param name="txtBtnRatio">: Ratio Of Button Allocated For Text</param>
+		/// <param name="charSize">: Char Size Of D_Text (Load @ Default Size Of 72 For Higher Resolution ) | Size Can Be Changed By Scaling</param>
+		/// <param name="oPos">: Origin Of Text</param>
 		void initButtonText(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& txtBtnRatio = DEF_TXT_TO_BTN_RATIO, sf::Uint8 charSize = Drawables::DEF_CHAR_SIZE, Drawables::Origin oPos = Drawables::Origin::CENTER);
 
 		//Set Text To Button Ratio ( Text Will Be Fit Within This Ratio )
