@@ -47,6 +47,13 @@ void GSManager::GameStateUpdate() {
 		exFPFree = MainMenu::Free;
 		exFPUnload = MainMenu::Unload;
 		break;
+	case GS_ANIMATION_SC:
+		exFPLoad = AnimationSC::Load;
+		exFPInit = AnimationSC::Init;
+		exFPUpdate = AnimationSC::Update;
+		exFPDraw = AnimationSC::Draw;
+		exFPFree = AnimationSC::Free;
+		exFPUnload = AnimationSC::Unload;
 	default:
 		break;
 	}

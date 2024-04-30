@@ -69,7 +69,7 @@ void Systems::EventHandler::pollEvents() {
     //Poll Events
     while (window.pollEvent(event)) {
         //Check For Escaping Application Events
-        if ((event.type == sf::Event::Closed || keyTriggered(sf::Keyboard::Scancode::Escape))) {
+        if ((event.type == sf::Event::Closed || exGSNext == GSManager::GS_EXIT)) {
 
             //Break GameLoop
             exGSNext = GSManager::GS_EXIT;

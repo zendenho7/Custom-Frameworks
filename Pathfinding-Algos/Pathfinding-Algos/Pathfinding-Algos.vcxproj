@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Menu\MainMenu.cpp" />
     <ClCompile Include="Source\Menu\SplashScreen.cpp" />
+    <ClCompile Include="Source\Sandbox\AnimationShowcase.cpp" />
     <ClCompile Include="Source\System\GameStateManager.cpp" />
     <ClCompile Include="Source\System\Load.cpp" />
     <ClCompile Include="Source\System\Main.cpp">
@@ -33,6 +34,7 @@
   <ItemGroup>
     <ClInclude Include="Header\Menu\MainMenu.hpp" />
     <ClInclude Include="Header\Menu\SplashScreen.hpp" />
+    <ClInclude Include="Header\Sandbox\AnimationShowcase.hpp" />
     <ClInclude Include="Header\System\GameStateManager.hpp" />
     <ClInclude Include="Header\System\Load.hpp" />
     <ClInclude Include="Header\System\pch.hpp" />

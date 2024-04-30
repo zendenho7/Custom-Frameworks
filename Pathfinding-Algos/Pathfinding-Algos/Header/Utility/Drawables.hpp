@@ -77,6 +77,34 @@ namespace Drawables {
 		sf::Vector2f const& Custom_GetFixedScale() const {
 			return fixedScale;
 		}
+
+		//Set Opacity ( Sprite Overload )
+		template<typename Q = T, typename std::enable_if<std::is_same<Q, sf::Sprite>::value, Q>::type* = nullptr>
+		void Custom_SetOpacity(sf::Uint8 opacity) {
+			sf::Color newColor{ Q::getColor() };
+			newColor.a = opacity;
+			Q::setColor(newColor);
+		}
+
+		//Set Opacity ( Shape/Text Overload )
+		template<typename Q = T, typename std::enable_if<std::disjunction<std::is_same<Q, sf::Shape>, std::is_same<Q, sf::Text>>::value, Q>::type* = nullptr>
+		void Custom_SetOpacity(sf::Uint8 opacity) {
+			sf::Color newColor{ Q::getFillColor() };
+			newColor.a = opacity;
+			Q::setFillColor(newColor);
+		}
+
+		//Get Opacity ( Sprite Overload )
+		template<typename Q = T, typename std::enable_if<std::is_same<Q, sf::Sprite>::value, Q>::type* = nullptr>
+		sf::Uint8 Custom_GetOpacity() const {
+			return T::getColor().a;
+		}
+
+		//Get Opacity ( Shape/Text Overload )
+		template<typename Q = T, typename std::enable_if<std::disjunction<std::is_same<Q, sf::Shape>, std::is_same<Q, sf::Text>>::value, Q>::type* = nullptr>
+		sf::Uint8 Custom_GetOpacity() const {
+			return T::getFillColor().a;
+		}
 	};
 
 	// ================================================================================

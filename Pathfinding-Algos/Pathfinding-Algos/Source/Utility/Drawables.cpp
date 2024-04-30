@@ -15,10 +15,6 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\Utility\Utils.hpp"
 
 // ================================================================================
-// Class: Template Base Drawable Class
-// ================================================================================
-
-// ================================================================================
 // Class: Text Drawable
 // ================================================================================
 
@@ -128,8 +124,8 @@ void Drawables::D_RoundedRectangle::setPoints() {
 	//Check For Rounding
 	if (cornerRounding > 0.0f) {
 		//If Rounding Reserve Number Of Edges * Points Per Edge For Rounding
-		setPointCount((RECT_EDGES * ROUNDING_POINTS_PER_EDGE));
-		rectTotalPoints.reserve((RECT_EDGES * ROUNDING_POINTS_PER_EDGE));
+		setPointCount(static_cast<size_t>(RECT_EDGES * ROUNDING_POINTS_PER_EDGE));
+		rectTotalPoints.reserve(static_cast<size_t>(RECT_EDGES * ROUNDING_POINTS_PER_EDGE));
 
 		//Calculate Offset From Rect Edegs Angle & Length
 		float offsetAngle{ (5.0f / 8.0f) * static_cast<float>(2.0 * M_PI) };

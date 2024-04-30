@@ -42,5 +42,7 @@ Copyright (c) 2024 Zen Ho
 #include <memory>
 #include <unordered_map>
 #include <functional>
+#include <type_traits>
+#include <cassert>
 
 #endif // !PCH_HPP

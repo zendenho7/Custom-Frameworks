@@ -16,12 +16,12 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\Utility\Utils.hpp"
 #include "..\..\Header\Utility\Drawables.hpp"
 #include "..\..\Header\Utility\Animation.hpp"
-#include "..\..\Header\Utility\UserInterface.hpp"
 
 namespace {
-	std::unique_ptr <Interface::RectButton> ssEntity;
-	std::unique_ptr <Drawables::D_Sprite> spriteEntity;
-	std::unique_ptr <Animation::SheetAnimator> sheetAnimator;
+	std::unique_ptr<Drawables::D_Sprite> ssSFML;
+	std::unique_ptr<Animation::FadeAnimator> SFMLFadeAnimator;
+	std::unique_ptr<Animation::FadeAnimator> SFMLFadeAnimator2;
+	std::unique_ptr<Drawables::D_Text> ssText;
 }
 
 void SplashScreen::Load() {
@@ -35,37 +35,44 @@ void SplashScreen::Load() {
 }
 
 void SplashScreen::Init() {
-	//Button Init
-	ssEntity = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter, 10.0f, 0.0f);
-	ssEntity->initButtonText("CLICK THIS BUTTON", exAssets->fonts["COMIC"], sf::Color::Black, {0.75f, 0.4f});
+	//SFML Logo SplashScreen Init
+	ssSFML = std::make_unique<Drawables::D_Sprite>(exAssets->textures["SFML"], sf::IntRect(0, 0, 512, 512), sf::Vector2f(250.0f, 250.0f), exEvents->windowCenter + sf::Vector2f(0.0f, -75.0f), 0.0f, sf::Uint8(0));
+	SFMLFadeAnimator = std::make_unique<Animation::FadeAnimator>(sf::Uint8(0), sf::Uint8(255), 2.0f, true, 1);
+	SFMLFadeAnimator2 = std::make_unique<Animation::FadeAnimator>(sf::Uint8(255), sf::Uint8(0), 1.0f, true, 1);
 
-	//Sprite Animation Init
-	spriteEntity = std::make_unique<Drawables::D_Sprite>(exAssets->textures["AME"], sf::IntRect(0, 0, 500, 500), sf::Vector2f(150.0f, 150.0f), exEvents->windowCenter + sf::Vector2f(0.0f, -100.0f));
-	sheetAnimator = std::make_unique<Animation::SheetAnimator>(sf::Vector2u( 2000, 2500 ), sf::Vector2i(500, 500), Animation::ANIMATE_SPEED, true, sf::Vector2u(0, 0), sf::Vector2u(2, 4));
-
+	//Splashscreen Text Init
+	ssText = std::make_unique<Drawables::D_Text>("MADE USING SFML", exAssets->fonts["COMIC"], sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, 125.0f));
+	ssText->Custom_OffsetToCenter();
+	ssText->setScale(0.4f, 0.4f);
+	ssText->Custom_SetFixedScale();
 }
 
 void SplashScreen::Update() {
 
-	//Update Sprite Animation
-	sheetAnimator->animateTexture(*spriteEntity);
+	SFMLFadeAnimator->fadeDrawable(*ssSFML);
+	SFMLFadeAnimator->fadeDrawable(*ssText);
+
+	if (SFMLFadeAnimator->isAnimationFinished()) {
+		SFMLFadeAnimator2->fadeDrawable(*ssSFML);
+		SFMLFadeAnimator2->fadeDrawable(*ssText);
+	}
 
 	//Button To Enter Next Game State
-	if (ssEntity->isButtonClicked()) {
-		exGSNext = GSManager::GS_MAIN_MENU;
+	if (SFMLFadeAnimator2->isAnimationFinished() || exEvents->mouseTriggered(sf::Mouse::Left)) {
+		exGSNext = GSManager::GS_ANIMATION_SC;
 	}
 }
 
 void SplashScreen::Draw() {
 
 	//Clear Window
-	exEvents->window.clear({100, 100, 100, 255});
+	exEvents->window.clear({ 100, 100, 100, 255 });
 
-	//Draw To Window
-	ssEntity->drawButton();
+	//Draw Text
+	exEvents->window.draw(*ssText);
 
 	//Draw Sprite
-	exEvents->window.draw(*spriteEntity);
+	exEvents->window.draw(*ssSFML);
 }
 
 void SplashScreen::Free() {

@@ -18,6 +18,7 @@ Copyright (c) 2024 Zen Ho
 
 #include "..\..\Header\Menu\SplashScreen.hpp"
 #include "..\..\Header\Menu\MainMenu.hpp"
+#include "..\..\Header\Sandbox\AnimationShowcase.hpp"
 
 // ================================================================================
 // GS Manager Namespace
@@ -28,6 +29,8 @@ namespace GSManager {
 	enum GameStates : unsigned char {
 		GS_SPLASH_SCREEN = 0,
 		GS_MAIN_MENU,
+
+		GS_ANIMATION_SC,
 
 		//DONT TOUCH GS
 		GS_RESTART,
