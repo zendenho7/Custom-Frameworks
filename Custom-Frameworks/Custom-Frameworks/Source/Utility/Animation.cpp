@@ -47,8 +47,28 @@ void Animation::BaseAnimator::restartAnimation() {
 	b_reverse = false;
 }
 
-bool Animation::BaseAnimator::isAnimationFinished() {
+bool Animation::BaseAnimator::isAnimationFinished() const {
 	return animationFinished;
+}
+
+void Animation::BaseAnimator::setPingPongAnimation(bool enable) {
+	b_pingpong = enable;
+}
+
+void Animation::BaseAnimator::setAnimationsToComplete(int count) {
+	animationsToComplete = count;
+}
+
+bool Animation::BaseAnimator::getPingPongAnimation() const {
+	return b_pingpong;
+}
+
+int Animation::BaseAnimator::getAnimationsToComplete() {
+	return animationsToComplete;
+}
+
+int Animation::BaseAnimator::getCompletedAnimations() const {
+	return completedAnimations;
 }
 
 // ================================================================================

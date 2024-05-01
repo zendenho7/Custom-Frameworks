@@ -41,6 +41,9 @@ namespace Animation {
 		void animationEndChecker();
 
 	public:
+		//Default Constructor
+		BaseAnimator() : animationsToComplete{ 0 }, completedAnimations{ 0 }, animationStop{ false }, animationFinished{ false }, b_pingpong{ false }, b_reverse{ false } {}
+
 		//Stop Animation
 		virtual void stopAnimation();
 
@@ -51,9 +54,22 @@ namespace Animation {
 		virtual void restartAnimation();
 
 		//Return If Animation Has Stopped
-		bool isAnimationFinished();
+		bool isAnimationFinished() const;
 
-		BaseAnimator() : animationsToComplete { 0 }, completedAnimations{ 0 }, animationStop{ false }, animationFinished{ false }, b_pingpong{ false }, b_reverse{ false } {}
+		//Set PingPong Animation To Enable Or Disable
+		void setPingPongAnimation(bool enable);
+
+		//Set Animations To Complete Count
+		void setAnimationsToComplete(int count);
+
+		//Get PingPong Animation Enable Or Disable
+		bool getPingPongAnimation() const;
+
+		//Get Animations To Complete Count
+		int getAnimationsToComplete();
+
+		//Get Completed Animations Count
+		int getCompletedAnimations() const;
 	};
 
 	// ================================================================================

@@ -25,6 +25,7 @@ namespace {
 	std::unique_ptr <Drawables::D_Sprite> spriteEntity;
 	std::unique_ptr <Animation::SheetAnimator> sheetAnimator;
 	std::unique_ptr<Drawables::D_Text> animationStatus;
+	std::unique_ptr<Drawables::D_Text> animationCount;
 }
 
 void AnimationSC::Load() {
@@ -38,12 +39,6 @@ void AnimationSC::Load() {
 }
 
 void AnimationSC::Init() {
-
-	//Animation Status Init
-	animationStatus = std::make_unique<Drawables::D_Text>("ANIMATION ONGOING", exAssets->fonts["COMIC"], sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -250.0f));
-	animationStatus->Custom_OffsetToCenter();
-	animationStatus->setScale(0.4f, 0.4f);
-	animationStatus->Custom_SetFixedScale();
 
 	//Sprite Animation Init
 	spriteEntity = std::make_unique<Drawables::D_Sprite>(exAssets->textures["AME"], sf::IntRect(0, 0, 500, 500), sf::Vector2f(250.0f, 250.0f), exEvents->windowCenter + sf::Vector2f(0.0f, -75.0f));
@@ -60,12 +55,27 @@ void AnimationSC::Init() {
 	//Restart Button Init
 	restartButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 250.0f), 15.0f, 0.0f);
 	restartButton->initButtonText("RESTART ANIMATION", exAssets->fonts["COMIC"], sf::Color::Black, { 0.75f, 0.4f });
+
+	//Animation Status Init
+	animationCount = std::make_unique<Drawables::D_Text>(std::to_string(sheetAnimator->getCompletedAnimations()) + "/" + std::to_string(sheetAnimator->getAnimationsToComplete()), exAssets->fonts["COMIC"], sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -300.0f));
+	animationCount->Custom_OffsetToCenter();
+	animationCount->setScale(0.4f, 0.4f);
+	animationCount->Custom_SetFixedScale();
+
+	//Animation Status Init
+	animationStatus = std::make_unique<Drawables::D_Text>("ANIMATION ONGOING", exAssets->fonts["COMIC"], sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -250.0f));
+	animationStatus->Custom_OffsetToCenter();
+	animationStatus->setScale(0.4f, 0.4f);
+	animationStatus->Custom_SetFixedScale();
 }
 
 void AnimationSC::Update() {
 
 	//Update Sprite Animation
 	sheetAnimator->animateTexture(*spriteEntity);
+
+	//Update Animation Count
+	animationCount->setString(std::to_string(sheetAnimator->getCompletedAnimations()) + "/" + std::to_string(sheetAnimator->getAnimationsToComplete()));
 
 	//Stop Animation
 	if (stopButton->isButtonClicked()) {
@@ -97,6 +107,7 @@ void AnimationSC::Draw() {
 	exEvents->window.clear({ 100, 100, 100, 255 });
 
 	//Draw Text
+	exEvents->window.draw(*animationCount);
 	exEvents->window.draw(*animationStatus);
 
 	//Draw Sprite
