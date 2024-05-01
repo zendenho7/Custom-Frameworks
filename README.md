@@ -2,7 +2,7 @@
 Custom Frameworks Experimentation With C++ Using SFML Framework
 
 ## Features Implemented:
-Sprite Sheet Animation
-Fade Animation
-Derived Drawables ( Added Custom Functionalities )
-Rounded Rectangle Buttons
+Sprite Sheet Animation\n
+Fade Animation\n
+Derived Drawables ( Added Custom Functionalities )\n
+Rounded Rectangle Buttons\n
