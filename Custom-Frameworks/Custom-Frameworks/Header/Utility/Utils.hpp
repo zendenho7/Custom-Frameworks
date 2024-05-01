@@ -22,6 +22,7 @@ Copyright (c) 2024 Zen Ho
 extern Systems::EventHandler* exEvents;
 extern Systems::FrameTime* exTime;
 extern Load::Assets* exAssets;
+extern GSManager::GameStateManager* exGSManager;
 
 // ================================================================================
 // MATHEMATICAL HELPERS

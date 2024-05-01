@@ -69,10 +69,10 @@ void Systems::EventHandler::pollEvents() {
     //Poll Events
     while (window.pollEvent(event)) {
         //Check For Escaping Application Events
-        if ((event.type == sf::Event::Closed || exGSNext == GSManager::GS_EXIT)) {
+        if ((event.type == sf::Event::Closed || !exGSManager->getGameRunning())) {
 
-            //Break GameLoop
-            exGSNext = GSManager::GS_EXIT;
+            //Exit Game
+            exGSManager->exitGame();
 
             //Free the console before exiting (For Debugging)
             FreeConsole();

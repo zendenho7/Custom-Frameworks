@@ -13,42 +13,67 @@ Copyright (c) 2024 Zen Ho
 #define GS_MANAGER
 
 // ================================================================================
-// INCLUDES
-// ================================================================================
-
-#include "..\..\Header\Menu\SplashScreen.hpp"
-#include "..\..\Header\Menu\MainMenu.hpp"
-#include "..\..\Header\Sandbox\AnimationShowcase.hpp"
-
-// ================================================================================
 // GS Manager Namespace
 // ================================================================================
 
 namespace GSManager {
-	//GameState Constants
-	enum GameStates : unsigned char {
-		GS_SPLASH_SCREEN = 0,
-		GS_MAIN_MENU,
 
-		GS_ANIMATION_SC,
-
-		//DONT TOUCH GS
-		GS_RESTART,
-		GS_EXIT
+	enum class StateEnums {
+		GS_SPLASHSCREEN = 0,
+		GS_MAINMENU,
+		GS_ANIMATION_SC
 	};
 
-	//Function Pointer
-	typedef void(*FP)(void);
+	//GameState Class
+	class GameState {
+	public:
+		virtual void Load() = 0;
+		virtual void Init() = 0;
+		virtual void Update() = 0;
+		virtual void Draw() = 0;
+		virtual void Free() = 0;
+		virtual void Unload() = 0;
 
-	//GameState Functions
-	void GameStateInit(GameStates startState);
-	void GameStateUpdate(void);
+		virtual ~GameState() = default;
+	};
+
+	class GameStateManager {
+	private:
+		//Curr & Prev GameState
+		std::unique_ptr<GameState> currGameState;
+		std::unique_ptr<GameState> prevGameState;
+
+		//Flag For Game Running
+		bool b_GameRunning;
+
+		//Flag To Signify Changes To currGameState
+		bool b_ManipulatingState;
+
+	public:
+		//Default Constructor
+		GameStateManager(GameState* startingState);
+
+		//Change Game State
+		void changeState(GameState* newState);
+
+		//Update GameState
+		void updateGameState();
+
+		//Draw GameState
+		void drawGameState();
+
+		//Restart GameState
+		void restartState();
+
+		//Go To Previous GameState
+		void previousState();
+		
+		//Exit Game
+		void exitGame();
+
+		//Get GameRunning Status Flag
+		bool getGameRunning() const;
+	};
 }
-
-// ================================================================================
-// External GameState Variables
-// ================================================================================
-extern GSManager::GameStates exGSCurrent, exGSNext, exGSPrevious;
-extern GSManager::FP exFPLoad, exFPInit, exFPUpdate, exFPDraw, exFPFree, exFPUnload;
 
 #endif // !GS_MANAGER

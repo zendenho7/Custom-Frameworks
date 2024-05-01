@@ -16,14 +16,33 @@ Copyright (c) 2024 Zen Ho
 // Splash Screen Namespace
 // ================================================================================
 
-namespace SplashScreen {
+#include "..\..\Header\System\GameStateManager.hpp"
+#include "..\..\Header\Utility\Drawables.hpp"
+#include "..\..\Header\Utility\Animation.hpp"
 
-	void Load();
-	void Init();
-	void Update();
-	void Draw();
-	void Free();
-	void Unload();
+namespace SplashScreen {
+    class State : public GSManager::GameState {
+    private:
+
+        //Game Objects
+        std::unique_ptr<Drawables::D_Sprite> ssSFML;
+        std::unique_ptr<Animation::FadeAnimator> SFMLFadeAnimator;
+        std::unique_ptr<Animation::FadeAnimator> SFMLFadeAnimator2;
+        std::unique_ptr<Drawables::D_Text> ssText;
+
+    public:
+
+        //GameState Components
+        void Load() override;
+        void Init() override;
+        void Update() override;
+        void Draw() override;
+        void Free() override;
+        void Unload() override;
+
+        //Default Destructor
+        ~State() override = default;
+    };
 }
 
 #endif // !SPLASHSCREEN_HPP

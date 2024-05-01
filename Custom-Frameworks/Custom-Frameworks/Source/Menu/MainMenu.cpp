@@ -13,29 +13,28 @@ Copyright (c) 2024 Zen Ho
 
 #include "..\..\Header\System\pch.hpp"
 #include "..\..\Header\Menu\MainMenu.hpp"
-#include "..\..\Header\Utility\Utils.hpp"
 
-void MainMenu::Load() {
-
-}
-
-void MainMenu::Init() {
+void MainMenu::State::Load() {
 
 }
 
-void MainMenu::Update() {
+void MainMenu::State::Init() {
 
 }
 
-void MainMenu::Draw() {
+void MainMenu::State::Update() {
+
+}
+
+void MainMenu::State::Draw() {
 	//Clear Window
-	exEvents->window.clear();
+	//exEvents->window.clear();
 }
 
-void MainMenu::Free() {
+void MainMenu::State::Free() {
 
 }
 
-void MainMenu::Unload() {
+void MainMenu::State::Unload() {
 
 }

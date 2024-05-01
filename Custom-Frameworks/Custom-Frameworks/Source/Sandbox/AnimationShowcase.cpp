@@ -13,22 +13,9 @@ Copyright (c) 2024 Zen Ho
 
 #include "..\..\Header\System\pch.hpp"
 #include "..\..\Header\Sandbox\AnimationShowcase.hpp"
-#include "..\..\Header\Utility\Utils.hpp"
-#include "..\..\Header\Utility\Drawables.hpp"
-#include "..\..\Header\Utility\Animation.hpp"
-#include "..\..\Header\Utility\UserInterface.hpp"
 
-namespace {
-	std::unique_ptr <Interface::RectButton> stopButton;
-	std::unique_ptr <Interface::RectButton> resumeButton;
-	std::unique_ptr <Interface::RectButton> restartButton;
-	std::unique_ptr <Drawables::D_Sprite> spriteEntity;
-	std::unique_ptr <Animation::SheetAnimator> sheetAnimator;
-	std::unique_ptr<Drawables::D_Text> animationStatus;
-	std::unique_ptr<Drawables::D_Text> animationCount;
-}
 
-void AnimationSC::Load() {
+void AnimationSC::State::Load() {
 	//Load Textures
 	exAssets->loadTexFromFile("SFML", "Assets/Textures/SFML Logo.png");
 	exAssets->loadTexFromFile("AME", "Assets/Textures/ame.png");
@@ -38,7 +25,7 @@ void AnimationSC::Load() {
 	exAssets->loadFontFromFile("MONTSERRAT", "Assets/Fonts/Montserrat-Bold.ttf");
 }
 
-void AnimationSC::Init() {
+void AnimationSC::State::Init() {
 
 	//Sprite Animation Init
 	spriteEntity = std::make_unique<Drawables::D_Sprite>(exAssets->textures["AME"], sf::IntRect(0, 0, 500, 500), sf::Vector2f(250.0f, 250.0f), exEvents->windowCenter + sf::Vector2f(0.0f, -75.0f));
@@ -69,7 +56,7 @@ void AnimationSC::Init() {
 	animationStatus->Custom_SetFixedScale();
 }
 
-void AnimationSC::Update() {
+void AnimationSC::State::Update() {
 
 	//Update Sprite Animation
 	sheetAnimator->animateTexture(*spriteEntity);
@@ -99,9 +86,14 @@ void AnimationSC::Update() {
 	if (sheetAnimator->isAnimationFinished()) {
 		animationStatus->setString("ANIMATION FINISHED");
 	}
+
+	//Go Back To Previous State
+	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Escape)) {
+		exGSManager->previousState();
+	}
 }
 
-void AnimationSC::Draw() {
+void AnimationSC::State::Draw() {
 
 	//Clear Window
 	exEvents->window.clear({ 100, 100, 100, 255 });
@@ -119,10 +111,10 @@ void AnimationSC::Draw() {
 	restartButton->drawButton();
 }
 
-void AnimationSC::Free() {
+void AnimationSC::State::Free() {
 
 }
 
-void AnimationSC::Unload() {
+void AnimationSC::State::Unload() {
 
 }

@@ -13,18 +13,10 @@ Copyright (c) 2024 Zen Ho
 
 #include "..\..\Header\System\pch.hpp"
 #include "..\..\Header\Menu\SplashScreen.hpp"
-#include "..\..\Header\Utility\Utils.hpp"
-#include "..\..\Header\Utility\Drawables.hpp"
-#include "..\..\Header\Utility\Animation.hpp"
 
-namespace {
-	std::unique_ptr<Drawables::D_Sprite> ssSFML;
-	std::unique_ptr<Animation::FadeAnimator> SFMLFadeAnimator;
-	std::unique_ptr<Animation::FadeAnimator> SFMLFadeAnimator2;
-	std::unique_ptr<Drawables::D_Text> ssText;
-}
+#include "..\..\Header\Sandbox\AnimationShowcase.hpp"
 
-void SplashScreen::Load() {
+void SplashScreen::State::Load() {
 	//Load Textures
 	exAssets->loadTexFromFile("SFML", "Assets/Textures/SFML Logo.png");
 	exAssets->loadTexFromFile("AME", "Assets/Textures/ame.png");
@@ -34,7 +26,7 @@ void SplashScreen::Load() {
 	exAssets->loadFontFromFile("MONTSERRAT", "Assets/Fonts/Montserrat-Bold.ttf");
 }
 
-void SplashScreen::Init() {
+void SplashScreen::State::Init() {
 	//SFML Logo SplashScreen Init
 	ssSFML = std::make_unique<Drawables::D_Sprite>(exAssets->textures["SFML"], sf::IntRect(0, 0, 512, 512), sf::Vector2f(250.0f, 250.0f), exEvents->windowCenter + sf::Vector2f(0.0f, -75.0f), 0.0f, sf::Uint8(0));
 	SFMLFadeAnimator = std::make_unique<Animation::FadeAnimator>(sf::Uint8(0), sf::Uint8(255), 2.0f, true, 1);
@@ -47,7 +39,7 @@ void SplashScreen::Init() {
 	ssText->Custom_SetFixedScale();
 }
 
-void SplashScreen::Update() {
+void SplashScreen::State::Update() {
 
 	SFMLFadeAnimator->fadeDrawable(*ssSFML);
 	SFMLFadeAnimator->fadeDrawable(*ssText);
@@ -59,11 +51,16 @@ void SplashScreen::Update() {
 
 	//Button To Enter Next Game State
 	if (SFMLFadeAnimator2->isAnimationFinished() || exEvents->mouseTriggered(sf::Mouse::Left)) {
-		exGSNext = GSManager::GS_ANIMATION_SC;
+		exGSManager->changeState(new AnimationSC::State());
+	}
+
+	//Restart GameState
+	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Escape)) {
+		exGSManager->restartState();
 	}
 }
 
-void SplashScreen::Draw() {
+void SplashScreen::State::Draw() {
 
 	//Clear Window
 	exEvents->window.clear({ 100, 100, 100, 255 });
@@ -75,10 +72,10 @@ void SplashScreen::Draw() {
 	exEvents->window.draw(*ssSFML);
 }
 
-void SplashScreen::Free() {
+void SplashScreen::State::Free() {
 
 }
 
-void SplashScreen::Unload() {
+void SplashScreen::State::Unload() {
 
 }

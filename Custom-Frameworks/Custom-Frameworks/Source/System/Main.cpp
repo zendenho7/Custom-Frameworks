@@ -16,6 +16,10 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\System\Systems.hpp"
 #include "..\..\Header\System\Load.hpp"
 
+#include "..\..\Header\Menu\SplashScreen.hpp"
+//#include "..\..\Header\Menu\MainMenu.hpp"
+//#include "..\..\Header\Sandbox\AnimationShowcase.hpp"
+
 // ================================================================================
 // EXTERNALS
 // ================================================================================
@@ -23,6 +27,7 @@ Copyright (c) 2024 Zen Ho
 Systems::EventHandler* exEvents;
 Systems::FrameTime* exTime;
 Load::Assets* exAssets;
+GSManager::GameStateManager* exGSManager;
 
 // ================================================================================
 // WINMAIN ENTRY
@@ -56,61 +61,32 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     exAssets = new Load::Assets();
 
     //Initialize GameState
-    GSManager::GameStateInit(GSManager::GS_SPLASH_SCREEN);
+    exGSManager = new GSManager::GameStateManager(new SplashScreen::State());
 
     //Game Loop
-    while (exGSCurrent != GSManager::GS_EXIT)
+    while (exGSManager->getGameRunning())
     {
-        //Check If GameState Is Restarted
-        if (exGSCurrent == GSManager::GS_RESTART) {
-            exGSCurrent = exGSPrevious;
-            exGSNext = exGSPrevious;
-        }
-        else {
-            //Load & Update GameState
-            GSManager::GameStateUpdate();
-            exFPLoad();
-        }
+        //Time Step
+        while (exTime->UpdateFrameTime(60));
 
-        //Init GameState
-        exFPInit();
+        //Input Checks
+        exEvents->pollEvents();
 
-        //Game Update & Draw Loop
-        while (exGSCurrent == exGSNext) {
+        //Update GameState
+        exGSManager->updateGameState();
 
-            //Time Step
-            while (exTime->UpdateFrameTime(60));
+        //Draw GameState
+        exGSManager->drawGameState();
 
-            //Input Checks
-            exEvents->pollEvents();
-
-            //Update GameState
-            exFPUpdate();
-
-            //Draw GameState
-            exFPDraw();
-
-            //Display Window Contents
-            exEvents->window.display();
-        }
-
-        //Free GamState
-        exFPFree();
-
-        //If Not Restart Unload
-        if (exGSNext != GSManager::GS_RESTART) {
-            exFPUnload();
-        }
-
-        //Store Previous & Set Current
-        exGSPrevious = exGSCurrent;
-        exGSCurrent = exGSNext;
+        //Display Window Contents
+        exEvents->window.display();
     }
 
     //Delete Singletons
     delete exEvents;
     delete exTime;
     delete exAssets;
+    delete exGSManager;
 
     return 0;
 }

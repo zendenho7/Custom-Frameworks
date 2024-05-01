@@ -15,46 +15,75 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\System\GameStateManager.hpp"
 
 // ================================================================================
-// EXTERNALS
+// Class: GameState Manager
 // ================================================================================
 
-GSManager::GameStates exGSCurrent = GSManager::GS_SPLASH_SCREEN, exGSNext = GSManager::GS_SPLASH_SCREEN, exGSPrevious = GSManager::GS_SPLASH_SCREEN;
-GSManager::FP exFPLoad = nullptr, exFPInit = nullptr, exFPUpdate = nullptr, exFPDraw = nullptr, exFPFree = nullptr, exFPUnload = nullptr;
-
-// ================================================================================
-// Functions: GameState Management Functions
-// ================================================================================
-void GSManager::GameStateInit(GameStates startState) {
-	exGSPrevious = exGSCurrent = exGSNext = startState;
+GSManager::GameStateManager::GameStateManager(GameState* startingState)
+	: b_GameRunning{ true }, b_ManipulatingState{ true }
+{
+	currGameState.reset(startingState);
+	b_ManipulatingState = false;
+	currGameState->Load();
+	currGameState->Init();
 }
 
-void GSManager::GameStateUpdate() {
+void GSManager::GameStateManager::changeState(GameState* newState) {
 
-	switch (exGSCurrent) {
-	case GS_SPLASH_SCREEN:
-		exFPLoad = SplashScreen::Load;
-		exFPInit = SplashScreen::Init;
-		exFPUpdate = SplashScreen::Update;
-		exFPDraw = SplashScreen::Draw;
-		exFPFree = SplashScreen::Free;
-		exFPUnload = SplashScreen::Unload;
-		break;
-	case GS_MAIN_MENU:
-		exFPLoad = MainMenu::Load;
-		exFPInit = MainMenu::Init;
-		exFPUpdate = MainMenu::Update;
-		exFPDraw = MainMenu::Draw;
-		exFPFree = MainMenu::Free;
-		exFPUnload = MainMenu::Unload;
-		break;
-	case GS_ANIMATION_SC:
-		exFPLoad = AnimationSC::Load;
-		exFPInit = AnimationSC::Init;
-		exFPUpdate = AnimationSC::Update;
-		exFPDraw = AnimationSC::Draw;
-		exFPFree = AnimationSC::Free;
-		exFPUnload = AnimationSC::Unload;
-	default:
-		break;
+	//Free & Unload Old State
+	if (currGameState) {
+		currGameState->Free();
+		currGameState->Unload();
 	}
+
+	//Change New State
+	prevGameState.swap(currGameState);
+	currGameState.reset(newState);
+
+	//Load & Init New State
+	if (currGameState) {
+		currGameState->Load();
+		currGameState->Init();
+	}
+}
+
+void GSManager::GameStateManager::updateGameState() {
+	if(currGameState)
+	currGameState->Update();
+}
+
+void GSManager::GameStateManager::drawGameState() {
+	if (currGameState)
+		currGameState->Draw();
+}
+
+void GSManager::GameStateManager::restartState() {
+	if (currGameState) {
+		currGameState->Free();
+		currGameState->Init();
+	}
+}
+
+void GSManager::GameStateManager::previousState() {
+	//Free & Unload Old State
+	if (currGameState) {
+		currGameState->Free();
+		currGameState->Unload();
+	}
+
+	//Change New State
+	prevGameState.swap(currGameState);
+
+	//Load & Init New State
+	if (currGameState) {
+		currGameState->Load();
+		currGameState->Init();
+	}
+}
+
+void GSManager::GameStateManager::exitGame() {
+	b_GameRunning = false;
+}
+
+bool GSManager::GameStateManager::getGameRunning() const {
+	return b_GameRunning;
 }
