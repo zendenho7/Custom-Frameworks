@@ -16,13 +16,7 @@ Copyright (c) 2024 Zen Ho
 
 
 void AnimationSC::State::Load() {
-	//Load Textures
-	exAssets->loadTexFromFile("SFML", "Assets/Textures/SFML Logo.png");
-	exAssets->loadTexFromFile("AME", "Assets/Textures/ame.png");
 
-	//Load Fonts
-	exAssets->loadFontFromFile("COMIC", "Assets/Fonts/SuperComic.ttf");
-	exAssets->loadFontFromFile("MONTSERRAT", "Assets/Fonts/Montserrat-Bold.ttf");
 }
 
 void AnimationSC::State::Init() {
@@ -33,7 +27,7 @@ void AnimationSC::State::Init() {
 
 	//Stop Button Init
 	stopButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 100.0f), 15.0f, 0.0f);
-	stopButton->initButtonText("STOP ANIMATION", exAssets->fonts["COMIC"], sf::Color::Black, { 0.75f, 0.4f });
+	stopButton->initButtonText("PAUSE ANIMATION", exAssets->fonts["COMIC"], sf::Color::Black, { 0.75f, 0.4f });
 
 	//Start Button Init
 	resumeButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 175.0f), 15.0f, 0.0f);
@@ -43,8 +37,12 @@ void AnimationSC::State::Init() {
 	restartButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 250.0f), 15.0f, 0.0f);
 	restartButton->initButtonText("RESTART ANIMATION", exAssets->fonts["COMIC"], sf::Color::Black, { 0.75f, 0.4f });
 
+	//End Button Init
+	endButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 325.0f), 15.0f, 0.0f);
+	endButton->initButtonText("END ANIMATION", exAssets->fonts["COMIC"], sf::Color::Black, { 0.75f, 0.4f });
+
 	//Animation Status Init
-	animationCount = std::make_unique<Drawables::D_Text>(std::to_string(sheetAnimator->getCompletedAnimations()) + "/" + std::to_string(sheetAnimator->getAnimationsToComplete()), exAssets->fonts["COMIC"], sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -300.0f));
+	animationCount = std::make_unique<Drawables::D_Text>(std::to_string(sheetAnimator->getCompletedAnimations()) + " / " += sheetAnimator->getAnimationsToComplete() ? std::to_string(sheetAnimator->getAnimationsToComplete()) : std::string("INF"), exAssets->fonts["COMIC"], sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -300.0f));
 	animationCount->Custom_OffsetToCenter();
 	animationCount->setScale(0.4f, 0.4f);
 	animationCount->Custom_SetFixedScale();
@@ -54,6 +52,14 @@ void AnimationSC::State::Init() {
 	animationStatus->Custom_OffsetToCenter();
 	animationStatus->setScale(0.4f, 0.4f);
 	animationStatus->Custom_SetFixedScale();
+
+	//Increase Button
+	increaseButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(75.0f, 325.0f), 15.0f, 0.0f);
+	increaseButton->initButtonText("ADD", exAssets->fonts["COMIC"], sf::Color::Black, { 0.5f, 0.5f });
+
+	//Decrease Button
+	decreaseButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(-75.0f, 325.0f), 15.0f, 0.0f);
+	decreaseButton->initButtonText("SUB", exAssets->fonts["COMIC"], sf::Color::Black, { 0.5f, 0.5f });
 }
 
 void AnimationSC::State::Update() {
@@ -62,7 +68,7 @@ void AnimationSC::State::Update() {
 	sheetAnimator->animateTexture(*spriteEntity);
 
 	//Update Animation Count
-	animationCount->setString(std::to_string(sheetAnimator->getCompletedAnimations()) + "/" + std::to_string(sheetAnimator->getAnimationsToComplete()));
+	animationCount->setString(std::to_string(sheetAnimator->getCompletedAnimations()) + " / " += sheetAnimator->getAnimationsToComplete() ? std::to_string(sheetAnimator->getAnimationsToComplete()) : std::string("INF"));
 
 	//Stop Animation
 	if (stopButton->isButtonClicked()) {
@@ -82,6 +88,24 @@ void AnimationSC::State::Update() {
 		animationStatus->setString("ANIMATION ONGOING");
 	}
 
+	if (sheetAnimator->isAnimationFinished()) {
+		//Increase Animation Count
+		if (increaseButton->isButtonClicked()) {
+			sheetAnimator->setAnimationsToComplete(sf::Uint8(sheetAnimator->getAnimationsToComplete() + 1));
+		}
+
+		//Decrease Animation Count
+		if (decreaseButton->isButtonClicked()) {
+			sheetAnimator->setAnimationsToComplete(sf::Uint8(sheetAnimator->getAnimationsToComplete() - 1));
+		}
+	}
+	else {
+		//End Animation
+		if (endButton->isButtonClicked()) {
+			sheetAnimator->setAnimationFinished();
+		}
+	}
+
 	//Animation Finished
 	if (sheetAnimator->isAnimationFinished()) {
 		animationStatus->setString("ANIMATION FINISHED");
@@ -89,7 +113,7 @@ void AnimationSC::State::Update() {
 
 	//Go Back To Previous State
 	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Escape)) {
-		exGSManager->previousState();
+		exGSManager->exitGame();
 	}
 }
 
@@ -109,6 +133,14 @@ void AnimationSC::State::Draw() {
 	stopButton->drawButton();
 	resumeButton->drawButton();
 	restartButton->drawButton();
+
+	if (sheetAnimator->isAnimationFinished()) {
+		increaseButton->drawButton();
+		decreaseButton->drawButton();
+	}
+	else {
+		endButton->drawButton();
+	}
 }
 
 void AnimationSC::State::Free() {

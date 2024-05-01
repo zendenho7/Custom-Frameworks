@@ -27,7 +27,6 @@ namespace SplashScreen {
         //Game Objects
         std::unique_ptr<Drawables::D_Sprite> ssSFML;
         std::unique_ptr<Animation::FadeAnimator> SFMLFadeAnimator;
-        std::unique_ptr<Animation::FadeAnimator> SFMLFadeAnimator2;
         std::unique_ptr<Drawables::D_Text> ssText;
 
     public:

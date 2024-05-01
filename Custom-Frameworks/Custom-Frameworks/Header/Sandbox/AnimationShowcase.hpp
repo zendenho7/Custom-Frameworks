@@ -29,10 +29,13 @@ namespace AnimationSC {
         std::unique_ptr <Interface::RectButton> stopButton;
         std::unique_ptr <Interface::RectButton> resumeButton;
         std::unique_ptr <Interface::RectButton> restartButton;
+        std::unique_ptr <Interface::RectButton> endButton;
         std::unique_ptr <Drawables::D_Sprite> spriteEntity;
         std::unique_ptr <Animation::SheetAnimator> sheetAnimator;
         std::unique_ptr<Drawables::D_Text> animationStatus;
         std::unique_ptr<Drawables::D_Text> animationCount;
+        std::unique_ptr <Interface::RectButton> increaseButton;
+        std::unique_ptr <Interface::RectButton> decreaseButton;
 
     public:
 

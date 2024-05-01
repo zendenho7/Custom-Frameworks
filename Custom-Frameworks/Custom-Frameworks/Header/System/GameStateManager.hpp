@@ -18,7 +18,8 @@ Copyright (c) 2024 Zen Ho
 
 namespace GSManager {
 
-	enum class StateEnums {
+	//Application GameStates
+	enum class GSTypes {
 		GS_SPLASHSCREEN = 0,
 		GS_MAINMENU,
 		GS_ANIMATION_SC
@@ -49,12 +50,15 @@ namespace GSManager {
 		//Flag To Signify Changes To currGameState
 		bool b_ManipulatingState;
 
+		//Conversion From Enum To GameSatet Ptr
+		GameState* enumToGS(GSTypes gsType);
+
 	public:
 		//Default Constructor
-		GameStateManager(GameState* startingState);
+		GameStateManager(GSTypes startingGS);
 
 		//Change Game State
-		void changeState(GameState* newState);
+		void changeState(GSTypes newGS);
 
 		//Update GameState
 		void updateGameState();

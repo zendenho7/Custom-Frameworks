@@ -21,9 +21,10 @@ Copyright (c) 2024 Zen Ho
 
 void Animation::BaseAnimator::animationEndChecker() {
 	//Incr Completed Animations
-	if (++completedAnimations == animationsToComplete && animationsToComplete) {
+	if (++completedAnimations >= animationsToComplete && animationsToComplete) {
 		animationFinished = true;
 		animationStop = true;
+		animationsToComplete = completedAnimations;
 	}
 }
 
@@ -47,6 +48,11 @@ void Animation::BaseAnimator::restartAnimation() {
 	b_reverse = false;
 }
 
+void Animation::BaseAnimator::setAnimationFinished() {
+	animationFinished = true;
+	animationStop = true;
+}
+
 bool Animation::BaseAnimator::isAnimationFinished() const {
 	return animationFinished;
 }
@@ -55,12 +61,12 @@ void Animation::BaseAnimator::setPingPongAnimation(bool enable) {
 	b_pingpong = enable;
 }
 
-void Animation::BaseAnimator::setAnimationsToComplete(int count) {
-	animationsToComplete = count;
-}
-
 bool Animation::BaseAnimator::getPingPongAnimation() const {
 	return b_pingpong;
+}
+
+void Animation::BaseAnimator::setAnimationsToComplete(int count) {
+	animationsToComplete = count;
 }
 
 int Animation::BaseAnimator::getAnimationsToComplete() {
@@ -69,6 +75,14 @@ int Animation::BaseAnimator::getAnimationsToComplete() {
 
 int Animation::BaseAnimator::getCompletedAnimations() const {
 	return completedAnimations;
+}
+
+void Animation::BaseAnimator::setAnimationSpeed(float speed) {
+	animationSpeed = speed;
+}
+
+float Animation::BaseAnimator::getAnimationSpeed() const {
+	return animationSpeed;
 }
 
 // ================================================================================
@@ -136,7 +150,7 @@ void Animation::SheetAnimator::numSpritesToAnimate(sf::Vector2u const& startInde
 //Public Functions
 
 Animation::SheetAnimator::SheetAnimator(sf::Vector2u const& sheetsize, sf::Vector2i const& spritesize, sf::Vector2u const& startIndex, sf::Vector2u const& endIndex, float animatespeed, bool pingpong, int numOfAnimations)
-	:	BaseAnimator(),sheetSize{ sheetsize }, spriteSize{ spritesize }, numSprites{ 0 },animationSpeed{ animatespeed }, timer(),
+	:	BaseAnimator(),sheetSize{ sheetsize }, spriteSize{ spritesize }, numSprites{ 0 }, timer(),
 		startSprite{ startIndex.x * spriteSize.x, startIndex.y * spriteSize.y }, endSprite{ endIndex.x * spriteSize.x, endIndex.y * spriteSize.y }, currSprite{ startSprite } 
 {
 	//Assert Index Out Of Range

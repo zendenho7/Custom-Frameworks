@@ -14,20 +14,46 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\System\pch.hpp"
 #include "..\..\Header\System\GameStateManager.hpp"
 
+//Include Paths To GameStates
+#include "..\..\Header\Menu\SplashScreen.hpp"
+#include "..\..\Header\Menu\MainMenu.hpp"
+#include "..\..\Header\Sandbox\AnimationShowcase.hpp"
+
 // ================================================================================
 // Class: GameState Manager
 // ================================================================================
 
-GSManager::GameStateManager::GameStateManager(GameState* startingState)
+//Private Member Function
+
+GSManager::GameState * GSManager::GameStateManager::enumToGS(GSTypes gsType) {
+	switch (gsType) {
+	case GSTypes::GS_SPLASHSCREEN:
+		return new SplashScreen::State();
+		break;
+	case GSTypes::GS_MAINMENU:
+		return new MainMenu::State();
+		break;
+	case GSTypes::GS_ANIMATION_SC:
+		return new AnimationSC::State();
+		break;
+	default:
+		return 0;
+		break;
+	}
+}
+
+//Public Member Function
+
+GSManager::GameStateManager::GameStateManager(GSTypes startingGS)
 	: b_GameRunning{ true }, b_ManipulatingState{ true }
 {
-	currGameState.reset(startingState);
+	currGameState.reset(enumToGS(startingGS));
 	b_ManipulatingState = false;
 	currGameState->Load();
 	currGameState->Init();
 }
 
-void GSManager::GameStateManager::changeState(GameState* newState) {
+void GSManager::GameStateManager::changeState(GSTypes newGS) {
 
 	//Free & Unload Old State
 	if (currGameState) {
@@ -37,7 +63,7 @@ void GSManager::GameStateManager::changeState(GameState* newState) {
 
 	//Change New State
 	prevGameState.swap(currGameState);
-	currGameState.reset(newState);
+	currGameState.reset(enumToGS(newGS));
 
 	//Load & Init New State
 	if (currGameState) {

@@ -16,10 +16,6 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\System\Systems.hpp"
 #include "..\..\Header\System\Load.hpp"
 
-#include "..\..\Header\Menu\SplashScreen.hpp"
-//#include "..\..\Header\Menu\MainMenu.hpp"
-//#include "..\..\Header\Sandbox\AnimationShowcase.hpp"
-
 // ================================================================================
 // EXTERNALS
 // ================================================================================
@@ -61,7 +57,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     exAssets = new Load::Assets();
 
     //Initialize GameState
-    exGSManager = new GSManager::GameStateManager(new SplashScreen::State());
+    exGSManager = new GSManager::GameStateManager(GSManager::GSTypes::GS_SPLASHSCREEN);
 
     //Game Loop
     while (exGSManager->getGameRunning())

@@ -14,8 +14,6 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\System\pch.hpp"
 #include "..\..\Header\Menu\SplashScreen.hpp"
 
-#include "..\..\Header\Sandbox\AnimationShowcase.hpp"
-
 void SplashScreen::State::Load() {
 	//Load Textures
 	exAssets->loadTexFromFile("SFML", "Assets/Textures/SFML Logo.png");
@@ -29,8 +27,7 @@ void SplashScreen::State::Load() {
 void SplashScreen::State::Init() {
 	//SFML Logo SplashScreen Init
 	ssSFML = std::make_unique<Drawables::D_Sprite>(exAssets->textures["SFML"], sf::IntRect(0, 0, 512, 512), sf::Vector2f(250.0f, 250.0f), exEvents->windowCenter + sf::Vector2f(0.0f, -75.0f), 0.0f, sf::Uint8(0));
-	SFMLFadeAnimator = std::make_unique<Animation::FadeAnimator>(sf::Uint8(0), sf::Uint8(255), 2.0f, true, 1);
-	SFMLFadeAnimator2 = std::make_unique<Animation::FadeAnimator>(sf::Uint8(255), sf::Uint8(0), 1.0f, true, 1);
+	SFMLFadeAnimator = std::make_unique<Animation::FadeAnimator>(sf::Uint8(0), sf::Uint8(255), 5.0f, true, 2);
 
 	//Splashscreen Text Init
 	ssText = std::make_unique<Drawables::D_Text>("MADE USING SFML", exAssets->fonts["COMIC"], sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, 125.0f));
@@ -41,22 +38,18 @@ void SplashScreen::State::Init() {
 
 void SplashScreen::State::Update() {
 
+	//Drawables To Fade
 	SFMLFadeAnimator->fadeDrawable(*ssSFML);
 	SFMLFadeAnimator->fadeDrawable(*ssText);
 
-	if (SFMLFadeAnimator->isAnimationFinished()) {
-		SFMLFadeAnimator2->fadeDrawable(*ssSFML);
-		SFMLFadeAnimator2->fadeDrawable(*ssText);
+	//Speed Up Animation
+	if (SFMLFadeAnimator->getCompletedAnimations() == 1) {
+		SFMLFadeAnimator->setAnimationSpeed(1.0f);
 	}
 
 	//Button To Enter Next Game State
-	if (SFMLFadeAnimator2->isAnimationFinished() || exEvents->mouseTriggered(sf::Mouse::Left)) {
-		exGSManager->changeState(new AnimationSC::State());
-	}
-
-	//Restart GameState
-	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Escape)) {
-		exGSManager->restartState();
+	if (SFMLFadeAnimator->isAnimationFinished() || exEvents->mouseChecked(sf::Mouse::Left)) {
+		exGSManager->changeState(GSManager::GSTypes::GS_ANIMATION_SC);
 	}
 }
 

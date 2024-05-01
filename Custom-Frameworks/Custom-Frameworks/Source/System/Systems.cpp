@@ -90,12 +90,12 @@ void Systems::EventHandler::pollEvents() {
 bool Systems::EventHandler::keyTriggered(sf::Keyboard::Scancode keycode) {
 
     //Reset Boolean When Key Released
-    if (keyReleased(keycode)) {
+    if (event.type == sf::Event::KeyReleased && event.key.scancode == keycode) {
         b_keyTriggered = false;
     }
 
     //Check If Key Triggered
-    if (keyChecked(keycode) && !b_keyTriggered) {
+    if (sf::Keyboard::isKeyPressed(keycode) && !b_keyTriggered) {
         b_keyTriggered = true;
         return true;
     }
@@ -118,7 +118,7 @@ bool Systems::EventHandler::keyChecked(sf::Keyboard::Scancode keycode) {
 bool Systems::EventHandler::keyReleased(sf::Keyboard::Scancode keycode) {
 
     //Released Flag Reset
-    if (event.type != sf::Event::KeyReleased) {
+    if (event.type != sf::Event::KeyReleased || event.key.scancode != keycode) {
         b_keyReleased = false;
     }
 
@@ -134,12 +134,12 @@ bool Systems::EventHandler::keyReleased(sf::Keyboard::Scancode keycode) {
 
 bool Systems::EventHandler::mouseTriggered(sf::Mouse::Button btncode) {
     //Reset Boolean When Key Released
-    if (mouseReleased(btncode)) {
+    if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == btncode) {
         b_mouseTriggered = false;
     }
 
     //Check If Key Triggered
-    if (mouseChecked(btncode) && !b_mouseTriggered) {
+    if (sf::Mouse::isButtonPressed(btncode) && !b_mouseTriggered) {
         b_mouseTriggered = true;
         return true;
     }
@@ -160,7 +160,7 @@ bool Systems::EventHandler::mouseChecked(sf::Mouse::Button btncode) {
 
 bool Systems::EventHandler::mouseReleased(sf::Mouse::Button btncode) {
     //Released Flag Reset
-    if (event.type != sf::Event::MouseButtonReleased) {
+    if (event.type != sf::Event::MouseButtonReleased || event.mouseButton.button != btncode) {
         b_mouseReleased = false;
     }
 

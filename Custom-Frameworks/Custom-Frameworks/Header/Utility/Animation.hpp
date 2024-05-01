@@ -22,7 +22,7 @@ namespace Animation {
 	const float FADE_SPEED = 2.0f;
 
 	// ================================================================================
-	// Class: Sprite Sheet Animation Class ( Top Left To Bot Right Iteration )
+	// Class: Base Animator Class
 	// ================================================================================
 
 	class BaseAnimator {
@@ -37,12 +37,15 @@ namespace Animation {
 		bool b_pingpong;
 		bool b_reverse;
 
+		//Animation Speed
+		float animationSpeed;
+
 		//Check If Animation Ends
 		void animationEndChecker();
 
 	public:
 		//Default Constructor
-		BaseAnimator() : animationsToComplete{ 0 }, completedAnimations{ 0 }, animationStop{ false }, animationFinished{ false }, b_pingpong{ false }, b_reverse{ false } {}
+		BaseAnimator() : animationsToComplete{ 0 }, completedAnimations{ 0 }, animationStop{ false }, animationFinished{ false }, b_pingpong{ false }, b_reverse{ false }, animationSpeed{ 0.0f } {}
 
 		//Stop Animation
 		virtual void stopAnimation();
@@ -53,28 +56,38 @@ namespace Animation {
 		//Restart Animation ( Can Only Be Called If Animation Paused Abruptly )
 		virtual void restartAnimation();
 
+		//Set Animation Finished
+		void setAnimationFinished();
+
 		//Return If Animation Has Stopped
 		bool isAnimationFinished() const;
 
 		//Set PingPong Animation To Enable Or Disable
 		void setPingPongAnimation(bool enable);
 
-		//Set Animations To Complete Count
-		void setAnimationsToComplete(int count);
-
 		//Get PingPong Animation Enable Or Disable
 		bool getPingPongAnimation() const;
+
+		//Set Animations To Complete Count
+		void setAnimationsToComplete(int count);
 
 		//Get Animations To Complete Count
 		int getAnimationsToComplete();
 
 		//Get Completed Animations Count
 		int getCompletedAnimations() const;
+
+		//Set Speed Of Animation
+		void setAnimationSpeed(float speed);
+
+		//Get Speed Of Animation
+		float getAnimationSpeed() const;
 	};
 
 	// ================================================================================
 	// Class: Sprite Sheet Animation Class ( Top Left To Bot Right Iteration )
 	// ================================================================================
+
 	class SheetAnimator : public BaseAnimator {
 	private:
 		//Sprite Sheet Sizes
@@ -82,8 +95,7 @@ namespace Animation {
 		sf::Vector2u spriteSize;
 		unsigned int numSprites;
 
-		//Speed Of Animation From Start To End
-		float animationSpeed;
+		//Timer For Calculating Animation Speed
 		sf::Clock timer;
 
 		//Sprite Index ( Based On Top Left Corner Of Sprite )
@@ -102,7 +114,7 @@ namespace Animation {
 	public:
 
 		//Default Constructor
-		SheetAnimator() : BaseAnimator(), numSprites{ 0 }, animationSpeed{ 0.0f } {}
+		SheetAnimator() : BaseAnimator(), numSprites{ 0 } {}
 
 		/// <summary>
 		/// Constructor For Sprite Sheet Animation
@@ -141,13 +153,11 @@ namespace Animation {
 	};
 
 	// ================================================================================
-	// Class: Fade Animation Class
+	// Class: Fade Animation Class ( Defined Here Due To Template Function )
 	// ================================================================================
 
 	class FadeAnimator : public BaseAnimator {
 	private:
-		//Speed Of Fade From Start To End
-		float fadeSpeed;
 
 		//Start & End Opacity
 		sf::Uint8 startOpacity;
@@ -160,19 +170,34 @@ namespace Animation {
 	public:
 		//Default Constructor
 		FadeAnimator() 
-			: BaseAnimator(), fadeSpeed{ 0.0f }, startOpacity{ 0 }, endOpacity{ 255 }, currentOpacity{ 0.0f }, startMoreThanEnd { false } {};
+			: BaseAnimator(), startOpacity{ 0 }, endOpacity{ 255 }, currentOpacity{ 0.0f }, startMoreThanEnd { false } {};
 
-		//Fade Animator Constructor
+		/// <summary>
+		/// Constructor For Fade Animation
+		/// </summary>
+		/// <param name="startingOpacity">: Starting Opacity</param>
+		/// <param name="endingOpacity">: Ending Opacity</param>
+		/// <param name="animatespeed">P: Speed Of Animation</param>
+		/// <param name="pingpong">: PingPong Animation</param>
+		/// <param name="numOfAnimations">: Number Of Recurring Animations Before Stopping ( 0 = Infinite )</param>
 		FadeAnimator(sf::Uint8 startingOpacity, sf::Uint8 endingOpacity, float animatespeed = FADE_SPEED, bool pingpong = false, int numOfAnimations = 0)
-			: BaseAnimator(), fadeSpeed{ animatespeed }, startOpacity{ startingOpacity }, endOpacity{ endingOpacity }, currentOpacity{ static_cast<float>(startOpacity) }, startMoreThanEnd { startOpacity > endOpacity }
+			: BaseAnimator(), startOpacity{ startingOpacity }, endOpacity{ endingOpacity }, currentOpacity{ static_cast<float>(startOpacity) }, startMoreThanEnd { startOpacity > endOpacity }
 		{
 			b_pingpong = pingpong;
 			animationsToComplete = numOfAnimations;
+			animationSpeed = animatespeed;
 		}
 
-		//Set Fade Animator
+		/// <summary>
+		/// Fade Animation Setter
+		/// </summary>
+		/// <param name="startingOpacity">: Starting Opacity</param>
+		/// <param name="endingOpacity">: Ending Opacity</param>
+		/// <param name="animatespeed">P: Speed Of Animation</param>
+		/// <param name="pingpong">: PingPong Animation</param>
+		/// <param name="numOfAnimations">: Number Of Recurring Animations Before Stopping ( 0 = Infinite )</param>
 		void setFadeAnimator(sf::Uint8 startingOpacity, sf::Uint8 endingOpacity, float animatespeed = FADE_SPEED, bool pingpong = false , int numOfAnimations = 0) {
-			fadeSpeed = animatespeed;
+			animationSpeed = animatespeed;
 			b_pingpong = pingpong;
 			animationsToComplete = numOfAnimations;
 			startOpacity = startingOpacity;
@@ -181,12 +206,12 @@ namespace Animation {
 			startMoreThanEnd = startOpacity > endOpacity;
 		}
 
-		//Template Defintion
+		//Fade Drawable
 		template<typename T>
 		void fadeDrawable(Drawables::D_Base<T>& obj) {
 
 			//Opacity Increment
-			float opacityIncr { std::abs(endOpacity - startOpacity) / (fadeSpeed * exTime->getFrameRate()) };
+			float opacityIncr { std::abs(endOpacity - startOpacity) / (animationSpeed * exTime->getFrameRate()) };
 
 			if (!animationStop) {
 				//Iterator
