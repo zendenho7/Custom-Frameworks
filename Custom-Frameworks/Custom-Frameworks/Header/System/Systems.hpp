@@ -126,4 +126,52 @@ namespace Systems {
 	};
 }
 
+namespace DebugTools {
+
+	//Bench Marking Timer
+	class BMTimer {
+	private:
+		//Name Of Timer
+		std::string name;
+
+		//Start Time
+		std::chrono::time_point<std::chrono::high_resolution_clock> start;
+
+		//End Time
+		std::chrono::time_point<std::chrono::high_resolution_clock> end;
+
+		//Duration
+		std::chrono::duration<float> duration;
+
+		//Seconds / MilliSeconds
+		float timeScale;
+	public:
+		//Default Bench Marking Timer Returning In Milliseconds
+		BMTimer() : name{ "" }, timeScale{ 1000.0f }, start{ std::chrono::high_resolution_clock::now() }, duration{ 0.0f }
+		{
+		}
+
+		/// <summary>
+		/// Constructor With Naming ( Timer Runs Faster If No Name Is Provided )
+		/// </summary>
+		/// <param name="milliSeconds"></param>
+		/// <param name="name"></param>
+		BMTimer(bool milliSeconds, std::string&& name = "") : name{name}, timeScale{ milliSeconds ? 1000.0f : 1.0f }, start{ std::chrono::high_resolution_clock::now() }, duration{0.0f}
+		{
+		}
+
+		void timerStop() {
+			end = std::chrono::high_resolution_clock::now();
+		}
+
+		//RAII Timer Ends
+		~BMTimer()
+		{
+			timerStop();
+			duration = end - start;
+			std::cout << name << " Duration " << (duration.count() * timeScale) << (timeScale > 1.0f ? "ms\n" : "s\n");
+		}
+	};
+}
+
 #endif // !SYSTEMS_HPP

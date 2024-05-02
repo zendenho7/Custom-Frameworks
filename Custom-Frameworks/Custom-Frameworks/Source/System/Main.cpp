@@ -42,9 +42,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     //If Debug Mode, Create Console
-    #ifdef _DEBUG
-        exEvents->CreateConsole(true);
-    #endif // _DEBUG
+    //#ifdef _DEBUG
+    //    exEvents->CreateConsole(true);
+    //#endif // _DEBUG
+    exEvents->CreateConsole(true);
 
     //Initialize Event Handler & Create Window
     exEvents = new Systems::EventHandler(sf::VideoMode(1600, 900), "Custom Frameworks", sf::Style::Default);

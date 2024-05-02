@@ -211,11 +211,11 @@ void Animation::SheetAnimator::animateTexture(sf::Shape& obj) {
 
 		//If End Has Been Reached
 		if (currSprite == endSprite) {
+			//Check If Animation Is Finished
+			animationEndChecker();
 
 			//PingPong Function Checking
 			if (b_pingpong) {
-				//Check If Animation Is Finished
-				animationEndChecker();
 
 				//Set Reverse Iterator To True
 				b_reverse = true;
@@ -260,11 +260,11 @@ void Animation::SheetAnimator::animateTexture(sf::Sprite& obj) {
 
 		//If End Has Been Reached
 		if (currSprite == endSprite) {
+			//Check If Animation Is Finished
+			animationEndChecker();
 
 			//PingPong Function Checking
 			if (b_pingpong) {
-				//Check If Animation Is Finished
-				animationEndChecker();
 
 				//Set Reverse Iterator To True
 				b_reverse = true;

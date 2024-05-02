@@ -23,7 +23,7 @@ void AnimationSC::State::Init() {
 
 	//Sprite Animation Init
 	spriteEntity = std::make_unique<Drawables::D_Sprite>(exAssets->textures["AME"], sf::IntRect(0, 0, 500, 500), sf::Vector2f(250.0f, 250.0f), exEvents->windowCenter + sf::Vector2f(0.0f, -75.0f));
-	sheetAnimator = std::make_unique<Animation::SheetAnimator>(sf::Vector2u(2000, 2500), sf::Vector2i(500, 500), sf::Vector2u(0, 0), sf::Vector2u(2, 4), 1.0f, true, 5);
+	sheetAnimator = std::make_unique<Animation::SheetAnimator>(sf::Vector2u(2000, 2500), sf::Vector2i(500, 500), sf::Vector2u(0, 0), sf::Vector2u(2, 4), 1.0f, false , 5);
 
 	//Stop Button Init
 	stopButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 100.0f), 15.0f, 0.0f);
@@ -42,7 +42,7 @@ void AnimationSC::State::Init() {
 	endButton->initButtonText("END ANIMATION", exAssets->fonts["COMIC"], sf::Color::Black, { 0.75f, 0.4f });
 
 	//Animation Status Init
-	animationCount = std::make_unique<Drawables::D_Text>(std::to_string(sheetAnimator->getCompletedAnimations()) + " / " += sheetAnimator->getAnimationsToComplete() ? std::to_string(sheetAnimator->getAnimationsToComplete()) : std::string("INF"), exAssets->fonts["COMIC"], sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -300.0f));
+	animationCount = std::make_unique<Drawables::D_Text>(std::move((std::to_string(sheetAnimator->getCompletedAnimations()) += " / ") += sheetAnimator->getAnimationsToComplete() ? std::move(std::to_string(sheetAnimator->getAnimationsToComplete())) : "INF"), exAssets->fonts["COMIC"], sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -300.0f));
 	animationCount->Custom_OffsetToCenter();
 	animationCount->setScale(0.4f, 0.4f);
 	animationCount->Custom_SetFixedScale();
@@ -67,21 +67,6 @@ void AnimationSC::State::Update() {
 	//Update Sprite Animation
 	sheetAnimator->animateTexture(*spriteEntity);
 
-	//Update Animation Count
-	animationCount->setString(std::to_string(sheetAnimator->getCompletedAnimations()) + " / " += sheetAnimator->getAnimationsToComplete() ? std::to_string(sheetAnimator->getAnimationsToComplete()) : std::string("INF"));
-
-	//Stop Animation
-	if (stopButton->isButtonClicked()) {
-		sheetAnimator->stopAnimation();
-		animationStatus->setString("ANIMATION PAUSED");
-	}
-
-	//Resume Animation
-	if (resumeButton->isButtonClicked()) {
-		sheetAnimator->resumeAnimation();
-		animationStatus->setString("ANIMATION ONGOING");
-	}
-
 	//Restart Animation
 	if (restartButton->isButtonClicked()) {
 		sheetAnimator->restartAnimation();
@@ -98,18 +83,32 @@ void AnimationSC::State::Update() {
 		if (decreaseButton->isButtonClicked()) {
 			sheetAnimator->setAnimationsToComplete(sf::Uint8(sheetAnimator->getAnimationsToComplete() - 1));
 		}
+
+		//Set Animation Status
+		animationStatus->setString("ANIMATION FINISHED");
 	}
 	else {
+
+		//Stop Animation
+		if (stopButton->isButtonClicked()) {
+			sheetAnimator->stopAnimation();
+			animationStatus->setString("ANIMATION PAUSED");
+		}
+
+		//Resume Animation
+		if (resumeButton->isButtonClicked()) {
+			sheetAnimator->resumeAnimation();
+			animationStatus->setString("ANIMATION ONGOING");
+		}
+
 		//End Animation
 		if (endButton->isButtonClicked()) {
 			sheetAnimator->setAnimationFinished();
 		}
 	}
 
-	//Animation Finished
-	if (sheetAnimator->isAnimationFinished()) {
-		animationStatus->setString("ANIMATION FINISHED");
-	}
+	//Update Animation Count
+	animationCount->setString(std::move(std::to_string(sheetAnimator->getCompletedAnimations()) += " / ") += std::move(sheetAnimator->getAnimationsToComplete() ? std::to_string(sheetAnimator->getAnimationsToComplete()) : "INF"));
 
 	//Go Back To Previous State
 	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Escape)) {

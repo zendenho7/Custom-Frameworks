@@ -44,5 +44,6 @@ Copyright (c) 2024 Zen Ho
 #include <functional>
 #include <type_traits>
 #include <cassert>
+#include <chrono>
 
 #endif // !PCH_HPP
