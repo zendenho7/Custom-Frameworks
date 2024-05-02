@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\GameObjects\Map.cpp" />
     <ClCompile Include="Source\Menu\MainMenu.cpp" />
     <ClCompile Include="Source\Menu\SplashScreen.cpp" />
     <ClCompile Include="Source\Sandbox\AnimationShowcase.cpp" />
@@ -32,6 +33,7 @@
     <ClCompile Include="Source\Utility\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Header\GameObjects\Map.hpp" />
     <ClInclude Include="Header\Menu\MainMenu.hpp" />
     <ClInclude Include="Header\Menu\SplashScreen.hpp" />
     <ClInclude Include="Header\Sandbox\AnimationShowcase.hpp" />
