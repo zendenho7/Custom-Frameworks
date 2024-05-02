@@ -22,7 +22,8 @@ namespace GSManager {
 	enum class GSTypes {
 		GS_SPLASHSCREEN = 0,
 		GS_MAINMENU,
-		GS_ANIMATION_SC
+		GS_ANIMATION_SC,
+		GS_GRID_SC
 	};
 
 	//GameState Class

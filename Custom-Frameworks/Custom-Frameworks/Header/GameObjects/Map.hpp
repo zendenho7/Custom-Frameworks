@@ -24,7 +24,7 @@ namespace Map {
 		Cell() = default;
 
 		//Cell Constructor
-		Cell(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding);
+		Cell(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f);
 	};
 	
 	class Grid {
@@ -32,12 +32,21 @@ namespace Map {
 		//Array Of Cells
 		std::vector<std::vector<Cell>> gridArray;
 
+		//Size Of Grid
+		sf::Vector2f gridSize;
+
+		//Grid Container
+		Drawables::D_RoundedRectangle gridContainer;
+
 	public:
 		//Ddefault Grid Constructor
 		Grid() = default;
 
 		//Grid Constructor
-		Grid(sf::Vector2<size_t>const& gridCount, sf::Vector2f const& gridPos, sf::Color const& cellColor, sf::Vector2f const& cellSize, float cellRounding = 0.0f);
+		Grid(sf::Vector2<size_t>const& cellCount, sf::Vector2f const& gridPos, sf::Vector2f const& gridBorder, sf::Color const& gridColor, sf::Color const& cellColor, sf::Vector2f const& cellSize, float cellGap);
+
+		//Draw Grid
+		void drawGrid();
 	};
 }
 

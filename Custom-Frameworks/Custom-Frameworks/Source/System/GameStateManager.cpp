@@ -18,6 +18,7 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\Menu\SplashScreen.hpp"
 #include "..\..\Header\Menu\MainMenu.hpp"
 #include "..\..\Header\Sandbox\AnimationShowcase.hpp"
+#include "..\..\Header\Sandbox\GridShowcase.hpp"
 
 // ================================================================================
 // Class: GameState Manager
@@ -35,6 +36,9 @@ GSManager::GameState * GSManager::GameStateManager::enumToGS(GSTypes gsType) {
 		break;
 	case GSTypes::GS_ANIMATION_SC:
 		return new AnimationSC::State();
+		break;
+	case GSTypes::GS_GRID_SC:
+		return new GridSC::State();
 		break;
 	default:
 		return 0;

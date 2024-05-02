@@ -49,7 +49,7 @@ void SplashScreen::State::Update() {
 
 	//Button To Enter Next Game State
 	if (SFMLFadeAnimator->isAnimationFinished() || exEvents->mouseChecked(sf::Mouse::Left)) {
-		exGSManager->changeState(GSManager::GSTypes::GS_ANIMATION_SC);
+		exGSManager->changeState(GSManager::GSTypes::GS_GRID_SC);
 	}
 }
 
