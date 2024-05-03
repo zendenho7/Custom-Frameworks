@@ -66,11 +66,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         //Time Step
         while (exTime->UpdateFrameTime(60));
 
-        //Input Checks
+        //Input Checks & Update GameState
         exEvents->pollEvents();
-
-        //Update GameState
-        exGSManager->updateGameState();
 
         //Draw GameState
         exGSManager->drawGameState();

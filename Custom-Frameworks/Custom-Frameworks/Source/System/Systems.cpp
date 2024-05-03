@@ -80,6 +80,9 @@ void Systems::EventHandler::pollEvents() {
             //Close Window
             window.close();
         }
+
+        //Update GameState
+        exGSManager->updateGameState();
     }
 }
 
@@ -133,12 +136,12 @@ bool Systems::EventHandler::keyReleased(sf::Keyboard::Scancode keycode) {
 }
 
 bool Systems::EventHandler::mouseTriggered(sf::Mouse::Button btncode) {
-    //Reset Boolean When Key Released
+    //Reset Boolean When Mouse Released
     if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == btncode) {
         b_mouseTriggered = false;
     }
 
-    //Check If Key Triggered
+    //Check If Mouse Triggered
     if (sf::Mouse::isButtonPressed(btncode) && !b_mouseTriggered) {
         b_mouseTriggered = true;
         return true;

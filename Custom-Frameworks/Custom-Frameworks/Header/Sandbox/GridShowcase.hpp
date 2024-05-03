@@ -24,10 +24,8 @@ Copyright (c) 2024 Zen Ho
 namespace GridSC {
     class State : public GSManager::GameState {
     private:
-
-        std::unique_ptr<Map::Grid> testGrid;
-
         //Game Objects
+        std::unique_ptr<Map::Grid> testGrid;
 
     public:
 

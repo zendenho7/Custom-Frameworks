@@ -37,17 +37,23 @@ namespace Drawables {
 	private:
 		sf::Vector2f fixedScale;
 
+		Origin originPos;
+
 	public:
 		//Constructors
-		D_Base() : fixedScale{ 1.0f, 1.0f } {}
+		D_Base() : fixedScale{ 1.0f, 1.0f }, originPos{ Origin::CENTER } {}
 
 		//Custom Member Functions
 		void Custom_SetOrigin(Origin oPos = Origin::CENTER) {
+
+			//Set Origin Position
+			originPos = oPos;
+
 			//Size Of Object
 			sf::Vector2f size{ T::getLocalBounds().getSize() };
 
 			//Switch Cases For Origin Setting
-			switch (oPos) {
+			switch (originPos) {
 			case Origin::CENTER:
 				T::setOrigin(size.x / 2, size.y / 2);
 				break;
@@ -71,6 +77,10 @@ namespace Drawables {
 		//Set Fixed Scale ( For Size Manipulation )
 		void Custom_SetFixedScale() {
 			fixedScale = T::getScale();
+		}
+
+		Origin Custom_GetOrigin() const {
+			return originPos;
 		}
 
 		//Get Fixed Scale
@@ -164,6 +174,9 @@ namespace Drawables {
 		//Update Points Positioning
 		void setPoints();
 
+		//Private Rounded Rect Constructor
+		void constructRoundedRect(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Origin oPos);
+
 	public:
 		//Default Constructor
 		D_RoundedRectangle() = default;
@@ -178,6 +191,7 @@ namespace Drawables {
 		/// <param name="rotation">: Rotation Of Rounded Rectangle</param>
 		/// <param name="oPos">: Origin Of Rounded Rectangle</param>
 		D_RoundedRectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+		D_RoundedRectangle(D_RoundedRectangle const& copy);
 
 		/// <summary>
 		/// D_RoundedRectangle Setter
@@ -189,6 +203,13 @@ namespace Drawables {
 		/// <param name="rotation">: Rotation Of Rounded Rectangle</param>
 		/// <param name="oPos">: Origin Of Rounded Rectangle</param>
 		void setD_RoundedRectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+		void setD_RoundedRectangle(D_RoundedRectangle const& copy);
+
+		//Get Size
+		sf::Vector2f getSize() const;
+
+		//Set Size
+		void setSize(sf::Vector2f const& size);
 
 		//Set Rounding
 		void setCornerRounding(float rounding);

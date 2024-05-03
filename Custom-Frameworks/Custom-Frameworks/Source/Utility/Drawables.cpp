@@ -57,31 +57,15 @@ void Drawables::D_Text::Custom_OffsetToCenter() {
 Drawables::D_RoundedRectangle::D_RoundedRectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Origin oPos)
 	: cornerRounding{ rounding }, D_Base<sf::ConvexShape>()
 {
-	//Center Point Of Rectangle
-	sf::Vector2f centerPoint{ size.x / 2, size.y / 2 };
+	//Construct Rounded Rect
+	constructRoundedRect(color, size, pos, cornerRounding, rotation, oPos);
+}
 
-	//Vertex Points Of Rectangle
-	rectVertex[0] = { centerPoint.x + (size.x / 2), centerPoint.y - (size.y / 2) };
-	rectVertex[1] = { centerPoint.x - (size.x / 2), centerPoint.y - (size.y / 2) };
-	rectVertex[2] = { centerPoint.x - (size.x / 2), centerPoint.y + (size.y / 2) };
-	rectVertex[3] = { centerPoint.x + (size.x / 2), centerPoint.y + (size.y / 2) };
-
-	//Clamp Cornder Rounding
-	cornerRounding = std::clamp(rounding, 0.0f, (size.x < size.y ? size.x / 2 : size.y / 2));
-
-	//Update Points Of Rectangle
-	setPoints();
-	update();
-
-	//Set FillColor
-	setFillColor(color);
-
-	//Set Position & Rotation
-	setPosition(pos);
-	setRotation(rotation);
-
-	//Set Origin Of Rect
-	Custom_SetOrigin(oPos);
+Drawables::D_RoundedRectangle::D_RoundedRectangle(D_RoundedRectangle const& copy)
+	: cornerRounding{ copy.getCornerRounding() }, D_Base<sf::ConvexShape>()
+{
+	//Construct Rounded Rect
+	constructRoundedRect(copy.getFillColor(), copy.getLocalBounds().getSize(), copy.getPosition(), cornerRounding, copy.getRotation(), copy.Custom_GetOrigin());
 }
 
 void Drawables::D_RoundedRectangle::setD_RoundedRectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Origin oPos)
@@ -89,6 +73,20 @@ void Drawables::D_RoundedRectangle::setD_RoundedRectangle(sf::Color const& color
 	//Init Corner Rounding
 	cornerRounding = rounding;
 
+	//Construct Rounded Rect
+	constructRoundedRect(color, size, pos, cornerRounding, rotation, oPos);
+}
+
+void Drawables::D_RoundedRectangle::setD_RoundedRectangle(D_RoundedRectangle const& copy)
+{
+	//Init Corner Rounding
+	cornerRounding = copy.getCornerRounding();
+
+	//Construct Rounded Rect
+	constructRoundedRect(copy.getFillColor(), copy.getLocalBounds().getSize(), copy.getPosition(), cornerRounding, copy.getRotation(), copy.Custom_GetOrigin());
+}
+
+void Drawables::D_RoundedRectangle::constructRoundedRect(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Origin oPos) {
 	//Center Point Of Rectangle
 	sf::Vector2f centerPoint{ size.x / 2, size.y / 2 };
 
@@ -168,6 +166,25 @@ void Drawables::D_RoundedRectangle::setPoints() {
 	for (int i{ 0 }; i < rectTotalPoints.size(); i++) {
 		setPoint(i, rectTotalPoints.at(i));
 	}
+}
+
+sf::Vector2f  Drawables::D_RoundedRectangle::getSize() const {
+	return getLocalBounds().getSize();
+}
+
+void  Drawables::D_RoundedRectangle::setSize(sf::Vector2f const& size) {
+	//Center Point Of Rectangle
+	sf::Vector2f centerPoint{ size.x / 2, size.y / 2 };
+
+	//Vertex Points Of Rectangle
+	rectVertex[0] = { centerPoint.x + (size.x / 2), centerPoint.y - (size.y / 2) };
+	rectVertex[1] = { centerPoint.x - (size.x / 2), centerPoint.y - (size.y / 2) };
+	rectVertex[2] = { centerPoint.x - (size.x / 2), centerPoint.y + (size.y / 2) };
+	rectVertex[3] = { centerPoint.x + (size.x / 2), centerPoint.y + (size.y / 2) };
+
+	//Update Points Of Rectangle
+	setPoints();
+	update();
 }
 
 void Drawables::D_RoundedRectangle::setCornerRounding(float rounding) {
