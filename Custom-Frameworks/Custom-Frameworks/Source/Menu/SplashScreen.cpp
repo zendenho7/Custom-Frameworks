@@ -30,7 +30,7 @@ void SplashScreen::State::Init() {
 	SFMLFadeAnimator = std::make_unique<Animation::FadeAnimator>(sf::Uint8(0), sf::Uint8(255), 5.0f, true, 2);
 
 	//Splashscreen Text Init
-	ssText = std::make_unique<Drawables::D_Text>("MADE USING SFML", exAssets->fonts["COMIC"], sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, 125.0f));
+	ssText = std::make_unique<Drawables::D_Text>("MADE USING SFML", exAssets->fonts["COMIC"], sf::Color(0, 0, 0, 0), exEvents->windowCenter + sf::Vector2f(0.0f, 125.0f));
 	ssText->Custom_OffsetToCenter();
 	ssText->setScale(0.4f, 0.4f);
 	ssText->Custom_SetFixedScale();

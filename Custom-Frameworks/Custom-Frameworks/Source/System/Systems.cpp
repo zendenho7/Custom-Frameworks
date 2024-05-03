@@ -66,6 +66,9 @@ void Systems::WindowHandler::SetIcon(HINSTANCE const& hInstance) {
 
 void Systems::EventHandler::pollEvents() {
 
+    //Init GameStateUpdate Flag
+    bool gameStateUpdated{ false };
+
     //Poll Events
     while (window.pollEvent(event)) {
         //Check For Escaping Application Events
@@ -81,6 +84,14 @@ void Systems::EventHandler::pollEvents() {
             window.close();
         }
 
+        //Update GameState
+        exGSManager->updateGameState();
+
+        //Set GameState Updated
+        gameStateUpdated = true;
+    }
+
+    if (!gameStateUpdated) {
         //Update GameState
         exGSManager->updateGameState();
     }
