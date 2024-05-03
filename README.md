@@ -6,3 +6,4 @@ Custom Frameworks Experimentation With C++ Using SFML Framework
 - Fade Animation
 - Derived Drawables ( Added Custom Functionalities )
 - Rounded Rectangle Button
+- Resizable Grid
