@@ -25,7 +25,15 @@ namespace GridSC {
     class State : public GSManager::GameState {
     private:
         //Game Objects
-        std::unique_ptr<Map::Grid> testGrid;
+        std::unique_ptr<Map::Grid> GOLGrid;
+        std::unique_ptr<Drawables::D_Text> GOLHeader;
+        std::unique_ptr<Drawables::D_Text> GOLStatus;
+        
+        //Buffer Boolean Array
+        std::vector<std::vector<bool>> selectedArray;
+        
+        //Simulation Paused
+        bool b_SimPaused;
 
     public:
 
@@ -39,6 +47,9 @@ namespace GridSC {
 
         //Default Destructor
         ~State() override = default;
+
+        //Helper Functions
+        void GOLUpdateLogic();
     };
 }
 
