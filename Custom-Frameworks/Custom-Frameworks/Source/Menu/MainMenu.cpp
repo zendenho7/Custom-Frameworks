@@ -20,9 +20,9 @@ void MainMenu::State::Load() {
 
 void MainMenu::State::Init() {
 	//Main Menu Header Init
-	mmHeader = std::make_unique<Drawables::D_Text>("NAVIGATE", exAssets->fonts["COMIC"], sf::Color(0, 0, 0, 255), exEvents->windowCenter + sf::Vector2f(0.0f, -150.0f));
+	mmHeader = std::make_unique<Drawables::D_Text>("MAIN MENU", exAssets->fonts["COMIC"], sf::Color(0, 0, 0, 255), exEvents->windowCenter + sf::Vector2f(0.0f, -150.0f));
 	mmHeader->Custom_OffsetToCenter();
-	mmHeader->setScale(0.75f, 0.75f);
+	mmHeader->setScale(0.70f, 0.70f);
 	mmHeader->Custom_SetFixedScale();
 
 	//Animation Showcase Init
@@ -31,11 +31,11 @@ void MainMenu::State::Init() {
 
 	//GOL Showcase Init
 	golSS = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 75.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 50.0f), 15.0f, 0.0f);
-	golSS->initButtonText("GOL SHOWCASE", exAssets->fonts["COMIC"], sf::Color::Black, { 0.75f, 0.4f });
+	golSS->initButtonText("GAMEOFLIFE SHOWCASE", exAssets->fonts["COMIC"], sf::Color::Black, { 0.75f, 0.4f });
 
 	//Exit Button Init
 	exitBtn = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 75.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 150.0f), 15.0f, 0.0f);
-	exitBtn->initButtonText("EXIT SIMULATION", exAssets->fonts["COMIC"], sf::Color::Black, { 0.75f, 0.4f });
+	exitBtn->initButtonText("EXIT APPLICATION", exAssets->fonts["COMIC"], sf::Color::Black, { 0.75f, 0.4f });
 }
 
 void MainMenu::State::Update() {

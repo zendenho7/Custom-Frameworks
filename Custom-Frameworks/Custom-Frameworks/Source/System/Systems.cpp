@@ -26,7 +26,7 @@ Systems::WindowHandler::WindowHandler(sf::VideoMode mode, const sf::String& titl
     windowCenter(static_cast<float>(window.getSize().x) / 2.0f, static_cast<float>(window.getSize().y) / 2.0f) {}
 
 Systems::EventHandler::EventHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style, const sf::ContextSettings& settings)
-    : WindowHandler(mode, title, style, settings), b_mouseTriggered{ false }, b_mouseReleased{ false }, b_keyTriggered{ false }, b_keyReleased{ false }, event{ sf::Event() } {}
+    : WindowHandler(mode, title, style, settings), b_mouseTriggered{ false }, b_mouseReleased{ false }, b_keyTriggered{ false }, b_keyReleased{ false }, event() {}
 
 // ================================================================================
 // Function: System Input Handling
@@ -61,16 +61,20 @@ void Systems::WindowHandler::SetIcon(HINSTANCE const& hInstance) {
 }
 
 // ================================================================================
-// Function: Events Polling
+// Function: Game Loop
 // ================================================================================
 
-void Systems::EventHandler::pollEvents() {
+void Systems::EventHandler::gameLoop() {
 
     //Init GameStateUpdate Flag
     bool gameStateUpdated{ false };
 
     //Poll Events
     while (window.pollEvent(event)) {
+
+        //Update Existing Events
+        eventsUpdate();
+
         //Check For Escaping Application Events
         if ((event.type == sf::Event::Closed || !exGSManager->getGameRunning())) {
 
@@ -84,16 +88,35 @@ void Systems::EventHandler::pollEvents() {
             window.close();
         }
 
+        //Time Step
+        while (exTime->UpdateFrameTime(60));
+
         //Update GameState
         exGSManager->updateGameState();
+
+        //Draw GameState
+        exGSManager->drawGameState();
+
+        //Display Window Contents
+        exEvents->window.display();
 
         //Set GameState Updated
         gameStateUpdated = true;
     }
 
+    //No Active Events To Poll
     if (!gameStateUpdated) {
+        //Time Step
+        while (exTime->UpdateFrameTime(60));
+
         //Update GameState
         exGSManager->updateGameState();
+
+        //Draw GameState
+        exGSManager->drawGameState();
+
+        //Display Window Contents
+        exEvents->window.display();
     }
 }
 
@@ -102,11 +125,6 @@ void Systems::EventHandler::pollEvents() {
 // ================================================================================
 
 bool Systems::EventHandler::keyTriggered(sf::Keyboard::Scancode keycode) {
-
-    //Reset Boolean When Key Released
-    if (event.type == sf::Event::KeyReleased && event.key.scancode == keycode) {
-        b_keyTriggered = false;
-    }
 
     //Check If Key Triggered
     if (sf::Keyboard::isKeyPressed(keycode) && !b_keyTriggered) {
@@ -132,7 +150,7 @@ bool Systems::EventHandler::keyChecked(sf::Keyboard::Scancode keycode) {
 bool Systems::EventHandler::keyReleased(sf::Keyboard::Scancode keycode) {
 
     //Released Flag Reset
-    if (event.type != sf::Event::KeyReleased || event.key.scancode != keycode) {
+    if (event.key.scancode != keycode) {
         b_keyReleased = false;
     }
 
@@ -147,10 +165,6 @@ bool Systems::EventHandler::keyReleased(sf::Keyboard::Scancode keycode) {
 }
 
 bool Systems::EventHandler::mouseTriggered(sf::Mouse::Button btncode) {
-    //Reset Boolean When Mouse Released
-    if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == btncode) {
-        b_mouseTriggered = false;
-    }
 
     //Check If Mouse Triggered
     if (sf::Mouse::isButtonPressed(btncode) && !b_mouseTriggered) {
@@ -174,7 +188,7 @@ bool Systems::EventHandler::mouseChecked(sf::Mouse::Button btncode) {
 
 bool Systems::EventHandler::mouseReleased(sf::Mouse::Button btncode) {
     //Released Flag Reset
-    if (event.type != sf::Event::MouseButtonReleased || event.mouseButton.button != btncode) {
+    if (event.mouseButton.button != btncode) {
         b_mouseReleased = false;
     }
 
@@ -185,6 +199,29 @@ bool Systems::EventHandler::mouseReleased(sf::Mouse::Button btncode) {
     }
     else {
         return false;
+    }
+}
+
+void Systems::EventHandler::eventsUpdate() {
+
+    //Reset Boolean When Key Released
+    if (event.type == sf::Event::KeyReleased) {
+        b_keyTriggered = false;
+    }
+
+    //Released Flag Reset
+    if (event.type != sf::Event::KeyReleased) {
+        b_keyReleased = false;
+    }
+
+    //Reset Boolean When Mouse Released
+    if (event.type == sf::Event::MouseButtonReleased) {
+        b_mouseTriggered = false;
+    }
+
+    //Released Flag Reset
+    if (event.type != sf::Event::MouseButtonReleased) {
+        b_mouseReleased = false;
     }
 }
 

@@ -72,8 +72,8 @@ namespace Systems {
 		/// <param name="settings">: Window Settings</param>
 		EventHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
 
-		//Poll Events ( Input etc. )
-		void pollEvents();
+		//Poll Events, Update, Draw & Display
+		void gameLoop();
 
 		//Custom Events Input Handling
 		bool keyTriggered(sf::Keyboard::Scancode keycode);
@@ -83,6 +83,9 @@ namespace Systems {
 		bool mouseTriggered(sf::Mouse::Button btncode);
 		bool mouseChecked(sf::Mouse::Button btncode);
 		bool mouseReleased(sf::Mouse::Button btncode);
+
+		//Event Handler Reset
+		void eventsUpdate();
 
 		//Destructor
 		~EventHandler() override = default;

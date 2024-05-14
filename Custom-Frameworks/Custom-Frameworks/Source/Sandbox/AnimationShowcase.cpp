@@ -129,8 +129,6 @@ void AnimationSC::State::Draw() {
 	exEvents->window.draw(*spriteEntity);
 
 	//Draw Buttons
-	stopButton->drawButton();
-	resumeButton->drawButton();
 	restartButton->drawButton();
 
 	if (sheetAnimator->isAnimationFinished()) {
@@ -138,6 +136,8 @@ void AnimationSC::State::Draw() {
 		decreaseButton->drawButton();
 	}
 	else {
+		stopButton->drawButton();
+		resumeButton->drawButton();
 		endButton->drawButton();
 	}
 }

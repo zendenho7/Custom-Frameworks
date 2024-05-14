@@ -37,6 +37,9 @@ namespace GridSC {
         //BG Color Of GOL Sim
         sf::Color bgColor;
 
+        //Display FPS
+        std::unique_ptr<Drawables::D_Text> fpsDisplay;
+
     public:
 
         //GameState Components

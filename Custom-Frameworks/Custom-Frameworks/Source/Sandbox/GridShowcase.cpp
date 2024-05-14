@@ -20,7 +20,7 @@ void GridSC::State::Load() {
 }
 
 void GridSC::State::Init() {
-	GOLGrid = std::make_unique<Map::Grid>(sf::Vector2<size_t>(50, 25), exEvents->windowCenter, sf::Vector2f(15.0f, 15.0f), sf::Color::Black, sf::Color::White, sf::Color::Blue, sf::Vector2f(25.0f, 25.0f), 5.0f);
+	GOLGrid = std::make_unique<Map::Grid>(sf::Vector2<size_t>(50, 25), exEvents->windowCenter, sf::Vector2f(15.0f, 15.0f), sf::Color::Transparent, sf::Color::White, sf::Color::Blue, sf::Vector2f(25.0f, 25.0f), 5.0f);
 	GOLGrid->setGridRounding(10.0f);
 
 	//GOL Header Init
@@ -34,6 +34,11 @@ void GridSC::State::Init() {
 	GOLStatus->Custom_OffsetToCenter();
 	GOLStatus->setScale(0.4f, 0.4f);
 	GOLStatus->Custom_SetFixedScale();
+
+	//FPS Display Init
+	fpsDisplay = std::make_unique<Drawables::D_Text>(std::to_string(exTime->getFrameRate()), exAssets->fonts["COMIC"], sf::Color::Black, sf::Vector2f(0.0f, 0.0f), sf::Uint8(72), 0.0f, Drawables::Origin::TOP_LEFT);
+	fpsDisplay->setScale(0.4f, 0.4f);
+	fpsDisplay->Custom_SetFixedScale();
 
 	//Resize Boolean Array
 	selectedArray.resize(GOLGrid->getCellCount().y);
@@ -50,6 +55,19 @@ void GridSC::State::Init() {
 
 void GridSC::State::Update() {
 
+	//Update FPS
+	fpsDisplay->setString(std::to_string(exTime->getFrameRate()));
+
+	//Enter Key To Toggle Simulation Status
+	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Enter)) {
+		b_SimPaused = !b_SimPaused;
+	}
+
+	//Go Back To Main Menu Game State
+	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Escape)) {
+		exGSManager->previousState();
+	}
+
 	//Check For Cell Click
 	if (b_SimPaused) {
 		GOLGrid->checkCellClicked();
@@ -61,22 +79,15 @@ void GridSC::State::Update() {
 		GOLStatus->setString("SIMULATION ONGOING");
 		bgColor = { 100, 100, 100, 255 };
 	}
-
-	//Enter Key To Toggle Simulation Status
-	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Enter)) {
-		b_SimPaused = !b_SimPaused;
-	}
-
-	//Go Back To Main Menu Game State
-	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Escape)) {
-		exGSManager->previousState();
-	}
 }
 
 void GridSC::State::Draw() {
 
 	//Clear Window
 	exEvents->window.clear(bgColor);
+
+	//Draw FPS Display
+	exEvents->window.draw(*fpsDisplay);
 
 	//Draw GOL Header
 	exEvents->window.draw(*GOLHeader);
@@ -113,8 +124,8 @@ void GridSC::State::GOLUpdateLogic() {
 			int aliveCount{ 0 };
 
 			//Check Cell Neighbours
-			for (int k = std::clamp(static_cast<int>(i - 1), 0, std::numeric_limits<int>::max()); k <= static_cast<int>(i + 1); k++) {
-				for (int m = std::clamp(static_cast<int>(j - 1), 0, std::numeric_limits<int>::max()); m <= static_cast<int>(j + 1); m++) {
+			for (int k = static_cast<int>(i - 1); k <= static_cast<int>(i + 1); k++) {
+				for (int m = static_cast<int>(j - 1); m <= static_cast<int>(j + 1); m++) {
 					if ((k == i && m == j) || k >= GOLGrid->getCellCount().y || m >= GOLGrid->getCellCount().x || k < 0 || m < 0)
 						continue;
 
@@ -128,7 +139,7 @@ void GridSC::State::GOLUpdateLogic() {
 			/*Decide If Cell Is Alive Or Dead*/
 			if (selectedArray[i][j]) {
 				if ((aliveCount == 2) || (aliveCount == 3)) {
-					GOLGrid->modifyCell({j, i}).setCellSelected(true);
+					GOLGrid->modifyCell({ j, i }).setCellSelected(true);
 				}
 				else {
 					GOLGrid->modifyCell({ j, i }).setCellSelected(false);

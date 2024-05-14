@@ -63,17 +63,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     //Game Loop
     while (exGSManager->getGameRunning())
     {
-        //Time Step
-        while (exTime->UpdateFrameTime(60));
-
         //Input Checks & Update GameState
-        exEvents->pollEvents();
-
-        //Draw GameState
-        exGSManager->drawGameState();
-
-        //Display Window Contents
-        exEvents->window.display();
+        exEvents->gameLoop();
     }
 
     //Delete Singletons

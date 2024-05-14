@@ -338,11 +338,14 @@ void Map::Grid::checkCellClicked() {
 void Map::Grid::drawGrid() {
 
 	//Draw Grid Container
+	if(gridContainer.getFillColor().a > 0)
 	exEvents->window.draw(gridContainer);
 
 	//Draw Grid
 	for (size_t i = 0; i < gridArray.size(); i++) {
 		for (size_t j = 0; j < gridArray[i].size(); j++) {
+
+			if(gridArray[i][j].getFillColor().a > 0)
 			exEvents->window.draw(gridArray[i][j]);
 		}
 	}
