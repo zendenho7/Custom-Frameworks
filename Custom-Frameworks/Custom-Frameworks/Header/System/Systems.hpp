@@ -10,6 +10,8 @@ Copyright (c) 2024 Zen Ho
 #ifndef SYSTEMS_HPP
 #define SYSTEMS_HPP
 
+#include "..\..\Header\Utility\Drawables.hpp"
+
 namespace Systems {
 
 	// ================================================================================
@@ -113,10 +115,23 @@ namespace Systems {
 
 		//Delta Time
 		float deltaTime;
+
+		//DeltaTime Display
+		Drawables::D_Text fpsDisplay;
+
+		//FPS Display
+		Drawables::D_Text deltaTimeDisplay;
 	public:
 
 		//Default Constructor
-		FrameTime() : clock(), currTime(clock.getElapsedTime()), prevTime(clock.getElapsedTime()), elapsedTime(clock.getElapsedTime()), elapsedFrame{0}, frameRate{0.0f}, deltaTime{0.0f} {}
+		FrameTime() 
+			: clock(), currTime(clock.getElapsedTime()), prevTime(clock.getElapsedTime()), elapsedTime(clock.getElapsedTime()), elapsedFrame{0}, frameRate{0.0f}, deltaTime{0.0f}, fpsDisplay(), deltaTimeDisplay() {}
+
+		//Set FrameTime Display
+		void setDisplay(sf::Font const& font, sf::Color const& color, Drawables::Origin oPos = Drawables::Origin::CENTER);
+
+		//Set Display Position
+		void setDisplayPos(sf::Vector2f const& pos);
 		
 		//Update Time & Frame Components
 		bool UpdateFrameTime(unsigned int targetFPS);
@@ -126,6 +141,12 @@ namespace Systems {
 
 		//Get Delta Time
 		float getDeltaTime() const;
+
+		//Display Delta Time
+		void displayFrameRate();
+
+		//Display FrameRate
+		void displayDeltaTime();
 	};
 }
 

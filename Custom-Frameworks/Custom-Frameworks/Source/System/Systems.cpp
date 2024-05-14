@@ -228,6 +228,28 @@ void Systems::EventHandler::eventsUpdate() {
 // ================================================================================
 // Function: Frame & Time Handling
 // ================================================================================
+void Systems::FrameTime::setDisplay(sf::Font const& font, sf::Color const& color, Drawables::Origin oPos) {
+    //FPS Display
+    fpsDisplay.setD_Text(std::to_string(frameRate), font, color, sf::Vector2f(0.0f, 0.0f), Drawables::DEF_CHAR_SIZE, 0.0f, oPos);
+    fpsDisplay.setScale(0.4f, 0.4f);
+    fpsDisplay.Custom_SetFixedScale();
+
+    if (fpsDisplay.Custom_GetOrigin() == Drawables::Origin::CENTER)
+        fpsDisplay.Custom_OffsetToCenter();
+
+    //DeltaTime Display
+    deltaTimeDisplay.setD_Text(std::to_string(deltaTime), font, color, sf::Vector2f(0.0f, 0.0f), Drawables::DEF_CHAR_SIZE, 0.0f, oPos);
+    deltaTimeDisplay.setScale(0.4f, 0.4f);
+    deltaTimeDisplay.Custom_SetFixedScale();
+
+    if(deltaTimeDisplay.Custom_GetOrigin() == Drawables::Origin::CENTER)
+        deltaTimeDisplay.Custom_OffsetToCenter();
+}
+
+void Systems::FrameTime::setDisplayPos(sf::Vector2f const& pos) {
+    fpsDisplay.setPosition(pos);
+    deltaTimeDisplay.setPosition(pos);
+}
 
 bool Systems::FrameTime::UpdateFrameTime(unsigned int targetFPS) {
 
@@ -258,4 +280,20 @@ float Systems::FrameTime::getFrameRate() const {
 
 float Systems::FrameTime::getDeltaTime() const {
     return deltaTime;
+}
+
+void Systems::FrameTime::displayFrameRate() {
+    //Update FPS Display
+    fpsDisplay.Custom_SetString(std::to_string(frameRate));
+
+    //Draw FPS Display
+    exEvents->window.draw(fpsDisplay);
+}
+
+void Systems::FrameTime::displayDeltaTime() {
+    //Update DeltaTime Display
+    deltaTimeDisplay.Custom_SetString(std::to_string(deltaTime));
+
+    //Draw DeltaTime Display
+    exEvents->window.draw(deltaTimeDisplay);
 }

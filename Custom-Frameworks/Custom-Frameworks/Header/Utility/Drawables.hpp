@@ -154,6 +154,9 @@ namespace Drawables {
 
 		// To Be Called Only After Setting Position
 		void Custom_OffsetToCenter();
+
+		//Custom Setting Of String
+		void Custom_SetString(std::string const& txt);
 	};
 
 	// ================================================================================

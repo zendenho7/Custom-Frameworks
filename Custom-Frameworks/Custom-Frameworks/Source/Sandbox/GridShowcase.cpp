@@ -35,10 +35,8 @@ void GridSC::State::Init() {
 	GOLStatus->setScale(0.4f, 0.4f);
 	GOLStatus->Custom_SetFixedScale();
 
-	//FPS Display Init
-	fpsDisplay = std::make_unique<Drawables::D_Text>(std::to_string(exTime->getFrameRate()), exAssets->fonts["COMIC"], sf::Color::Black, sf::Vector2f(0.0f, 0.0f), sf::Uint8(72), 0.0f, Drawables::Origin::TOP_LEFT);
-	fpsDisplay->setScale(0.4f, 0.4f);
-	fpsDisplay->Custom_SetFixedScale();
+	//Set FrameRate Display Positon
+	exTime->setDisplayPos(sf::Vector2f(0.0f, 0.0f));
 
 	//Resize Boolean Array
 	selectedArray.resize(GOLGrid->getCellCount().y);
@@ -54,9 +52,6 @@ void GridSC::State::Init() {
 }
 
 void GridSC::State::Update() {
-
-	//Update FPS
-	fpsDisplay->setString(std::to_string(exTime->getFrameRate()));
 
 	//Enter Key To Toggle Simulation Status
 	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Enter)) {
@@ -86,8 +81,8 @@ void GridSC::State::Draw() {
 	//Clear Window
 	exEvents->window.clear(bgColor);
 
-	//Draw FPS Display
-	exEvents->window.draw(*fpsDisplay);
+	//Display FrameRate ( Debugging Tool )
+	exTime->displayFrameRate();
 
 	//Draw GOL Header
 	exEvents->window.draw(*GOLHeader);

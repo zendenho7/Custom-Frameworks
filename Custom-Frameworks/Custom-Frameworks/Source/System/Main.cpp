@@ -51,11 +51,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     exEvents = new Systems::EventHandler(sf::VideoMode(1600, 900), "Custom Frameworks", sf::Style::Default);
     exEvents->SetIcon(hInstance);
 
-    //Initialize Time Handler
-    exTime = new Systems::FrameTime();
-
     //Initialize Assets Handler
     exAssets = new Load::Assets();
+
+    //Initialize Time Handler
+    exTime = new Systems::FrameTime();
 
     //Initialize GameState
     exGSManager = new GSManager::GameStateManager(GSManager::GSTypes::GS_SPLASHSCREEN);

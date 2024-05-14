@@ -50,6 +50,13 @@ void Drawables::D_Text::Custom_OffsetToCenter() {
 	move(0.0f, -(getGlobalBounds().getSize().y * 1.0f / 4.0f));
 }
 
+void Drawables::D_Text::Custom_SetString(std::string const& txt) {
+	setString(txt);
+
+	//Set Origin Based On Text Size
+	Custom_SetOrigin(Custom_GetOrigin());
+}
+
 // ================================================================================
 // Class: Rounded Rect Convex Shape
 // ================================================================================

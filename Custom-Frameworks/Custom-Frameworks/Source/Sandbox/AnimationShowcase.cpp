@@ -108,7 +108,7 @@ void AnimationSC::State::Update() {
 	}
 
 	//Update Animation Count
-	animationCount->setString(std::move(std::to_string(sheetAnimator->getCompletedAnimations()) += " / ") += std::move(sheetAnimator->getAnimationsToComplete() ? std::to_string(sheetAnimator->getAnimationsToComplete()) : "INF"));
+	animationCount->Custom_SetString(std::move(std::to_string(sheetAnimator->getCompletedAnimations()) += " / ") += std::move(sheetAnimator->getAnimationsToComplete() ? std::to_string(sheetAnimator->getAnimationsToComplete()) : "INF"));
 
 	//Go Back To Main Menu Game State
 	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Escape)) {

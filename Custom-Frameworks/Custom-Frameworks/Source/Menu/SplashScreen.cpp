@@ -34,6 +34,9 @@ void SplashScreen::State::Init() {
 	ssText->Custom_OffsetToCenter();
 	ssText->setScale(0.4f, 0.4f);
 	ssText->Custom_SetFixedScale();
+
+	//Set Frame Time Display
+	exTime->setDisplay(exAssets->fonts["COMIC"], sf::Color::Black, Drawables::Origin::TOP_LEFT);
 }
 
 void SplashScreen::State::Update() {
