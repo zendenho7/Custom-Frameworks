@@ -13,6 +13,9 @@ Copyright (c) 2024 Zen Ho
 #define MAINMENU_HPP
 
 #include "..\..\Header\System\GameStateManager.hpp"
+#include "..\..\Header\Utility\Drawables.hpp"
+#include "..\..\Header\Utility\Utils.hpp"
+#include "..\..\Header\Utility\UserInterface.hpp"
 
 // ================================================================================
 // Main Menu Namespace
@@ -23,6 +26,10 @@ namespace MainMenu {
     private:
 
         //Game Objects
+        std::unique_ptr<Drawables::D_Text> mmHeader;
+        std::unique_ptr <Interface::RectButton> animationSS;
+        std::unique_ptr <Interface::RectButton> golSS;
+        std::unique_ptr <Interface::RectButton> exitBtn;
 
     public:
 

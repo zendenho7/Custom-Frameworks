@@ -18,7 +18,6 @@ Copyright (c) 2024 Zen Ho
 
 #include "..\..\Header\System\GameStateManager.hpp"
 #include "..\..\Header\Utility\Drawables.hpp"
-#include "..\..\Header\Utility\Animation.hpp"
 #include "..\..\Header\GameObjects\Map.hpp"
 
 namespace GridSC {
@@ -34,6 +33,9 @@ namespace GridSC {
         
         //Simulation Paused
         bool b_SimPaused;
+
+        //BG Color Of GOL Sim
+        sf::Color bgColor;
 
     public:
 

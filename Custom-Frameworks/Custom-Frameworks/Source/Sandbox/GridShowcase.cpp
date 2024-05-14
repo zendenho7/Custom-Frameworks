@@ -54,10 +54,12 @@ void GridSC::State::Update() {
 	if (b_SimPaused) {
 		GOLGrid->checkCellClicked();
 		GOLStatus->setString("SIMULATION PAUSED");
+		bgColor = sf::Color::Cyan;
 	}
 	else {
 		GOLUpdateLogic();
 		GOLStatus->setString("SIMULATION ONGOING");
+		bgColor = { 100, 100, 100, 255 };
 	}
 
 	//Enter Key To Toggle Simulation Status
@@ -65,16 +67,16 @@ void GridSC::State::Update() {
 		b_SimPaused = !b_SimPaused;
 	}
 
-	//Go Back To Previous State
+	//Go Back To Main Menu Game State
 	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Escape)) {
-		exGSManager->exitGame();
+		exGSManager->previousState();
 	}
 }
 
 void GridSC::State::Draw() {
 
 	//Clear Window
-	exEvents->window.clear({ 100, 100, 100, 255 });
+	exEvents->window.clear(bgColor);
 
 	//Draw GOL Header
 	exEvents->window.draw(*GOLHeader);
@@ -108,7 +110,7 @@ void GridSC::State::GOLUpdateLogic() {
 		for (size_t j = 0; j < selectedArray[i].size(); j++) {
 
 			//Init Alive Count
-			int aliveCount = 0;
+			int aliveCount{ 0 };
 
 			//Check Cell Neighbours
 			for (int k = std::clamp(static_cast<int>(i - 1), 0, std::numeric_limits<int>::max()); k <= static_cast<int>(i + 1); k++) {

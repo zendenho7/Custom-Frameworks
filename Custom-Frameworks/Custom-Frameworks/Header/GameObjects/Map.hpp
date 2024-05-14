@@ -153,7 +153,10 @@ namespace Map {
 		sf::Color getCellClickedColor() const;
 
 		//Set Cell Def & Clicked Color
-		void setCellColors(sf::Color const& defcolor, sf::Color const& clickedcolor);
+		void setCellDefColor(sf::Color const& color);
+
+		//Set Cell Def & Clicked Color
+		void setCellClickedColor(sf::Color const& color);
 
 		//Check If Cell Is Clicked
 		void checkCellClicked();

@@ -302,11 +302,24 @@ sf::Color Map::Grid::getCellClickedColor() const {
 	return gridArray[0][0].getClickedColor();
 }
 
-void Map::Grid::setCellColors(sf::Color const& defcolor, sf::Color const& clickedcolor) {
+void Map::Grid::setCellDefColor(sf::Color const& color) {
 	for (size_t i{ 0 }; i < cellCount.y; i++) {
 		for (size_t j{ 0 }; j < cellCount.x; j++) {
-			gridArray[i][j].setDefColor(defcolor);
-			gridArray[i][j].setClickedColor(clickedcolor);
+			gridArray[i][j].setDefColor(color);
+
+			if(!gridArray[i][j].getCellSelected())
+			gridArray[i][j].setFillColor(color);
+		}
+	}
+}
+
+void Map::Grid::setCellClickedColor(sf::Color const& color) {
+	for (size_t i{ 0 }; i < cellCount.y; i++) {
+		for (size_t j{ 0 }; j < cellCount.x; j++) {
+			gridArray[i][j].setClickedColor(color);
+
+			if (gridArray[i][j].getCellSelected())
+				gridArray[i][j].setFillColor(color);
 		}
 	}
 }
