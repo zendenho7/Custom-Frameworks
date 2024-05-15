@@ -44,6 +44,9 @@ namespace Systems {
 		//Set Icon Based On Loaded Resource
 		void SetIcon(HINSTANCE const& hInstance);
 
+		//Update Window Data
+		void windowUpdate();
+
 		//Virtual Destructor
 		virtual ~WindowHandler() = default;
 	};

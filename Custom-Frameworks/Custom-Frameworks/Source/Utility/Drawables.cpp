@@ -57,6 +57,10 @@ void Drawables::D_Text::Custom_SetString(std::string const& txt) {
 	Custom_SetOrigin(Custom_GetOrigin());
 }
 
+void Drawables::D_Text::Custom_Draw() const {
+	exEvents->window.draw(*this);
+}
+
 // ================================================================================
 // Class: Rounded Rect Convex Shape
 // ================================================================================
@@ -175,7 +179,7 @@ void Drawables::D_RoundedRectangle::setPoints() {
 	}
 }
 
-sf::Vector2f  Drawables::D_RoundedRectangle::getSize() const {
+sf::Vector2f Drawables::D_RoundedRectangle::getSize() const {
 	return getLocalBounds().getSize();
 }
 
@@ -209,6 +213,10 @@ float Drawables::D_RoundedRectangle::getCornerRounding() const {
 	return cornerRounding;
 }
 
+void Drawables::D_RoundedRectangle::Custom_Draw() const {
+	exEvents->window.draw(*this);
+}
+
 // ================================================================================
 // Rectangle Shape Initializer
 // ================================================================================
@@ -238,6 +246,10 @@ void Drawables::D_Rectangle::setD_Rectangle(sf::Color const& color, sf::Vector2f
 	Custom_SetOrigin(oPos);
 }
 
+void Drawables::D_Rectangle::Custom_Draw() const {
+	exEvents->window.draw(*this);
+}
+
 // ================================================================================
 // Circle Shape Initializer
 // ================================================================================
@@ -265,6 +277,10 @@ void Drawables::D_Circle::setD_Circle(sf::Color const& color, float radius, sf::
 
 	//Set Origin
 	Custom_SetOrigin(oPos);
+}
+
+void Drawables::D_Circle::Custom_Draw() const {
+	exEvents->window.draw(*this);
 }
 
 // ================================================================================
@@ -300,4 +316,8 @@ void Drawables::D_Sprite::setD_Sprite(sf::Texture const& tex, sf::IntRect const&
 
 	//Set Origin
 	Custom_SetOrigin(oPos);
+}
+
+void Drawables::D_Sprite::Custom_Draw() const {
+	exEvents->window.draw(*this);
 }

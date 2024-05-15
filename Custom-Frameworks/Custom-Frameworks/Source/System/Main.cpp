@@ -63,6 +63,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     //Game Loop
     while (exGSManager->getGameRunning())
     {
+        //Update Window Data
+        exEvents->windowUpdate();
+
         //Input Checks & Update GameState
         exEvents->gameLoop();
     }

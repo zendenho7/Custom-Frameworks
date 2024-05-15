@@ -84,7 +84,47 @@ namespace Interface {
 		bool isButtonClicked();
 
 		//Draw Button Onto Render Target
-		void drawButton();
+		void Custom_Draw() const;
+	};
+
+	template <typename T>
+	class DropDown {
+	private:
+		//Drop Down Type
+		using dropDownType = T;
+
+		//Drop Down Booleans
+		bool b_DropDownHidden;
+
+		//Drop Down Container
+		Drawables::D_RoundedRectangle dropDownContainer;
+
+		//Drop Down Components
+		std::vector<dropDownType> dropDownComponents;
+
+	public:
+		//Default Constructor
+		DropDown() = default;
+
+		//DropDown Constructor
+		DropDown(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, bool startHidden = true)
+			: dropDownContainer(color, size, pos, rounding), b_DropDownHidden{ startHidden } {}
+
+		//Add Components To DropDown
+		void addComponents(dropDownType && obj) {
+			dropDownComponents.emplace_back(std::move(obj));
+		} 
+
+		//Draw DropDown
+		void Custom_Draw() const {
+			//Draw DropDown Container
+			exEvents->window.draw(dropDownContainer);
+
+			//Draw All Components
+			for (dropDownType const& elem : dropDownComponents) {
+				elem.Custom_Draw();
+			}
+		}
 	};
 }
 

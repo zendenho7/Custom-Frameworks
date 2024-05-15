@@ -63,13 +63,13 @@ void MainMenu::State::Draw() {
 	exEvents->window.draw(*mmHeader);
 
 	//Draw Button To Animation Showcase
-	animationSS->drawButton();
+	animationSS->Custom_Draw();
 
 	//Draw Button To GOL Showcase
-	golSS->drawButton();
+	golSS->Custom_Draw();
 
 	//Draw Exit Button
-	exitBtn->drawButton();
+	exitBtn->Custom_Draw();
 }
 
 void MainMenu::State::Free() {

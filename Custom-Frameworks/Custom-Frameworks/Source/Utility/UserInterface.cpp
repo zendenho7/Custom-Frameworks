@@ -127,13 +127,13 @@ bool Interface::RectButton::isButtonClicked() {
 	return false;
 }
 
-void Interface::RectButton::drawButton() {
+void Interface::RectButton::Custom_Draw() const {
 
 	//Draw Rect Button
-	exEvents->window.draw(D_Rect);
+	D_Rect.Custom_Draw();
 
 	//Draw BtnTxt If Text Is Present
 	if (!D_Text.getString().isEmpty()) {
-		exEvents->window.draw(D_Text);
+		D_Text.Custom_Draw();
 	}
 }

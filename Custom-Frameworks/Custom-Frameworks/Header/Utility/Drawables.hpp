@@ -11,6 +11,8 @@ Copyright (c) 2024 Zen Ho
 #ifndef DRAWABLES_HPP
 #define DRAWABLES_HPP
 
+//#include "..\..\Header\Utility\Utils.hpp"
+
 namespace Drawables {
 
 	// ================================================================================
@@ -42,6 +44,9 @@ namespace Drawables {
 	public:
 		//Constructors
 		D_Base() : fixedScale{ 1.0f, 1.0f }, originPos{ Origin::CENTER } {}
+
+		//Custom Draw Function
+		virtual void Custom_Draw() const = 0;
 
 		//Custom Member Functions
 		void Custom_SetOrigin(Origin oPos = Origin::CENTER) {
@@ -157,6 +162,9 @@ namespace Drawables {
 
 		//Custom Setting Of String
 		void Custom_SetString(std::string const& txt);
+
+		//Custom Draw Function
+		void Custom_Draw() const override;
 	};
 
 	// ================================================================================
@@ -219,6 +227,9 @@ namespace Drawables {
 
 		//Get Rounding
 		float getCornerRounding() const;
+
+		//Custom Draw Function
+		void Custom_Draw() const override;
 	};
 
 	// ================================================================================
@@ -250,6 +261,9 @@ namespace Drawables {
 		/// <param name="rotation">: Rotation Of Rectangle</param>
 		/// <param name="oPos">: Origin Of Rectangle</param>
 		void setD_Rectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+
+		//Custom Draw Function
+		void Custom_Draw() const override;
 	};
 
 	// ================================================================================
@@ -281,6 +295,9 @@ namespace Drawables {
 		/// <param name="rotation">: Rotation Of Circle</param>
 		/// <param name="oPos">: Origin Of Circle</param>
 		void setD_Circle(sf::Color const& color, float radius, sf::Vector2f const& pos, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+
+		//Custom Draw Function
+		void Custom_Draw() const override;
 	};
 
 	// ================================================================================
@@ -316,6 +333,9 @@ namespace Drawables {
 		/// <param name="opacity">: Opacity Of Sprite</param>
 		/// <param name="oPos">: Origin Of Sprite</param>
 		void setD_Sprite(sf::Texture const& tex, sf::IntRect const& spritePos, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, sf::Uint8 opacity = 255, Origin oPos = Origin::CENTER);
+
+		//Custom Draw Function
+		void Custom_Draw() const override;
 	};
 }
 

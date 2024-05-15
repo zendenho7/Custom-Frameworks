@@ -25,6 +25,11 @@ Systems::WindowHandler::WindowHandler(sf::VideoMode mode, const sf::String& titl
     windowSize(static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y)),
     windowCenter(static_cast<float>(window.getSize().x) / 2.0f, static_cast<float>(window.getSize().y) / 2.0f) {}
 
+void Systems::WindowHandler::windowUpdate() {
+    windowSize = { static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y) };
+    windowCenter = { static_cast<float>(window.getSize().x) / 2.0f, static_cast<float>(window.getSize().y) / 2.0f };
+}
+
 Systems::EventHandler::EventHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style, const sf::ContextSettings& settings)
     : WindowHandler(mode, title, style, settings), b_mouseTriggered{ false }, b_mouseReleased{ false }, b_keyTriggered{ false }, b_keyReleased{ false }, event() {}
 

@@ -20,6 +20,8 @@ void GridSC::State::Load() {
 }
 
 void GridSC::State::Init() {
+
+	//Init GOL Grid
 	GOLGrid = std::make_unique<Map::Grid>(sf::Vector2<size_t>(50, 25), exEvents->windowCenter, sf::Vector2f(15.0f, 15.0f), sf::Color::Transparent, sf::Color::White, sf::Color::Blue, sf::Vector2f(25.0f, 25.0f), 5.0f);
 	GOLGrid->setGridRounding(10.0f);
 
@@ -49,6 +51,9 @@ void GridSC::State::Init() {
 
 	//Simulation Flag
 	b_SimPaused = true;
+
+	//Init DropDown
+	helperDropDown = std::make_unique<Interface::DropDown<Interface::RectButton>>(sf::Color::White, sf::Vector2f(exEvents->windowSize.x, 100.0f), sf::Vector2f(exEvents->windowCenter.x, exEvents->windowSize.y - 50.0f));
 }
 
 void GridSC::State::Update() {
@@ -92,6 +97,8 @@ void GridSC::State::Draw() {
 
 	//Draw GOL Grid
 	GOLGrid->drawGrid();
+
+	helperDropDown->Custom_Draw();
 }
 
 void GridSC::State::Free() {

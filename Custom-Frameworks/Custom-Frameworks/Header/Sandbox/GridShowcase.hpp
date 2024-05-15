@@ -18,6 +18,7 @@ Copyright (c) 2024 Zen Ho
 
 #include "..\..\Header\System\GameStateManager.hpp"
 #include "..\..\Header\Utility\Drawables.hpp"
+#include "..\..\Header\Utility\UserInterface.hpp"
 #include "..\..\Header\GameObjects\Map.hpp"
 
 namespace GridSC {
@@ -36,6 +37,9 @@ namespace GridSC {
 
         //BG Color Of GOL Sim
         sf::Color bgColor;
+
+        //Helper Buttons DropDown
+        std::unique_ptr<Interface::DropDown<Interface::RectButton>> helperDropDown;
 
     public:
 
