@@ -77,11 +77,11 @@ void Map::Cell::setCellSelected(bool selected) {
 	}
 }
 
-sf::Color Map::Cell::getDefColor() const {
+sf::Color const& Map::Cell::getDefColor() const {
 	return defColor;
 }
 
-sf::Color Map::Cell::getClickedColor() const {
+sf::Color const& Map::Cell::getClickedColor() const {
 	return clickedColor;
 }
 
@@ -215,7 +215,7 @@ void Map::Grid::reorganiseGrid() {
 	}
 }
 
-sf::Vector2<size_t> Map::Grid::getCellCount() const {
+sf::Vector2<size_t> const& Map::Grid::getCellCount() const {
 	return { gridArray[0].size(), gridArray.size() };
 }
 
@@ -228,7 +228,7 @@ void Map::Grid::setCellCount(sf::Vector2<size_t> const& cellcount) {
 	reorganiseGrid();
 }
 
-sf::Vector2f Map::Grid::getCellSize() const {
+sf::Vector2f const& Map::Grid::getCellSize() const {
 	return { gridArray[0][0].getLocalBounds().getSize() };
 }
 
@@ -241,11 +241,11 @@ void Map::Grid::setCellSize(sf::Vector2f const& cellsize) {
 	reorganiseGrid();
 }
 
-sf::Vector2f Map::Grid::getGridSize() const {
+sf::Vector2f const& Map::Grid::getGridSize() const {
 	return gridSize;
 }
 
-sf::Vector2f Map::Grid::getGridBorder() const {
+sf::Vector2f const& Map::Grid::getGridBorder() const {
 	return gridBorder;
 }
 
@@ -286,7 +286,7 @@ void Map::Grid::setCellRounding(float rounding) {
 	}
 }
 
-sf::Color Map::Grid::getGridColor() const {
+sf::Color const& Map::Grid::getGridColor() const {
 	return gridContainer.getFillColor();
 }
 
@@ -294,11 +294,11 @@ void Map::Grid::setGridColor(sf::Color const& color) {
 	gridContainer.setFillColor(color);
 }
 
-sf::Color Map::Grid::getCellDefColor() const {
+sf::Color const& Map::Grid::getCellDefColor() const {
 	return gridArray[0][0].getDefColor();
 }
 
-sf::Color Map::Grid::getCellClickedColor() const {
+sf::Color const& Map::Grid::getCellClickedColor() const {
 	return gridArray[0][0].getClickedColor();
 }
 

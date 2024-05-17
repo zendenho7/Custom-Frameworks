@@ -14,7 +14,7 @@ Copyright (c) 2024 Zen Ho
 // ================================================================================
 
 Interface::RectButton::RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Drawables::Origin oPos, bool hover)
-	: b_hoverEnabled{ hover }, hoverScale{ HOVER_SCALE }, hoverDuration{ HOVER_TIME }, textToBtnRatio{ 0.0f, 0.0f }, D_Rect(color, size, pos, rounding, rotation, oPos), D_Text()
+	: b_hoverEnabled{ hover }, hoverScale{ BTN_HOVER_SCALE }, hoverDuration{ BTN_HOVER_TIME }, textToBtnRatio{ 0.0f, 0.0f }, D_Rect(color, size, pos, rounding, rotation, oPos), D_Text()
 {
 }
 
@@ -87,6 +87,28 @@ void Interface::RectButton::initButtonText(std::string const& txt, sf::Font cons
 
 	//Set Origin Of Rect
 	D_Text.Custom_SetOrigin(oPos);
+}
+
+void Interface::RectButton::setPosition(sf::Vector2f const& pos) {
+	D_Rect.setPosition(pos);
+	D_Text.setPosition(pos);
+}
+
+sf::Vector2f const& Interface::RectButton::getPosition() const {
+	return D_Rect.getGlobalBounds().getPosition() + D_Rect.getOrigin();
+}
+
+void Interface::RectButton::setScale(sf::Vector2f const& scale) {
+	D_Rect.setScale(scale);
+	D_Text.setScale(scale);
+}
+
+sf::FloatRect const& Interface::RectButton::getLocalBounds() const {
+	return D_Rect.getLocalBounds();
+}
+
+sf::FloatRect const& Interface::RectButton::getGlobalBounds() const {
+	return D_Rect.getGlobalBounds();
 }
 
 // ================================================================================

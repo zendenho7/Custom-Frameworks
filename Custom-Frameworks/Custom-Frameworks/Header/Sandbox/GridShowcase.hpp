@@ -39,7 +39,7 @@ namespace GridSC {
         sf::Color bgColor;
 
         //Helper Buttons DropDown
-        std::unique_ptr<Interface::DropDown<Interface::RectButton>> helperDropDown;
+        std::unique_ptr<Interface::DropDown> helperDropDown;
 
     public:
 
