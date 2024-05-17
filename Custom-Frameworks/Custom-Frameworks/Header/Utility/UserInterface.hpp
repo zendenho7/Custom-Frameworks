@@ -16,12 +16,16 @@ Copyright (c) 2024 Zen Ho
 
 namespace Interface {
 
-	//Rect Button Default Constants
+	// ================================================================================
+	// Rect Button Constants
+	// ================================================================================
 	const sf::Vector2f	BTN_HOVER_SCALE{ 1.05f, 1.05f };	//Percentage Of Button Size
 	const float			BTN_HOVER_TIME{ 0.25f };		//Hover Time In Seconds
 	const sf::Vector2f	BTN_TXT_TO_BTN_RATIO{ 0.5f, 0.5f };
 
-	//Button Interface
+	// ================================================================================
+	// Class: Rect Button
+	// ================================================================================
 	class RectButton {
 	private:
 		//Drawable Rect ( Base Of Button )
@@ -32,6 +36,7 @@ namespace Interface {
 
 		//Hovering Operators
 		bool b_hoverEnabled;
+		bool b_hoverInProgress;
 		sf::Vector2f hoverScale;
 		float hoverDuration;
 
@@ -90,33 +95,51 @@ namespace Interface {
 		void setPosition(sf::Vector2f const& pos);
 
 		//Get Button Position
-		sf::Vector2f const& getPosition() const;
+		sf::Vector2f getPosition() const;
 
 		//Set Button Size
 		void setScale(sf::Vector2f const& size);
 
 		//Get Button Local Bounding
-		sf::FloatRect const& getLocalBounds() const;
+		sf::FloatRect getLocalBounds() const;
 
 		//Get Button Global Bounding
-		sf::FloatRect const& getGlobalBounds() const;
+		sf::FloatRect getGlobalBounds() const;
+
+		//Get Hover Status
+		bool getHoverStatus() const;
 	};
 
-	//Drop Down Alignment
+	// ================================================================================
+	// DropDown Enums
+	// ================================================================================
 	enum class DropDownAlign {
-		CENTER = 0,
-		LEFT,
-		RIGHT
+		DOWN_CENTER = 0,
+		DOWN_LEFT,
+		DOWN_RIGHT,
+		UP_CENTER,
+		UP_LEFT,
+		UP_RIGHT,
 	};
 
-	//Drop Down Interface
+	enum class DropDownType {
+		HOVER = 0,
+		CLICK
+	};
+
+	// ================================================================================
+	// Class: DropDown
+	// ================================================================================
 	class DropDown {
 	private:
 
 		//Drop Down Booleans
 		bool b_DropDownHidden;
+		bool b_MouseOverDropDown;
 
-		//Arrangement Style
+		//Type & Style
+		DropDownType dropDownType;
+		DropDownAlign alignmentStyle;
 		bool b_ArrangeVertical;
 
 		//Button To Show DropDown
@@ -133,50 +156,19 @@ namespace Interface {
 		DropDown() = default;
 
 		//DropDown Constructor
-		DropDown(sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding = 0, DropDownAlign alignment = DropDownAlign::CENTER)
-			: dropDownBtn(btncolor, btnsize, btnpos, rounding), dropDownContainer(dropdowncolor, dropdownsize, sf::Vector2f(0.0f, 0.0f), rounding), b_DropDownHidden{true}, b_ArrangeVertical{false}
-		{
-			switch (alignment) {
-			case DropDownAlign::CENTER:
-				dropDownContainer.setPosition(dropDownBtn.getPosition().x, dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
-				break;
-			case DropDownAlign::LEFT:
-				dropDownContainer.setPosition(dropDownBtn.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 4), dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
-				break;
-			case DropDownAlign::RIGHT:
-				dropDownContainer.setPosition(dropDownBtn.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 4), dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
-				break;
-			default:
-				break;
-			}
-		}
+		DropDown(sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding = 0, DropDownType type = DropDownType::HOVER, DropDownAlign alignment = DropDownAlign::DOWN_CENTER);
 
 		//Add Components To DropDown ( Position & Sized Will Be Altered To Fit DropDown )
-		void addComponents(std::string const& identifier) {
-			//dropDownComponents.emplace(identifier, obj);
-		} 
+		void addComponents(std::string const& identifier);
 
 		//Automatically Arrange Components Added
-		void arrangeComponents() {
-
-		}
+		void arrangeComponents();
 
 		//Update DropDown
-		void Custom_Update() {
-			if (dropDownBtn.isButtonClicked()) {
-				b_DropDownHidden = !b_DropDownHidden;
-			}
-		}
+		void Custom_Update();
 
 		//Draw DropDown
-		void Custom_Draw() {
-			//Draw DropDown Container
-			dropDownBtn.Custom_Draw();
-
-			if (!b_DropDownHidden) {
-				exEvents->window.draw(dropDownContainer);
-			}
-		}
+		void Custom_Draw();
 	};
 }
 

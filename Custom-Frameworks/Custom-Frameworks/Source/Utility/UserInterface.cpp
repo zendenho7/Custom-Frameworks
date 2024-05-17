@@ -10,17 +10,13 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\Utility\UserInterface.hpp"
 
 // ================================================================================
-// Class: Rect Button Constructor
+// Class: Rect Button
 // ================================================================================
 
 Interface::RectButton::RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Drawables::Origin oPos, bool hover)
-	: b_hoverEnabled{ hover }, hoverScale{ BTN_HOVER_SCALE }, hoverDuration{ BTN_HOVER_TIME }, textToBtnRatio{ 0.0f, 0.0f }, D_Rect(color, size, pos, rounding, rotation, oPos), D_Text()
+	: b_hoverEnabled{ hover }, b_hoverInProgress{ false }, hoverScale{ BTN_HOVER_SCALE }, hoverDuration{ BTN_HOVER_TIME }, textToBtnRatio{ 0.0f, 0.0f }, D_Rect(color, size, pos, rounding, rotation, oPos), D_Text()
 {
 }
-
-// ================================================================================
-// Class: Rect Button Private Hover Operations
-// ================================================================================
 
 void Interface::RectButton::hoverButton() {
 	//Hovering Speed Based On HoverTime
@@ -42,12 +38,9 @@ void Interface::RectButton::normalButton() {
 	D_Text.setScale(std::clamp(D_Text.getScale().x - txtHoverSpeed.x, D_Text.Custom_GetFixedScale().x, D_Text.Custom_GetFixedScale().x * hoverScale.x), std::clamp(D_Text.getScale().y - txtHoverSpeed.y, D_Text.Custom_GetFixedScale().y, D_Text.Custom_GetFixedScale().y * hoverScale.y));
 }
 
-// ================================================================================
-// Class: Rect Button Setters
-// ================================================================================
-
 void Interface::RectButton::setHoverSettings(bool hover, sf::Vector2f const& scale, float duration) {
 	b_hoverEnabled = hover;
+	b_hoverInProgress = false;
 	hoverScale = scale;
 	hoverDuration = duration;
 }
@@ -94,26 +87,28 @@ void Interface::RectButton::setPosition(sf::Vector2f const& pos) {
 	D_Text.setPosition(pos);
 }
 
-sf::Vector2f const& Interface::RectButton::getPosition() const {
+sf::Vector2f Interface::RectButton::getPosition() const {
 	return D_Rect.getGlobalBounds().getPosition() + D_Rect.getOrigin();
 }
 
 void Interface::RectButton::setScale(sf::Vector2f const& scale) {
 	D_Rect.setScale(scale);
+	D_Rect.Custom_SetFixedScale();
 	D_Text.setScale(scale);
+	D_Text.Custom_SetFixedScale();
 }
 
-sf::FloatRect const& Interface::RectButton::getLocalBounds() const {
+sf::FloatRect Interface::RectButton::getLocalBounds() const {
 	return D_Rect.getLocalBounds();
 }
 
-sf::FloatRect const& Interface::RectButton::getGlobalBounds() const {
+sf::FloatRect Interface::RectButton::getGlobalBounds() const {
 	return D_Rect.getGlobalBounds();
 }
 
-// ================================================================================
-// Class: Rect Button Hover & Clicked Check
-// ================================================================================
+bool Interface::RectButton::getHoverStatus() const {
+	return b_hoverInProgress;
+}
 
 bool Interface::RectButton::isButtonClicked() {
 	//Get Mouse Position
@@ -131,6 +126,7 @@ bool Interface::RectButton::isButtonClicked() {
 		//Hover Button
 		if (b_hoverEnabled) {
 			hoverButton();
+			b_hoverInProgress = true;
 		}
 
 		//Check For Mouse Click
@@ -140,6 +136,9 @@ bool Interface::RectButton::isButtonClicked() {
 		else {
 			return false;
 		}
+	}
+	else {
+		b_hoverInProgress = false;
 	}
 
 	//Return Button Back To Origin State
@@ -157,5 +156,101 @@ void Interface::RectButton::Custom_Draw() const {
 	//Draw BtnTxt If Text Is Present
 	if (!D_Text.getString().isEmpty()) {
 		D_Text.Custom_Draw();
+	}
+}
+
+// ================================================================================
+// Class: DropDown
+// ================================================================================
+
+Interface::DropDown::DropDown(sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding, DropDownType type, DropDownAlign alignment
+)
+	: b_DropDownHidden{ true }, b_MouseOverDropDown{ false }, alignmentStyle{ alignment }, dropDownType{ type }, b_ArrangeVertical{ false },
+	dropDownBtn(btncolor, btnsize, btnpos, rounding), dropDownContainer(dropdowncolor, dropdownsize, sf::Vector2f(0.0f, 0.0f), rounding)
+{
+	switch (alignmentStyle) {
+	case DropDownAlign::DOWN_CENTER:
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x, dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
+		break;
+	case DropDownAlign::DOWN_LEFT:
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 4), dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
+		break;
+	case DropDownAlign::DOWN_RIGHT:
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 4), dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
+		break;
+	case DropDownAlign::UP_CENTER:
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x, dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
+		break;
+	case DropDownAlign::UP_LEFT:
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 4), dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
+		break;
+	case DropDownAlign::UP_RIGHT:
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 4), dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
+		break;
+	default:
+		break;
+	}
+}
+
+void Interface::DropDown::addComponents(std::string const& identifier) {
+	dropDownButtons.emplace(identifier, RectButton());
+}
+
+void Interface::DropDown::arrangeComponents() {
+
+}
+
+void Interface::DropDown::Custom_Update() {
+
+	//Update DropDown
+	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(exEvents->window));
+
+	//Get DropDown Bound & Size
+	sf::FloatRect buttonObj = dropDownContainer.getGlobalBounds();
+
+	//Check For Mouse Click Within DropDown Bounds
+	if (mousePos.x > (buttonObj.left) && //Left Side
+		mousePos.x < (buttonObj.left + buttonObj.width) && //Right Side
+		mousePos.y >(buttonObj.top) && //Top Side
+		mousePos.y < (buttonObj.top + buttonObj.height)) //Bottom Side
+	{
+		b_MouseOverDropDown = true;
+	}
+	else {
+		b_MouseOverDropDown = false;
+	}
+
+	//Update DropDown Based On DropDown Type
+	switch (dropDownType) {
+	case DropDownType::HOVER:
+		//Update Button
+		dropDownBtn.isButtonClicked();
+
+		//Show Or Hide DropDown
+		if (dropDownBtn.getHoverStatus()) {
+			b_DropDownHidden = false;
+		}
+		else {
+			if (!b_MouseOverDropDown) {
+				b_DropDownHidden = true;
+			}
+		}
+		break;
+	case DropDownType::CLICK:
+		if (dropDownBtn.isButtonClicked()) {
+			b_DropDownHidden = !b_DropDownHidden;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void Interface::DropDown::Custom_Draw() {
+	//Draw DropDown Container
+	dropDownBtn.Custom_Draw();
+
+	if (!b_DropDownHidden) {
+		exEvents->window.draw(dropDownContainer);
 	}
 }

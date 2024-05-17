@@ -53,7 +53,7 @@ void GridSC::State::Init() {
 	b_SimPaused = true;
 
 	//Init DropDown
-	helperDropDown = std::make_unique<Interface::DropDown>(sf::Color::Black, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter, sf::Color::Blue, sf::Vector2f(200.0f, 400.0f), 10.0f, Interface::DropDownAlign::CENTER);
+	helperDropDown = std::make_unique<Interface::DropDown>(sf::Color::Black, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter, sf::Color::Blue, sf::Vector2f(200.0f, 400.0f), 10.0f, Interface::DropDownType::CLICK);
 }
 
 void GridSC::State::Update() {
