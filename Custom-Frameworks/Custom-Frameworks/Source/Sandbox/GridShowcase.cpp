@@ -26,13 +26,13 @@ void GridSC::State::Init() {
 	GOLGrid->setGridRounding(10.0f);
 
 	//GOL Header Init
-	GOLHeader = std::make_unique<Drawables::D_Text>("GAME OF LIME SIMULATION", exAssets->fonts["COMIC"], sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -350.0f));
+	GOLHeader = std::make_unique<Drawables::D_Text>("GAME OF LIME SIMULATION", exAssets->getPrimaryFont(), sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -350.0f));
 	GOLHeader->Custom_OffsetToCenter();
 	GOLHeader->setScale(0.4f, 0.4f);
 	GOLHeader->Custom_SetFixedScale();
 
 	//GOL Status Init
-	GOLStatus = std::make_unique<Drawables::D_Text>("SIMULATION PAUSED", exAssets->fonts["COMIC"], sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, 375.0f));
+	GOLStatus = std::make_unique<Drawables::D_Text>("SIMULATION PAUSED", exAssets->getPrimaryFont(), sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, 375.0f));
 	GOLStatus->Custom_OffsetToCenter();
 	GOLStatus->setScale(0.4f, 0.4f);
 	GOLStatus->Custom_SetFixedScale();
@@ -53,7 +53,8 @@ void GridSC::State::Init() {
 	b_SimPaused = true;
 
 	//Init DropDown
-	helperDropDown = std::make_unique<Interface::DropDown>(sf::Color::Black, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter, sf::Color::Blue, sf::Vector2f(200.0f, 400.0f), 10.0f, Interface::DropDownType::CLICK);
+	helperDropDown = std::make_unique<Interface::DropDown>(sf::Color::Black, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter, sf::Color::Blue, sf::Vector2f(200.0f, 400.0f), 10.0f, Interface::DropDownType::HOVER, Interface::DropDownAlign::DOWN_LEFT);
+	//helperDropDown->addButtons("TEST", sf::Color::White);
 }
 
 void GridSC::State::Update() {

@@ -13,8 +13,8 @@ Copyright (c) 2024 Zen Ho
 // Class: Rect Button
 // ================================================================================
 
-Interface::RectButton::RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Drawables::Origin oPos, bool hover)
-	: b_hoverEnabled{ hover }, b_hoverInProgress{ false }, hoverScale{ BTN_HOVER_SCALE }, hoverDuration{ BTN_HOVER_TIME }, textToBtnRatio{ 0.0f, 0.0f }, D_Rect(color, size, pos, rounding, rotation, oPos), D_Text()
+Interface::RectButton::RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Drawables::Origin oPos, bool hoverAnimation)
+	: b_HoverAnimationEnabled{ hoverAnimation }, b_Hovering{ false }, hoverScale{ BTN_HOVER_SCALE }, hoverDuration{ BTN_HOVER_TIME }, textToBtnRatio{ 0.0f, 0.0f }, D_Rect(color, size, pos, rounding, rotation, oPos), D_Text()
 {
 }
 
@@ -38,9 +38,9 @@ void Interface::RectButton::normalButton() {
 	D_Text.setScale(std::clamp(D_Text.getScale().x - txtHoverSpeed.x, D_Text.Custom_GetFixedScale().x, D_Text.Custom_GetFixedScale().x * hoverScale.x), std::clamp(D_Text.getScale().y - txtHoverSpeed.y, D_Text.Custom_GetFixedScale().y, D_Text.Custom_GetFixedScale().y * hoverScale.y));
 }
 
-void Interface::RectButton::setHoverSettings(bool hover, sf::Vector2f const& scale, float duration) {
-	b_hoverEnabled = hover;
-	b_hoverInProgress = false;
+void Interface::RectButton::setHoverSettings(bool hoverAnimation, sf::Vector2f const& scale, float duration) {
+	b_HoverAnimationEnabled = hoverAnimation;
+	b_Hovering = false;
 	hoverScale = scale;
 	hoverDuration = duration;
 }
@@ -107,7 +107,7 @@ sf::FloatRect Interface::RectButton::getGlobalBounds() const {
 }
 
 bool Interface::RectButton::getHoverStatus() const {
-	return b_hoverInProgress;
+	return b_Hovering;
 }
 
 bool Interface::RectButton::isButtonClicked() {
@@ -124,10 +124,11 @@ bool Interface::RectButton::isButtonClicked() {
 		mousePos.y < (buttonObj.top + buttonObj.height)) //Bottom Side
 	{
 		//Hover Button
-		if (b_hoverEnabled) {
+		if (b_HoverAnimationEnabled) {
 			hoverButton();
-			b_hoverInProgress = true;
 		}
+
+		b_Hovering = true;
 
 		//Check For Mouse Click
 		if (exEvents->mouseTriggered(sf::Mouse::Left)) {
@@ -138,7 +139,7 @@ bool Interface::RectButton::isButtonClicked() {
 		}
 	}
 	else {
-		b_hoverInProgress = false;
+		b_Hovering = false;
 	}
 
 	//Return Button Back To Origin State
@@ -163,41 +164,46 @@ void Interface::RectButton::Custom_Draw() const {
 // Class: DropDown
 // ================================================================================
 
-Interface::DropDown::DropDown(sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding, DropDownType type, DropDownAlign alignment
-)
+Interface::DropDown::DropDown(sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding, DropDownType type, DropDownAlign alignment)
 	: b_DropDownHidden{ true }, b_MouseOverDropDown{ false }, alignmentStyle{ alignment }, dropDownType{ type }, b_ArrangeVertical{ false },
-	dropDownBtn(btncolor, btnsize, btnpos, rounding), dropDownContainer(dropdowncolor, dropdownsize, sf::Vector2f(0.0f, 0.0f), rounding)
+	dropDownBtn(btncolor, btnsize, btnpos, rounding, 0.0f, Drawables::Origin::CENTER, false), dropDownContainer(dropdowncolor, dropdownsize, sf::Vector2f(0.0f, 0.0f), rounding)
 {
 	switch (alignmentStyle) {
 	case DropDownAlign::DOWN_CENTER:
 		dropDownContainer.setPosition(dropDownBtn.getPosition().x, dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	case DropDownAlign::DOWN_LEFT:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 4), dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	case DropDownAlign::DOWN_RIGHT:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 4), dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	case DropDownAlign::UP_CENTER:
 		dropDownContainer.setPosition(dropDownBtn.getPosition().x, dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	case DropDownAlign::UP_LEFT:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 4), dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	case DropDownAlign::UP_RIGHT:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 4), dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	default:
 		break;
 	}
 }
 
-void Interface::DropDown::addComponents(std::string const& identifier) {
-	dropDownButtons.emplace(identifier, RectButton());
+void Interface::DropDown::addButtons(std::string const& identifier, sf::Color const& btnColor, sf::Color const& txtColor, bool usePrimaryFont) {
+	dropDownButtonsKey.emplace_back(identifier);
+	dropDownButtons.emplace(dropDownButtonsKey[dropDownButtonsKey.size() - 1], RectButton(btnColor, sf::Vector2f(), sf::Vector2f()));
+	dropDownButtons[dropDownButtonsKey[dropDownButtonsKey.size() - 1]].initButtonText(dropDownButtonsKey[dropDownButtonsKey.size() - 1], usePrimaryFont ? exAssets->getPrimaryFont() : exAssets->getSecondaryFont(), txtColor);
 }
 
-void Interface::DropDown::arrangeComponents() {
+void Interface::DropDown::arrangeButtons() {
 
+
+	for (std::string const& key : dropDownButtonsKey) {
+		dropDownButtons[key];
+	}
 }
 
 void Interface::DropDown::Custom_Update() {
@@ -206,17 +212,23 @@ void Interface::DropDown::Custom_Update() {
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(exEvents->window));
 
 	//Get DropDown Bound & Size
-	sf::FloatRect buttonObj = dropDownContainer.getGlobalBounds();
+	sf::FloatRect dropDownObj = dropDownContainer.getGlobalBounds();
 
 	//Check For Mouse Click Within DropDown Bounds
-	if (mousePos.x > (buttonObj.left) && //Left Side
-		mousePos.x < (buttonObj.left + buttonObj.width) && //Right Side
-		mousePos.y >(buttonObj.top) && //Top Side
-		mousePos.y < (buttonObj.top + buttonObj.height)) //Bottom Side
+	if (mousePos.x > (dropDownObj.left) && //Left Side
+		mousePos.x < (dropDownObj.left + dropDownObj.width) && //Right Side
+		mousePos.y >(dropDownObj.top) && //Top Side
+		mousePos.y < (dropDownObj.top + dropDownObj.height) && //Bottom Side
+		!b_DropDownHidden) //Bottom Side
 	{
+		//Prevent Click Through DropDown
+		exEvents->mouseTriggered(sf::Mouse::Left);
+
+		//Set Mouse Over DropDown To True
 		b_MouseOverDropDown = true;
 	}
 	else {
+		//Set Mouse Over DropDown To False
 		b_MouseOverDropDown = false;
 	}
 
@@ -247,10 +259,16 @@ void Interface::DropDown::Custom_Update() {
 }
 
 void Interface::DropDown::Custom_Draw() {
-	//Draw DropDown Container
+	//Draw DropDown Btn Activator
 	dropDownBtn.Custom_Draw();
 
+	//Draw Container & Buttons If DropDown Is Shown
 	if (!b_DropDownHidden) {
 		exEvents->window.draw(dropDownContainer);
+
+		//Draw Buttons
+		for (std::string const& key : dropDownButtonsKey) {
+			dropDownButtons[key].Custom_Draw();
+		}
 	}
 }

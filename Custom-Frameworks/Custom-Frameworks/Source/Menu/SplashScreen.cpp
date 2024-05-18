@@ -22,21 +22,27 @@ void SplashScreen::State::Load() {
 	//Load Fonts
 	exAssets->loadFontFromFile("COMIC", "Assets/Fonts/SuperComic.ttf");
 	exAssets->loadFontFromFile("MONTSERRAT", "Assets/Fonts/Montserrat-Bold.ttf");
+
+	//Set Primary Font
+	exAssets->setPrimaryFont("MONTSERRAT");
+
+	//Set Secondary Font
+	exAssets->setSecondaryFont("COMIC");
 }
 
 void SplashScreen::State::Init() {
 	//SFML Logo SplashScreen Init
-	ssSFML = std::make_unique<Drawables::D_Sprite>(exAssets->textures["SFML"], sf::IntRect(0, 0, 512, 512), sf::Vector2f(250.0f, 250.0f), exEvents->windowCenter + sf::Vector2f(0.0f, -75.0f), 0.0f, sf::Uint8(0));
+	ssSFML = std::make_unique<Drawables::D_Sprite>(exAssets->getTexture("SFML"), sf::IntRect(0, 0, 512, 512), sf::Vector2f(250.0f, 250.0f), exEvents->windowCenter + sf::Vector2f(0.0f, -75.0f), 0.0f, sf::Uint8(0));
 	SFMLFadeAnimator = std::make_unique<Animation::FadeAnimator>(sf::Uint8(0), sf::Uint8(255), 5.0f, true, 2);
 
 	//Splashscreen Text Init
-	ssText = std::make_unique<Drawables::D_Text>("MADE USING SFML", exAssets->fonts["COMIC"], sf::Color(0, 0, 0, 0), exEvents->windowCenter + sf::Vector2f(0.0f, 125.0f));
+	ssText = std::make_unique<Drawables::D_Text>("MADE USING SFML", exAssets->getPrimaryFont(), sf::Color(0, 0, 0, 0), exEvents->windowCenter + sf::Vector2f(0.0f, 125.0f));
 	ssText->Custom_OffsetToCenter();
 	ssText->setScale(0.4f, 0.4f);
 	ssText->Custom_SetFixedScale();
 
 	//Set Frame Time Display
-	exTime->setDisplay(exAssets->fonts["COMIC"], sf::Color::Black, Drawables::Origin::TOP_LEFT);
+	exTime->setDisplay(exAssets->getPrimaryFont(), sf::Color::Black, Drawables::Origin::TOP_LEFT);
 }
 
 void SplashScreen::State::Update() {

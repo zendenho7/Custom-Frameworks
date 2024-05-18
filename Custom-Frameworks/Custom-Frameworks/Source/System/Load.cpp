@@ -24,7 +24,11 @@ Copyright (c) 2024 Zen Ho
 
 void Load::Assets::loadTexFromFile(std::string const& texIdentifier, std::string const& texturePath) {
 	textures.emplace(texIdentifier, sf::Texture());
-	textures[texIdentifier].loadFromFile(texturePath);
+	textures.at(texIdentifier).loadFromFile(texturePath);
+}
+
+sf::Texture const& Load::Assets::getTexture(std::string const& texIdentifier) const {
+	return textures.at(texIdentifier);
 }
 
 // ================================================================================
@@ -33,5 +37,25 @@ void Load::Assets::loadTexFromFile(std::string const& texIdentifier, std::string
 
 void Load::Assets::loadFontFromFile(std::string const& fontIdentifier, std::string const& fontPath) {
 	fonts.emplace(fontIdentifier, sf::Font());
-	fonts[fontIdentifier].loadFromFile(fontPath);
+	fonts.at(fontIdentifier).loadFromFile(fontPath);
+}
+
+sf::Font const& Load::Assets::getFont(std::string const& fontIdentifier) const {
+	return fonts.at(fontIdentifier);
+}
+
+void Load::Assets::setPrimaryFont(std::string const& fontIdentifier) {
+	primaryFont = fonts.at(fontIdentifier);
+}
+
+void Load::Assets::setSecondaryFont(std::string const& fontIdentifier) {
+	secondaryFont = fonts.at(fontIdentifier);
+}
+
+sf::Font const& Load::Assets::getPrimaryFont() const {
+	return primaryFont;
+}
+
+sf::Font const& Load::Assets::getSecondaryFont() const {
+	return secondaryFont;
 }

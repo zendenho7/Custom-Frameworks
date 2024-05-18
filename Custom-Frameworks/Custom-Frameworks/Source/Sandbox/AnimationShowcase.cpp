@@ -22,44 +22,44 @@ void AnimationSC::State::Load() {
 void AnimationSC::State::Init() {
 
 	//Sprite Animation Init
-	spriteEntity = std::make_unique<Drawables::D_Sprite>(exAssets->textures["AME"], sf::IntRect(0, 0, 500, 500), sf::Vector2f(250.0f, 250.0f), exEvents->windowCenter + sf::Vector2f(0.0f, -75.0f));
+	spriteEntity = std::make_unique<Drawables::D_Sprite>(exAssets->getTexture("AME"), sf::IntRect(0, 0, 500, 500), sf::Vector2f(250.0f, 250.0f), exEvents->windowCenter + sf::Vector2f(0.0f, -75.0f));
 	sheetAnimator = std::make_unique<Animation::SheetAnimator>(sf::Vector2u(2000, 2500), sf::Vector2i(500, 500), sf::Vector2u(0, 0), sf::Vector2u(2, 4), 1.0f, false , 5);
 
 	//Stop Button Init
 	stopButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 100.0f), 15.0f, 0.0f);
-	stopButton->initButtonText("PAUSE ANIMATION", exAssets->fonts["COMIC"], sf::Color::Black, { 0.75f, 0.4f });
+	stopButton->initButtonText("PAUSE ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black, { 0.75f, 0.4f });
 
 	//Start Button Init
 	resumeButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 175.0f), 15.0f, 0.0f);
-	resumeButton->initButtonText("RESUME ANIMATION", exAssets->fonts["COMIC"], sf::Color::Black, { 0.75f, 0.4f });
+	resumeButton->initButtonText("RESUME ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black, { 0.75f, 0.4f });
 
 	//Restart Button Init
 	restartButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 250.0f), 15.0f, 0.0f);
-	restartButton->initButtonText("RESTART ANIMATION", exAssets->fonts["COMIC"], sf::Color::Black, { 0.75f, 0.4f });
+	restartButton->initButtonText("RESTART ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black, { 0.75f, 0.4f });
 
 	//End Button Init
 	endButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 325.0f), 15.0f, 0.0f);
-	endButton->initButtonText("END ANIMATION", exAssets->fonts["COMIC"], sf::Color::Black, { 0.75f, 0.4f });
+	endButton->initButtonText("END ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black, { 0.75f, 0.4f });
 
 	//Animation Status Init
-	animationCount = std::make_unique<Drawables::D_Text>(std::move((std::to_string(sheetAnimator->getCompletedAnimations()) += " / ") += sheetAnimator->getAnimationsToComplete() ? std::move(std::to_string(sheetAnimator->getAnimationsToComplete())) : "INF"), exAssets->fonts["COMIC"], sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -300.0f));
+	animationCount = std::make_unique<Drawables::D_Text>(std::move((std::to_string(sheetAnimator->getCompletedAnimations()) += " / ") += sheetAnimator->getAnimationsToComplete() ? std::move(std::to_string(sheetAnimator->getAnimationsToComplete())) : "INF"), exAssets->getPrimaryFont(), sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -300.0f));
 	animationCount->Custom_OffsetToCenter();
 	animationCount->setScale(0.4f, 0.4f);
 	animationCount->Custom_SetFixedScale();
 
-	//Animation Status Init
-	animationStatus = std::make_unique<Drawables::D_Text>("ANIMATION ONGOING", exAssets->fonts["COMIC"], sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -250.0f));
+	//Animation Status InitgetFont(
+	animationStatus = std::make_unique<Drawables::D_Text>("ANIMATION ONGOING", exAssets->getPrimaryFont(), sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -250.0f));
 	animationStatus->Custom_OffsetToCenter();
 	animationStatus->setScale(0.4f, 0.4f);
 	animationStatus->Custom_SetFixedScale();
 
 	//Increase Button
 	increaseButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(75.0f, 325.0f), 15.0f, 0.0f);
-	increaseButton->initButtonText("ADD", exAssets->fonts["COMIC"], sf::Color::Black, { 0.5f, 0.5f });
+	increaseButton->initButtonText("ADD", exAssets->getPrimaryFont(), sf::Color::Black, { 0.5f, 0.5f });
 
 	//Decrease Button
 	decreaseButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(-75.0f, 325.0f), 15.0f, 0.0f);
-	decreaseButton->initButtonText("SUB", exAssets->fonts["COMIC"], sf::Color::Black, { 0.5f, 0.5f });
+	decreaseButton->initButtonText("SUB", exAssets->getPrimaryFont(), sf::Color::Black, { 0.5f, 0.5f });
 }
 
 void AnimationSC::State::Update() {

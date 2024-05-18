@@ -35,8 +35,8 @@ namespace Interface {
 		Drawables::D_Text D_Text;
 
 		//Hovering Operators
-		bool b_hoverEnabled;
-		bool b_hoverInProgress;
+		bool b_HoverAnimationEnabled;
+		bool b_Hovering;
 		sf::Vector2f hoverScale;
 		float hoverDuration;
 
@@ -61,7 +61,7 @@ namespace Interface {
 		/// <param name="rotation">: Rotation Of Button</param>
 		/// <param name="oPos">: Origin Of Button</param>
 		/// <param name="hover">: Hovering Enabled(true) or Disabled(false)</param>
-		RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, float rotation = 0.0f, Drawables::Origin oPos = Drawables::Origin::CENTER, bool hover = true);
+		RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, float rotation = 0.0f, Drawables::Origin oPos = Drawables::Origin::CENTER, bool hoverAnimation = true);
 
 		/// <summary>
 		/// Hover Settings
@@ -149,7 +149,8 @@ namespace Interface {
 		Drawables::D_RoundedRectangle dropDownContainer;
 
 		//Drop Down Components
-		std::map<std::string, RectButton> dropDownButtons;
+		std::vector<std::string> dropDownButtonsKey;
+		std::unordered_map<std::string, RectButton> dropDownButtons;
 
 	public:
 		//Default Constructor
@@ -158,11 +159,11 @@ namespace Interface {
 		//DropDown Constructor
 		DropDown(sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding = 0, DropDownType type = DropDownType::HOVER, DropDownAlign alignment = DropDownAlign::DOWN_CENTER);
 
-		//Add Components To DropDown ( Position & Sized Will Be Altered To Fit DropDown )
-		void addComponents(std::string const& identifier);
+		//Add Components To DropDown
+		void addButtons(std::string const& identifier, sf::Color const& btnColor, sf::Color const& txtColor, bool usePrimaryFont = true);
 
 		//Automatically Arrange Components Added
-		void arrangeComponents();
+		void arrangeButtons();
 
 		//Update DropDown
 		void Custom_Update();
