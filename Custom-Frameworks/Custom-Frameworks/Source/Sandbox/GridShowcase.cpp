@@ -53,23 +53,31 @@ void GridSC::State::Init() {
 	b_SimPaused = true;
 
 	//Init DropDown
-	helperDropDown = std::make_unique<Interface::DropDown>(sf::Color::Black, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter, sf::Color::Blue, sf::Vector2f(200.0f, 400.0f), 10.0f, Interface::DropDownType::HOVER, Interface::DropDownAlign::DOWN_LEFT);
-	//helperDropDown->addButtons("TEST", sf::Color::White);
+	helperDropDown = std::make_unique<Interface::DropDown>("TOOLS", sf::Color::White, sf::Color::Black, sf::Vector2f(100.0f, 50.0f), sf::Vector2f(1525.0f, 50.0f), sf::Color::Black, sf::Vector2f(125.0f, 125.0f), 10.0f, Interface::DropDownType::HOVER, Interface::DropDownAlign::DOWN_RIGHT);
+	helperDropDown->addButtons("CLEAR GRID", sf::Color::White, sf::Color::Black);
+	helperDropDown->addButtons("TOGGLE SIM", sf::Color::White, sf::Color::Black);
+	helperDropDown->addButtons("MAIN MENU", sf::Color::White, sf::Color::Black);
+	helperDropDown->arrangeButtons(sf::Vector2f(10.0f, 10.0f), 10.0f, 10.0f);
 }
 
 void GridSC::State::Update() {
 
+	//Update DropDown
+	helperDropDown->updateDropDown();
 
-	helperDropDown->Custom_Update();
+	//Reset GOL Grid
+	if (helperDropDown->isButtonClicked("CLEAR GRID")) {
+		GOLGrid->resetGrid();
+	}
 
 	//Enter Key To Toggle Simulation Status
-	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Enter)) {
+	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Enter) || helperDropDown->isButtonClicked("TOGGLE SIM")) {
 		b_SimPaused = !b_SimPaused;
 	}
 
 	//Go Back To Main Menu Game State
-	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Escape)) {
-		exGSManager->previousState();
+	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Escape) || helperDropDown->isButtonClicked("MAIN MENU")) {
+		exGSManager->changeState(GSManager::GSTypes::GS_MAINMENU);
 	}
 
 	//Check For Cell Click
@@ -103,7 +111,7 @@ void GridSC::State::Draw() {
 	GOLGrid->drawGrid();
 
 	//Draw DropDown
-	helperDropDown->Custom_Draw();
+	helperDropDown->drawDropDown();
 }
 
 void GridSC::State::Free() {

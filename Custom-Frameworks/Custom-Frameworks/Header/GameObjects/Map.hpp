@@ -102,22 +102,22 @@ namespace Map {
 		Cell const& getCell(sf::Vector2<size_t> const& index) const;
 
 		//Get Cell Count
-		sf::Vector2<size_t> const& getCellCount() const;
+		sf::Vector2<size_t> getCellCount() const;
 
 		//Set Cell Count
 		void setCellCount(sf::Vector2<size_t> const& cellcount);
 
 		//Get Cell Size
-		sf::Vector2f const& getCellSize() const;
+		sf::Vector2f getCellSize() const;
 
 		//Set Cell Size
 		void setCellSize(sf::Vector2f const& cellsize);
 
 		//Get Grid Size
-		sf::Vector2f const& getGridSize() const;
+		sf::Vector2f getGridSize() const;
 
 		//Get Grid Border
-		sf::Vector2f const& getGridBorder() const;
+		sf::Vector2f getGridBorder() const;
 
 		//Set Grid Border
 		void setGridBorder(sf::Vector2f const& gridborder);
@@ -160,6 +160,9 @@ namespace Map {
 
 		//Check If Cell Is Clicked
 		void checkCellClicked();
+
+		//Reset All Cells Within Grid
+		void resetGrid();
 
 		//Draw Grid
 		void drawGrid();

@@ -27,19 +27,19 @@ void AnimationSC::State::Init() {
 
 	//Stop Button Init
 	stopButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 100.0f), 15.0f, 0.0f);
-	stopButton->initButtonText("PAUSE ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black, { 0.75f, 0.4f });
+	stopButton->initButtonText("PAUSE ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black);
 
 	//Start Button Init
 	resumeButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 175.0f), 15.0f, 0.0f);
-	resumeButton->initButtonText("RESUME ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black, { 0.75f, 0.4f });
+	resumeButton->initButtonText("RESUME ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black);
 
 	//Restart Button Init
 	restartButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 250.0f), 15.0f, 0.0f);
-	restartButton->initButtonText("RESTART ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black, { 0.75f, 0.4f });
+	restartButton->initButtonText("RESTART ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black);
 
 	//End Button Init
 	endButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 325.0f), 15.0f, 0.0f);
-	endButton->initButtonText("END ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black, { 0.75f, 0.4f });
+	endButton->initButtonText("END ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black);
 
 	//Animation Status Init
 	animationCount = std::make_unique<Drawables::D_Text>(std::move((std::to_string(sheetAnimator->getCompletedAnimations()) += " / ") += sheetAnimator->getAnimationsToComplete() ? std::move(std::to_string(sheetAnimator->getAnimationsToComplete())) : "INF"), exAssets->getPrimaryFont(), sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -300.0f));

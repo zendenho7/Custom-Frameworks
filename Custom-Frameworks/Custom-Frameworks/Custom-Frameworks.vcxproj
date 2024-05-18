@@ -30,6 +30,7 @@
     </ClCompile>
     <ClCompile Include="Source\System\Systems.cpp" />
     <ClCompile Include="Source\Utility\Animation.cpp" />
+    <ClCompile Include="Source\Utility\Collision.cpp" />
     <ClCompile Include="Source\Utility\Drawables.cpp" />
     <ClCompile Include="Source\Utility\UserInterface.cpp" />
     <ClCompile Include="Source\Utility\Utils.cpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="Header\System\pch.hpp" />
     <ClInclude Include="Header\System\Systems.hpp" />
     <ClInclude Include="Header\Utility\Animation.hpp" />
+    <ClInclude Include="Header\Utility\Collision.hpp" />
     <ClInclude Include="Header\Utility\Drawables.hpp" />
     <ClInclude Include="Header\Utility\UserInterface.hpp" />
     <ClInclude Include="Header\Utility\Utils.hpp" />

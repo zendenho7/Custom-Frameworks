@@ -215,7 +215,7 @@ void Map::Grid::reorganiseGrid() {
 	}
 }
 
-sf::Vector2<size_t> const& Map::Grid::getCellCount() const {
+sf::Vector2<size_t> Map::Grid::getCellCount() const {
 	return { gridArray[0].size(), gridArray.size() };
 }
 
@@ -228,7 +228,7 @@ void Map::Grid::setCellCount(sf::Vector2<size_t> const& cellcount) {
 	reorganiseGrid();
 }
 
-sf::Vector2f const& Map::Grid::getCellSize() const {
+sf::Vector2f Map::Grid::getCellSize() const {
 	return { gridArray[0][0].getLocalBounds().getSize() };
 }
 
@@ -241,11 +241,11 @@ void Map::Grid::setCellSize(sf::Vector2f const& cellsize) {
 	reorganiseGrid();
 }
 
-sf::Vector2f const& Map::Grid::getGridSize() const {
+sf::Vector2f Map::Grid::getGridSize() const {
 	return gridSize;
 }
 
-sf::Vector2f const& Map::Grid::getGridBorder() const {
+sf::Vector2f Map::Grid::getGridBorder() const {
 	return gridBorder;
 }
 
@@ -331,6 +331,15 @@ void Map::Grid::checkCellClicked() {
 			if (gridArray[i][j].isCellClicked()) {
 				gridArray[i][j].setCellSelected(!gridArray[i][j].getCellSelected());
 			}
+		}
+	}
+}
+
+void Map::Grid::resetGrid() {
+	//Reset All Cells Within Grid
+	for (size_t i = 0; i < gridArray.size(); i++) {
+		for (size_t j = 0; j < gridArray[i].size(); j++) {
+			gridArray[i][j].setCellSelected(false);
 		}
 	}
 }

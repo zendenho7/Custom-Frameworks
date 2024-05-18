@@ -21,7 +21,7 @@ namespace Interface {
 	// ================================================================================
 	const sf::Vector2f	BTN_HOVER_SCALE{ 1.05f, 1.05f };	//Percentage Of Button Size
 	const float			BTN_HOVER_TIME{ 0.25f };		//Hover Time In Seconds
-	const sf::Vector2f	BTN_TXT_TO_BTN_RATIO{ 0.5f, 0.5f };
+	const sf::Vector2f	BTN_TXT_TO_BTN_RATIO{ 0.75f, 0.5f };
 
 	// ================================================================================
 	// Class: Rect Button
@@ -46,6 +46,9 @@ namespace Interface {
 		//Hover Operations
 		void hoverButton();
 		void normalButton();
+
+		//Rescale Txt To Fit Text To Btn Ratio
+		void rescaleTxt();
 	public:
 
 		//Default Constructor
@@ -88,8 +91,8 @@ namespace Interface {
 		//Button Click Check
 		bool isButtonClicked();
 
-		//Draw Button Onto Render Target
-		void Custom_Draw() const;
+		//Get Hover Status
+		bool getHoverStatus() const;
 
 		//Set Button Position
 		void setPosition(sf::Vector2f const& pos);
@@ -98,7 +101,16 @@ namespace Interface {
 		sf::Vector2f getPosition() const;
 
 		//Set Button Size
-		void setScale(sf::Vector2f const& size);
+		void setSize(sf::Vector2f const& size);
+
+		//Get Button Size
+		sf::Vector2f getSize() const;
+
+		//Set Button Scale
+		void setScale(sf::Vector2f const& scale);
+
+		//Get Button Scale
+		sf::Vector2f getScale() const;
 
 		//Get Button Local Bounding
 		sf::FloatRect getLocalBounds() const;
@@ -106,8 +118,26 @@ namespace Interface {
 		//Get Button Global Bounding
 		sf::FloatRect getGlobalBounds() const;
 
-		//Get Hover Status
-		bool getHoverStatus() const;
+		//Set Btn Color
+		void setButtonColor(sf::Color const& color);
+
+		//Get Btn Color
+		sf::Color getButtonColor() const;
+
+		//Set Btn Txt Color
+		void setTxtColor(sf::Color const& color);
+
+		//Get Btn Txt Color
+		sf::Color getTxtColor() const;
+
+		//Set Btn Rounding
+		void setButtonRounding(float rounding);
+
+		//Get Button Rounding
+		float getButtonRounding() const;
+
+		//Draw Button Onto Render Target
+		void Custom_Draw() const;
 	};
 
 	// ================================================================================
@@ -127,6 +157,11 @@ namespace Interface {
 		CLICK
 	};
 
+	enum class DropDownArrangement {
+		VERTICAL = 0,
+		HORIZONTAL
+	};
+
 	// ================================================================================
 	// Class: DropDown
 	// ================================================================================
@@ -138,9 +173,8 @@ namespace Interface {
 		bool b_MouseOverDropDown;
 
 		//Type & Style
-		DropDownType dropDownType;
+		DropDownType buttonType;
 		DropDownAlign alignmentStyle;
-		bool b_ArrangeVertical;
 
 		//Button To Show DropDown
 		RectButton dropDownBtn;
@@ -157,19 +191,22 @@ namespace Interface {
 		DropDown() = default;
 
 		//DropDown Constructor
-		DropDown(sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding = 0, DropDownType type = DropDownType::HOVER, DropDownAlign alignment = DropDownAlign::DOWN_CENTER);
+		DropDown(std::string const& btntxt, sf::Color const& btntxtcolor, sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding = 0, DropDownType type = DropDownType::HOVER, DropDownAlign alignment = DropDownAlign::DOWN_CENTER);
 
 		//Add Components To DropDown
 		void addButtons(std::string const& identifier, sf::Color const& btnColor, sf::Color const& txtColor, bool usePrimaryFont = true);
 
 		//Automatically Arrange Components Added
-		void arrangeButtons();
+		void arrangeButtons(sf::Vector2f const& padding, float spaceBetweenButtons, float buttonRounding = 0.0f, DropDownArrangement arrangementStyle = DropDownArrangement::VERTICAL);
+
+		//Check If Button Is Clicked
+		bool isButtonClicked(std::string const& identifier);
 
 		//Update DropDown
-		void Custom_Update();
+		void updateDropDown();
 
 		//Draw DropDown
-		void Custom_Draw();
+		void drawDropDown();
 	};
 }
 

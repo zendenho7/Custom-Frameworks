@@ -88,6 +88,10 @@ namespace Drawables {
 			return originPos;
 		}
 
+		sf::Vector2f Custom_GetOriginPosition() const{
+			return T::getGlobalBounds().getPosition() + T::getOrigin();
+		}
+
 		//Get Fixed Scale
 		sf::Vector2f const& Custom_GetFixedScale() const {
 			return fixedScale;
