@@ -237,8 +237,8 @@ Interface::DropDown::DropDown(std::string const& btntxt, sf::Color const& btntxt
 }
 
 void Interface::DropDown::addButtons(std::string const& identifier, sf::Color const& btnColor, sf::Color const& txtColor, bool usePrimaryFont) {
-	dropDownButtonsKey.emplace_back(identifier);
-	dropDownButtons.emplace(dropDownButtonsKey[dropDownButtonsKey.size() - 1], RectButton(btnColor, sf::Vector2f(), sf::Vector2f()));
+	dropDownButtonsKey.emplace_back(std::move(identifier));
+	dropDownButtons.emplace(std::piecewise_construct, std::forward_as_tuple(dropDownButtonsKey[dropDownButtonsKey.size() - 1]), std::forward_as_tuple(btnColor, sf::Vector2f(), sf::Vector2f()));
 	dropDownButtons[dropDownButtonsKey[dropDownButtonsKey.size() - 1]].initButtonText(dropDownButtonsKey[dropDownButtonsKey.size() - 1], usePrimaryFont ? exAssets->getPrimaryFont() : exAssets->getSecondaryFont(), txtColor);
 }
 

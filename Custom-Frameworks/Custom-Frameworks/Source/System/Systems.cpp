@@ -17,7 +17,7 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\Utility\Utils.hpp"
 
 // ================================================================================
-// Function: Constructors Window & Event Handler
+// Class: Constructors Window & Event Handler
 // ================================================================================
 
 Systems::WindowHandler::WindowHandler(sf::VideoMode mode, const sf::String& title, sf::Uint32 style, const sf::ContextSettings& settings)
@@ -34,7 +34,7 @@ Systems::EventHandler::EventHandler(sf::VideoMode mode, const sf::String& title,
     : WindowHandler(mode, title, style, settings), b_mouseTriggered{ false }, b_mouseReleased{ false }, b_keyTriggered{ false }, b_keyReleased{ false }, event() {}
 
 // ================================================================================
-// Function: System Input Handling
+// Class: System Input Handling
 // ================================================================================
 
 void Systems::WindowHandler::CreateConsole(bool debugging) {
@@ -66,7 +66,7 @@ void Systems::WindowHandler::SetIcon(HINSTANCE const& hInstance) {
 }
 
 // ================================================================================
-// Function: Game Loop
+// Class: Game Loop
 // ================================================================================
 
 void Systems::EventHandler::gameLoop() {
@@ -94,7 +94,7 @@ void Systems::EventHandler::gameLoop() {
         }
 
         //Time Step
-        while (exTime->UpdateFrameTime(60));
+        while (exTime->UpdateTimeHandler(60));
 
         //Update GameState
         exGSManager->updateGameState();
@@ -112,7 +112,7 @@ void Systems::EventHandler::gameLoop() {
     //No Active Events To Poll
     if (!gameStateUpdated) {
         //Time Step
-        while (exTime->UpdateFrameTime(60));
+        while (exTime->UpdateTimeHandler(60));
 
         //Update GameState
         exGSManager->updateGameState();
@@ -126,7 +126,7 @@ void Systems::EventHandler::gameLoop() {
 }
 
 // ================================================================================
-// Function: System Input Handling
+// Class: System Input Handling
 // ================================================================================
 
 bool Systems::EventHandler::keyTriggered(sf::Keyboard::Scancode keycode) {
@@ -231,9 +231,9 @@ void Systems::EventHandler::eventsUpdate() {
 }
 
 // ================================================================================
-// Function: Frame & Time Handling
+// Class: Frame & Time Handling
 // ================================================================================
-void Systems::FrameTime::setDisplay(sf::Font const& font, sf::Color const& color, Drawables::Origin oPos) {
+void Systems::TimeHandler::setDisplay(sf::Font const& font, sf::Color const& color, Drawables::Origin oPos) {
     //FPS Display
     fpsDisplay.setD_Text(std::to_string(frameRate), font, color, sf::Vector2f(0.0f, 0.0f), Drawables::DEF_CHAR_SIZE, 0.0f, oPos);
     fpsDisplay.setScale(0.4f, 0.4f);
@@ -251,12 +251,12 @@ void Systems::FrameTime::setDisplay(sf::Font const& font, sf::Color const& color
         deltaTimeDisplay.Custom_OffsetToCenter();
 }
 
-void Systems::FrameTime::setDisplayPos(sf::Vector2f const& pos) {
+void Systems::TimeHandler::setDisplayPos(sf::Vector2f const& pos) {
     fpsDisplay.setPosition(pos);
     deltaTimeDisplay.setPosition(pos);
 }
 
-bool Systems::FrameTime::UpdateFrameTime(unsigned int targetFPS) {
+bool Systems::TimeHandler::UpdateTimeHandler(unsigned int targetFPS) {
 
     //Elapsed Frame & Time Calculation
     elapsedTime = clock.getElapsedTime();
@@ -279,15 +279,15 @@ bool Systems::FrameTime::UpdateFrameTime(unsigned int targetFPS) {
     }
 }
 
-float Systems::FrameTime::getFrameRate() const {
+float Systems::TimeHandler::getFrameRate() const {
     return frameRate;
 }
 
-float Systems::FrameTime::getDeltaTime() const {
+float Systems::TimeHandler::getDeltaTime() const {
     return deltaTime;
 }
 
-void Systems::FrameTime::displayFrameRate() {
+void Systems::TimeHandler::displayFrameRate() {
     //Update FPS Display
     fpsDisplay.Custom_SetString(std::to_string(frameRate));
 
@@ -295,10 +295,104 @@ void Systems::FrameTime::displayFrameRate() {
     exEvents->window.draw(fpsDisplay);
 }
 
-void Systems::FrameTime::displayDeltaTime() {
+void Systems::TimeHandler::displayDeltaTime() {
     //Update DeltaTime Display
     deltaTimeDisplay.Custom_SetString(std::to_string(deltaTime));
 
     //Draw DeltaTime Display
     exEvents->window.draw(deltaTimeDisplay);
+}
+
+// ================================================================================
+// Class: Data Handler
+// ================================================================================
+
+Systems::DataHandler::DataHandler()
+    : exePath("")
+{
+    char buffer[MAX_PATH];
+    DWORD length = GetModuleFileNameA(NULL, buffer, MAX_PATH);
+    if (length == 0) {
+        throw std::runtime_error("Failed to get executable path.");
+    }
+    std::string path(buffer);
+    size_t pos = path.find_last_of("\\/");
+    exePath = path.substr(0, pos) + "\\Assets\\Save Files\\";
+}
+
+void Systems::DataHandler::addPath(std::string const& identifier) {
+    dataPaths.emplace(identifier, exePath + identifier + ".txt");
+    std::cout << "Path Created: " << dataPaths.at(identifier) << '\n';
+}
+
+std::vector<std::string> Systems::DataHandler::loadMultipleData(std::string const& identifier) {
+    std::ifstream fileStream;
+    fileStream.open(dataPaths.at(identifier));
+
+    //String Data
+    std::vector<std::string> datas;
+
+    if (fileStream.is_open()) {
+        while (std::getline(fileStream, datas.emplace_back()));
+
+        //Close FileStream
+        fileStream.close();
+    }
+    else {
+        std::cerr << "Error Opening Data Path To Load Data: " << dataPaths.at(identifier) << '\n';
+    }
+
+    return datas;
+}
+
+void Systems::DataHandler::saveMultipleData(std::string const& identifier, std::vector<std::string> const& serializedData) {
+    std::ofstream fileStream;
+    fileStream.open(dataPaths.at(identifier));
+
+    if (fileStream.is_open()) {
+        for (std::string const& data : serializedData) {
+            fileStream << data << '\n';
+        }
+
+        //Close FileStream
+        fileStream.close();
+    }
+    else {
+        std::cerr << "Error Opening Data Path To Save Data: " << dataPaths.at(identifier) << '\n';
+    }
+}
+
+std::string Systems::DataHandler::loadSingularData(std::string const& identifier) {
+    std::ifstream fileStream;
+    fileStream.open(dataPaths.at(identifier));
+
+    //String Data
+    std::string data;
+
+    if (fileStream.is_open()) {
+        std::getline(fileStream, data);
+
+        //Close FileStream
+        fileStream.close();
+    }
+    else {
+        std::cerr << "Error Opening Data Path To Load Data: " << dataPaths.at(identifier) << '\n';
+    }
+
+    return data;
+}
+
+void Systems::DataHandler::saveSingularData(std::string const& identifier, std::string const& serializedData) {
+    std::ofstream fileStream;
+    fileStream.open(dataPaths.at(identifier));
+
+    if (fileStream.is_open()) {
+        fileStream << serializedData;
+
+        //Close FileStream
+        fileStream.close();
+    }
+    else {
+        std::cerr << "Error Opening Data Path To Save Data: " << dataPaths.at(identifier) << '\n';
+    }
 }

@@ -21,7 +21,8 @@ Copyright (c) 2024 Zen Ho
 // ================================================================================
 
 Systems::EventHandler* exEvents;
-Systems::FrameTime* exTime;
+Systems::TimeHandler* exTime;
+Systems::DataHandler* exData;
 Load::Assets* exAssets;
 GSManager::GameStateManager* exGSManager;
 
@@ -55,7 +56,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     exAssets = new Load::Assets();
 
     //Initialize Time Handler
-    exTime = new Systems::FrameTime();
+    exTime = new Systems::TimeHandler();
+
+    //Initialize Data Handler
+    exData = new Systems::DataHandler();
 
     //Initialize GameState
     exGSManager = new GSManager::GameStateManager(GSManager::GSTypes::GS_SPLASHSCREEN);
@@ -73,6 +77,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     //Delete Singletons
     delete exEvents;
     delete exTime;
+    delete exData;
     delete exAssets;
     delete exGSManager;
 

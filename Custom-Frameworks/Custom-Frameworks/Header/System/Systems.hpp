@@ -99,7 +99,7 @@ namespace Systems {
 	// ================================================================================
 	// Class: Frame & Time Handling
 	// ================================================================================
-	class FrameTime {
+	class TimeHandler{
 	private:
 
 		//Time Calculation & Management
@@ -127,17 +127,17 @@ namespace Systems {
 	public:
 
 		//Default Constructor
-		FrameTime() 
+		TimeHandler() 
 			: clock(), currTime(clock.getElapsedTime()), prevTime(clock.getElapsedTime()), elapsedTime(clock.getElapsedTime()), elapsedFrame{0}, frameRate{0.0f}, deltaTime{0.0f}, fpsDisplay(), deltaTimeDisplay() {}
 
-		//Set FrameTime Display
+		//Set TimeHandler Display
 		void setDisplay(sf::Font const& font, sf::Color const& color, Drawables::Origin oPos = Drawables::Origin::CENTER);
 
 		//Set Display Position
 		void setDisplayPos(sf::Vector2f const& pos);
 		
 		//Update Time & Frame Components
-		bool UpdateFrameTime(unsigned int targetFPS);
+		bool UpdateTimeHandler(unsigned int targetFPS);
 
 		//Get Frame Rate
 		float getFrameRate() const;
@@ -150,6 +150,36 @@ namespace Systems {
 
 		//Display FrameRate
 		void displayDeltaTime();
+	};
+
+	// ================================================================================
+	// Class: Data Handling
+	// ================================================================================
+	class DataHandler {
+	private:
+		//exe Path
+		std::string exePath;
+
+		//Unordered Map Of Data Paths
+		std::unordered_map<std::string, std::string> dataPaths;
+	public:
+		//Default Constructor
+		DataHandler();
+
+		//Add Paths
+		void addPath(std::string const& identifier);
+
+		//Load Multiple Data Into Vector Of Strings
+		std::vector<std::string> loadMultipleData(std::string const& identifier);
+
+		//Save Multiple Data Into Stream
+		void saveMultipleData(std::string const& identifier, std::vector<std::string> const& serializedData);
+
+		//Load Data Into String
+		std::string loadSingularData(std::string const& identifier);
+
+		//Save Data Into Stream
+		void saveSingularData(std::string const& identifier, std::string const& serializedData);
 	};
 }
 

@@ -21,6 +21,10 @@ void GridSC::State::Load() {
 
 void GridSC::State::Init() {
 
+	exData->addPath("Grid");
+	exData->saveMultipleData("Grid", savedGridData);
+	savedGridData = std::move(exData->loadMultipleData("Grid"));
+
 	//Init GOL Grid
 	GOLGrid = std::make_unique<Map::Grid>(sf::Vector2<size_t>(50, 25), exEvents->windowCenter, sf::Vector2f(15.0f, 15.0f), sf::Color::Transparent, sf::Color::White, sf::Color::Blue, sf::Vector2f(25.0f, 25.0f), 5.0f);
 	GOLGrid->setGridRounding(10.0f);

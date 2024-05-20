@@ -41,10 +41,17 @@ namespace Drawables {
 
 		Origin originPos;
 
-	public:
-		//Constructors
+	protected:
+		//Default Consturctor
 		D_Base() : fixedScale{ 1.0f, 1.0f }, originPos{ Origin::CENTER } {}
+		D_Base(D_Base const& copy) = delete;
 
+		//Data Serialization & Deserialization
+		//virtual std::string serialize() = 0;
+
+		//vitrual T deserialize() = 0;
+
+	public:
 		//Custom Draw Function
 		virtual void Custom_Draw() const = 0;
 

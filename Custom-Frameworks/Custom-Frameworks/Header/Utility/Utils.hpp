@@ -20,7 +20,8 @@ Copyright (c) 2024 Zen Ho
 // ================================================================================
 
 extern Systems::EventHandler* exEvents;
-extern Systems::FrameTime* exTime;
+extern Systems::TimeHandler* exTime;
+extern Systems::DataHandler* exData;
 extern Load::Assets* exAssets;
 extern GSManager::GameStateManager* exGSManager;
 

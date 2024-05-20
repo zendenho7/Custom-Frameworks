@@ -28,6 +28,9 @@ namespace GridSC {
         std::unique_ptr<Map::Grid> GOLGrid;
         std::unique_ptr<Drawables::D_Text> GOLHeader;
         std::unique_ptr<Drawables::D_Text> GOLStatus;
+
+        //Saved Grids
+        std::vector<std::string> savedGridData;
         
         //Buffer Boolean Array
         std::vector<std::vector<bool>> selectedArray;
