@@ -108,7 +108,7 @@ void Map::Cell::deserialize(std::string const& data) {
 	std::istringstream iss(data);
 
 	//Temporary Variables
-	std::string comma;
+	;
 
 	//Input Stream From String
 	D_RoundedRectangle::deserialize(iss) >> b_selected 
@@ -119,7 +119,7 @@ void Map::Cell::deserialize(std::string const& data) {
 std::istringstream& Map::Cell::deserialize(std::istringstream& stream) {
 
 	//Temporary Variables
-	std::string comma;
+	;
 
 	//Input Stream From String
 	D_RoundedRectangle::deserialize(stream) >> b_selected 
@@ -416,7 +416,7 @@ std::string Map::Grid::serialize() const {
 void Map::Grid::deserialize(std::string const& data) {
 	std::istringstream iss(data);
 
-	std::string comma;
+	;
 
 	iss >> cellCount.x >> cellCount.y >> gridSize.x >> gridSize.y 
 		>> gridBorder.x >> gridBorder.y >> cellGap ;
@@ -432,7 +432,7 @@ void Map::Grid::deserialize(std::string const& data) {
 }
 
 std::istringstream& Map::Grid::deserialize(std::istringstream& stream) {
-	std::string comma;
+	;
 
 	stream >> cellCount.x >> cellCount.y >> gridSize.x >> gridSize.y 
 		>> gridBorder.x >> gridBorder.y >> cellGap ;

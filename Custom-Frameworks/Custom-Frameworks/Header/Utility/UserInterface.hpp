@@ -143,7 +143,7 @@ namespace Interface {
 	// ================================================================================
 	// DropDown Enums
 	// ================================================================================
-	enum class DropDownAlign {
+	enum class DropDownAlign : sf::Uint8 {
 		DOWN_CENTER = 0,
 		DOWN_LEFT,
 		DOWN_RIGHT,
@@ -152,12 +152,12 @@ namespace Interface {
 		UP_RIGHT,
 	};
 
-	enum class DropDownType {
+	enum class DropDownType : sf::Uint8 {
 		HOVER = 0,
 		CLICK
 	};
 
-	enum class DropDownArrangement {
+	enum class DropDownArrangement : sf::Uint8 {
 		VERTICAL = 0,
 		HORIZONTAL
 	};

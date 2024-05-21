@@ -44,7 +44,7 @@ namespace Drawables {
 	protected:
 		//Default Consturctor
 		D_Base() : fixedScale{ 1.0f, 1.0f }, originPos{ Origin::CENTER } {}
-		D_Base(D_Base const& copy) = delete;
+		D_Base(D_Base const& copy) : fixedScale{ copy.Custom_GetFixedScale() }, originPos{ copy.Custom_GetOrigin() } {}
 
 		//Custom Draw Function
 		virtual void Custom_Draw() const = 0;
@@ -192,6 +192,7 @@ namespace Drawables {
 		/// <param name="rotation">: Rotation Of D_Text</param>
 		/// <param name="oPos">: Origin Of D_Text</param>
 		D_Text(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& pos, sf::Uint8 charSize = DEF_CHAR_SIZE, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+		D_Text(D_Text const& copy);
 
 		/// <summary>
 		/// D_Text Setter
@@ -200,10 +201,11 @@ namespace Drawables {
 		/// <param name="font">: Font Of D_Text</param>
 		/// <param name="color">: Color Of D_Text</param>
 		/// <param name="pos">: Position Of D_Text</param>
-		/// <param name="charSize">: Char Size Of D_Text (Load @ Default Size Of 72 For Higher Resolution ) | Size Can Be Changed By Scaling</param>
+		/// <param name="charSize">: Char Size Of D_Text (Load @ Default Size Of 72 For Higher Resolution) | Size Can Be Changed By Scaling</param>
 		/// <param name="rotation">: Rotation Of D_Text</param>
 		/// <param name="oPos">: Origin Of D_Text</param>
 		void setD_Text(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& pos, sf::Uint8 charSize = DEF_CHAR_SIZE, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+		void setD_Text(D_Text const& copy);
 
 		// To Be Called Only After Setting Position
 		void Custom_OffsetToCenter();
@@ -212,7 +214,7 @@ namespace Drawables {
 		void Custom_SetString(std::string const& txt);
 
 		//Custom Draw Function
-		void Custom_Draw() const override;
+		virtual void Custom_Draw() const override;
 
 		//Data Serialization & Deserialization
 		virtual std::string serialize() const override;
@@ -240,12 +242,14 @@ namespace Drawables {
 
 		//Private Rounded Rect Constructor
 		void constructRoundedRect(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Origin oPos);
+
 	public:
 		//Default Constructor
 		D_RoundedRectangle() = default;
 
 		/// <summary>
-		/// Constructor For D_RoundedRectangle
+		/// Constructor For D_RoundedRectan
+		/// gle
 		/// </summary>
 		/// <param name="color">: Color Of Rounded Rectangle</param>
 		/// <param name="size">: Size Of Rounded Rectangle</param>
@@ -281,7 +285,7 @@ namespace Drawables {
 		float getCornerRounding() const;
 
 		//Custom Draw Function
-		void Custom_Draw() const override;
+		virtual void Custom_Draw() const override;
 
 		//Data Serialization & Deserialization
 		virtual std::string serialize() const override;
@@ -308,6 +312,7 @@ namespace Drawables {
 		/// <param name="rotation">: Rotation Of Rectangle</param>
 		/// <param name="oPos">: Origin Of Rectangle</param>
 		D_Rectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+		D_Rectangle(D_Rectangle const& copy);
 
 		/// <summary>
 		/// D_Rectangle Setter
@@ -318,9 +323,10 @@ namespace Drawables {
 		/// <param name="rotation">: Rotation Of Rectangle</param>
 		/// <param name="oPos">: Origin Of Rectangle</param>
 		void setD_Rectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+		void setD_Rectangle(D_Rectangle const& copy);
 
 		//Custom Draw Function
-		void Custom_Draw() const override;
+		virtual void Custom_Draw() const override;
 
 		//Data Serialization & Deserialization
 		std::string serialize() const override;
@@ -347,6 +353,7 @@ namespace Drawables {
 		/// <param name="rotation">: Rotation Of Circle</param>
 		/// <param name="oPos">: Origin Of Circle</param>
 		D_Circle(sf::Color const& color, float radius, sf::Vector2f const& pos, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+		D_Circle(D_Circle const& copy);
 
 		/// <summary>
 		/// D_Circle Setter
@@ -357,6 +364,7 @@ namespace Drawables {
 		/// <param name="rotation">: Rotation Of Circle</param>
 		/// <param name="oPos">: Origin Of Circle</param>
 		void setD_Circle(sf::Color const& color, float radius, sf::Vector2f const& pos, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+		void setD_Circle(D_Circle const& copy);
 
 		//Custom Draw Function
 		void Custom_Draw() const override;

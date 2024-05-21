@@ -39,7 +39,7 @@ void GridSC::State::Init() {
 	prevData->initButtonText("PREV", exAssets->getPrimaryFont(), sf::Color::Black);
 
 	//GOL Header Init
-	GOLHeader = std::make_unique<Drawables::D_Text>("GAME OF LIME SIMULATION", exAssets->getPrimaryFont(), sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -350.0f));
+	GOLHeader = std::make_unique<Drawables::D_Text>("GAME OF LIME SIMULATION | EMPTY GRID", exAssets->getPrimaryFont(), sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -350.0f));
 	GOLHeader->Custom_OffsetToCenter();
 	GOLHeader->setScale(0.4f, 0.4f);
 	GOLHeader->Custom_SetFixedScale();
@@ -82,7 +82,9 @@ void GridSC::State::Update() {
 
 	//Reset GOL Grid
 	if (helperDropDown->isButtonClicked("CLEAR GRID")) {
+		dataIndexTracker = -1;
 		GOLGrid->resetGrid();
+		GOLHeader->Custom_SetString("GAME OF LIME SIMULATION | EMPTY GRID");
 	}
 
 	//Enter Key To Toggle Simulation Status
@@ -120,7 +122,14 @@ void GridSC::State::Update() {
 
 			if (!duplicate) {
 				std::cout << "Grid Data Saved." << '\n';
+				
+				//Emplace Data Onto Grid Vector
 				savedGridData.emplace_back(std::move(saveData));
+
+				//Switch Curr Grid To The Saved Grid
+				dataIndexTracker = static_cast<int>(savedGridData.size()) - 1;
+				GOLGrid->deserialize(savedGridData.at(dataIndexTracker));
+				GOLHeader->Custom_SetString(std::string("GAME OF LIME SIMULATION") + " | SAVED GRID #" + std::to_string(dataIndexTracker + 1));
 			}
 		}
 
@@ -130,9 +139,11 @@ void GridSC::State::Update() {
 
 			if (dataIndexTracker != -1) {
 				GOLGrid->deserialize(savedGridData.at(dataIndexTracker));
+				GOLHeader->Custom_SetString(std::string("GAME OF LIME SIMULATION") + " | SAVED GRID #" + std::to_string(dataIndexTracker + 1));
 			}
 			else {
 				GOLGrid->resetGrid();
+				GOLHeader->Custom_SetString("GAME OF LIME SIMULATION | EMPTY GRID");
 			}
 		}
 
@@ -142,9 +153,11 @@ void GridSC::State::Update() {
 
 			if (dataIndexTracker != -1) {
 				GOLGrid->deserialize(savedGridData.at(dataIndexTracker));
+				GOLHeader->Custom_SetString(std::string("GAME OF LIME SIMULATION") + " | SAVED GRID #" + std::to_string(dataIndexTracker + 1));
 			}
 			else {
 				GOLGrid->resetGrid();
+				GOLHeader->Custom_SetString("GAME OF LIME SIMULATION | EMPTY GRID");
 			}
 		}
 	}
