@@ -54,11 +54,77 @@ void Drawables::D_Text::Custom_SetString(std::string const& txt) {
 	setString(txt);
 
 	//Set Origin Based On Text Size
-	Custom_SetOrigin(Custom_GetOrigin());
+	Custom_UpdateOrigin();
 }
 
 void Drawables::D_Text::Custom_Draw() const {
 	exEvents->window.draw(*this);
+}
+
+std::string Drawables::D_Text::serialize() const {
+	std::ostringstream oss;
+
+	//Output Stream From String
+	oss << static_cast<std::string>(getString()) << " " << getCharacterSize() << " "
+		<< getFillColor().r << " " << getFillColor().g << " " << getFillColor().b << " " << getFillColor().a << " "
+		<< getPosition().x << " " << getPosition().y << " " << getRotation() << " "
+		<< static_cast<int>(Custom_GetOrigin());
+
+	return oss.str();
+}
+
+void Drawables::D_Text::deserialize(std::string const& data) {
+	std::istringstream iss(data);
+
+	//Temporary Variables
+	std::string comma;
+	std::string str;
+	unsigned int charSize;
+	sf::Color color;
+	sf::Vector2f pos;
+	float rotation;
+	int oPos;
+
+	//Input Stream From String
+	iss >> str >> charSize >> color.r >> color.g >> color.b >> color.a
+		>> pos.x >> pos.y >> rotation >> oPos;
+
+	setFont(getFont() ? *getFont() : exAssets->getPrimaryFont());
+	setString(str);
+	setCharacterSize(charSize);
+	setFillColor(color);
+	setPosition(pos);
+	setRotation(rotation);
+
+	//Set Origin Of Text
+	Custom_SetOrigin(static_cast<Origin>(oPos));
+}
+
+std::istringstream& Drawables::D_Text::deserialize(std::istringstream& stream) {
+	//Temporary Variables
+	std::string comma;
+	std::string str;
+	unsigned int charSize;
+	sf::Color color;
+	sf::Vector2f pos;
+	float rotation;
+	int oPos;
+
+	//Input Stream From String
+	stream >> str  >> charSize  >> color.r  >> color.g  >> color.b  >> color.a
+		>> pos.x  >> pos.y  >> rotation  >> oPos;
+
+	setFont(getFont() ? *getFont() : exAssets->getPrimaryFont());
+	setString(str);
+	setCharacterSize(charSize);
+	setFillColor(color);
+	setPosition(pos);
+	setRotation(rotation);
+
+	//Set Origin Of Text
+	Custom_SetOrigin(static_cast<Origin>(oPos));
+
+	return stream;
 }
 
 // ================================================================================
@@ -217,6 +283,57 @@ void Drawables::D_RoundedRectangle::Custom_Draw() const {
 	exEvents->window.draw(*this);
 }
 
+std::string Drawables::D_RoundedRectangle::serialize() const {
+	std::ostringstream oss;
+
+	//Output Stream From String
+	oss << getFillColor().r << " " << getFillColor().g << " " << getFillColor().b << " " << getFillColor().a << " "
+		<< getSize().x << " " << getSize().y << " " << getPosition().x << " " << getPosition().y << " " 
+		<< getCornerRounding() << " " << getRotation() << " " << static_cast<int>(Custom_GetOrigin());
+
+	return oss.str();
+}
+
+void Drawables::D_RoundedRectangle::deserialize(std::string const& data) {
+	std::istringstream iss(data);
+
+	//Temporary Variables
+	std::string comma;
+	sf::Color color;
+	sf::Vector2f size;
+	sf::Vector2f pos;
+	float rounding;
+	float rotation;
+	int oPos;
+
+	//Input Stream From String
+	iss >> color.r >> color.g >> color.b >> color.a
+		>> size.x  >> size.y >> pos.x  >> pos.y  >> rounding 
+		>> rotation  >> oPos;
+
+	constructRoundedRect(color, size, pos, rounding, rotation, static_cast<Origin>(oPos));
+}
+
+std::istringstream& Drawables::D_RoundedRectangle::deserialize(std::istringstream& stream) {
+	//Temporary Variables
+	std::string comma;
+	sf::Color color;
+	sf::Vector2f size;
+	sf::Vector2f pos;
+	float rounding;
+	float rotation;
+	int oPos;
+
+	//Input Stream From String
+	stream >> color.r  >> color.g  >> color.b  >> color.a
+		>> size.x  >> size.y >> pos.x  >> pos.y  >> rounding 
+		>> rotation  >> oPos;
+
+	constructRoundedRect(color, size, pos, rounding, rotation, static_cast<Origin>(oPos));
+
+	return stream;
+}
+
 // ================================================================================
 // Rectangle Shape Initializer
 // ================================================================================
@@ -225,10 +342,10 @@ Drawables::D_Rectangle::D_Rectangle(sf::Color const& color, sf::Vector2f const& 
 	: D_Base<RectangleShape>()
 {
 	//Set Drawables Components
+	setFillColor(color);
 	setSize(size);
 	setPosition(pos);
 	setRotation(rotation);
-	setFillColor(color);
 
 	//Set Origin
 	Custom_SetOrigin(oPos);
@@ -237,10 +354,10 @@ Drawables::D_Rectangle::D_Rectangle(sf::Color const& color, sf::Vector2f const& 
 void Drawables::D_Rectangle::setD_Rectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, Origin oPos)
 {
 	//Set Drawables Components
+	setFillColor(color);
 	setSize(size);
 	setPosition(pos);
 	setRotation(rotation);
-	setFillColor(color);
 
 	//Set Origin
 	Custom_SetOrigin(oPos);
@@ -248,6 +365,67 @@ void Drawables::D_Rectangle::setD_Rectangle(sf::Color const& color, sf::Vector2f
 
 void Drawables::D_Rectangle::Custom_Draw() const {
 	exEvents->window.draw(*this);
+}
+
+std::string Drawables::D_Rectangle::serialize() const {
+	std::ostringstream oss;
+
+	//Output Stream From String
+	oss << getFillColor().r << " " << getFillColor().g << " " << getFillColor().b << " " << getFillColor().a << " "
+		<< getSize().x << " " << getSize().y << " " << getPosition().x << " " << getPosition().y << " "
+		<< getRotation() << " " << static_cast<int>(Custom_GetOrigin());
+
+	return oss.str();
+}
+
+void Drawables::D_Rectangle::deserialize(std::string const& data) {
+	std::istringstream iss(data);
+
+	//Temporary Variables
+	std::string comma;
+	sf::Color color;
+	sf::Vector2f size;
+	sf::Vector2f pos;
+	float rotation;
+	int oPos;
+
+	//Input Stream From String
+	iss >> color.r  >> color.g  >> color.b  >> color.a
+		>> size.x  >> size.y >> pos.x  >> pos.y  >> rotation  >> oPos;
+
+	//Set Drawables Components
+	setFillColor(color);
+	setSize(size);
+	setPosition(pos);
+	setRotation(rotation);
+
+	//Set Origin
+	Custom_SetOrigin(static_cast<Origin>(oPos));
+}
+
+std::istringstream& Drawables::D_Rectangle::deserialize(std::istringstream& stream) {
+	//Temporary Variables
+	std::string comma;
+	sf::Color color;
+	sf::Vector2f size;
+	sf::Vector2f pos;
+	float rotation;
+	int oPos;
+
+	//Input Stream From String
+	stream >> color.r  >> color.g  >> color.b  >> color.a
+		>> size.x  >> size.y >> pos.x  >> pos.y  >> rotation  >> oPos;
+
+	//Set Drawables Components
+	setFillColor(color);
+	setSize(size);
+	setPosition(pos);
+	setRotation(rotation);
+
+	//Set Origin
+	Custom_SetOrigin(static_cast<Origin>(oPos));
+
+	return stream;
 }
 
 // ================================================================================
@@ -281,6 +459,18 @@ void Drawables::D_Circle::setD_Circle(sf::Color const& color, float radius, sf::
 
 void Drawables::D_Circle::Custom_Draw() const {
 	exEvents->window.draw(*this);
+}
+
+std::string Drawables::D_Circle::serialize() const {
+	return std::string();
+}
+
+void Drawables::D_Circle::deserialize(std::string const& data) {
+	std::istringstream iss(data);
+}
+
+std::istringstream& Drawables::D_Circle::deserialize(std::istringstream& stream) {
+	return stream;
 }
 
 // ================================================================================
@@ -320,4 +510,16 @@ void Drawables::D_Sprite::setD_Sprite(sf::Texture const& tex, sf::IntRect const&
 
 void Drawables::D_Sprite::Custom_Draw() const {
 	exEvents->window.draw(*this);
+}
+
+std::string Drawables::D_Sprite::serialize() const {
+	return std::string();
+}
+
+void Drawables::D_Sprite::deserialize(std::string const& data) {
+	std::istringstream iss(data);
+}
+
+std::istringstream& Drawables::D_Sprite::deserialize(std::istringstream& stream) {
+	return stream;
 }

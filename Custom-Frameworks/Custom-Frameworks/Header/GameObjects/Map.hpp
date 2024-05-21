@@ -59,6 +59,11 @@ namespace Map {
 
 		//Set Clicked Color
 		void setClickedColor(sf::Color const& color);
+
+		//Data Serialization & Deserialization
+		virtual std::string serialize() const override;
+		virtual void deserialize(std::string const& data) override;
+		virtual std::istringstream& deserialize(std::istringstream& stream) override;
 	};
 	
 	class Grid {
@@ -70,17 +75,17 @@ namespace Map {
 		//Size Of Grid
 		sf::Vector2f gridSize;
 
-		//Array Of Cells
-		std::vector<std::vector<Cell>> gridArray;
-
-		//Grid Container
-		Drawables::D_RoundedRectangle gridContainer;
-
 		//Grid Border
 		sf::Vector2f gridBorder;
 
 		//Cell Gap
 		float cellGap;
+
+		//Grid Container
+		Drawables::D_RoundedRectangle gridContainer;
+
+		//Array Of Cells
+		std::vector<std::vector<Cell>> gridArray;
 
 		//Private Reorganising Of Grid
 		void reorganiseGrid();
@@ -166,6 +171,11 @@ namespace Map {
 
 		//Draw Grid
 		void drawGrid();
+
+		//Data Serialization & Deserialization
+		virtual std::string serialize() const;
+		virtual void deserialize(std::string const& data);
+		virtual std::istringstream& deserialize(std::istringstream& stream);
 	};
 }
 

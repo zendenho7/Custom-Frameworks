@@ -321,8 +321,19 @@ Systems::DataHandler::DataHandler()
 }
 
 void Systems::DataHandler::addPath(std::string const& identifier) {
-    dataPaths.emplace(identifier, exePath + identifier + ".txt");
-    std::cout << "Path Created: " << dataPaths.at(identifier) << '\n';
+    bool duplicate{ false };
+    for (std::pair<std::string, std::string> const& path : dataPaths) {
+        if (path.second == exePath + identifier + ".txt")
+            duplicate = true;
+    }
+
+    if (!duplicate) {
+        dataPaths.emplace(identifier, exePath + identifier + ".txt");
+        std::cout << "Path Added: " << dataPaths.at(identifier) << '\n';
+    }
+    else {
+        std::cout << "Path Already Exists: " << dataPaths.at(identifier) << '\n';
+    }
 }
 
 std::vector<std::string> Systems::DataHandler::loadMultipleData(std::string const& identifier) {
@@ -331,15 +342,26 @@ std::vector<std::string> Systems::DataHandler::loadMultipleData(std::string cons
 
     //String Data
     std::vector<std::string> datas;
+    std::string data;
 
     if (fileStream.is_open()) {
-        while (std::getline(fileStream, datas.emplace_back()));
+        while (std::getline(fileStream, data)) {
+            if (!data.empty()) {
+                datas.push_back(data);
+            }
+        }
 
         //Close FileStream
         fileStream.close();
     }
     else {
+        std::ofstream createFile;
+        createFile.open(dataPaths.at(identifier));
+
+        if(!createFile.is_open())
         std::cerr << "Error Opening Data Path To Load Data: " << dataPaths.at(identifier) << '\n';
+
+        createFile.close();
     }
 
     return datas;
@@ -376,7 +398,13 @@ std::string Systems::DataHandler::loadSingularData(std::string const& identifier
         fileStream.close();
     }
     else {
-        std::cerr << "Error Opening Data Path To Load Data: " << dataPaths.at(identifier) << '\n';
+        std::ofstream createFile;
+        createFile.open(dataPaths.at(identifier));
+
+        if (!createFile.is_open())
+            std::cerr << "Error Opening Data Path To Load Data: " << dataPaths.at(identifier) << '\n';
+
+        createFile.close();
     }
 
     return data;

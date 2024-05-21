@@ -46,14 +46,9 @@ namespace Drawables {
 		D_Base() : fixedScale{ 1.0f, 1.0f }, originPos{ Origin::CENTER } {}
 		D_Base(D_Base const& copy) = delete;
 
-		//Data Serialization & Deserialization
-		//virtual std::string serialize() = 0;
-
-		//vitrual T deserialize() = 0;
-
-	public:
 		//Custom Draw Function
 		virtual void Custom_Draw() const = 0;
+	public:
 
 		//Custom Member Functions
 		void Custom_SetOrigin(Origin oPos = Origin::CENTER) {
@@ -61,6 +56,12 @@ namespace Drawables {
 			//Set Origin Position
 			originPos = oPos;
 
+			//Update Origin
+			Custom_UpdateOrigin();
+		}
+
+		//Update Origin Pos
+		void Custom_UpdateOrigin() {
 			//Size Of Object
 			sf::Vector2f size{ T::getLocalBounds().getSize() };
 
@@ -131,6 +132,42 @@ namespace Drawables {
 		sf::Uint8 Custom_GetOpacity() const {
 			return T::getFillColor().a;
 		}
+
+		//Data Serialization & Deserialization
+		virtual std::string serialize() const {
+			std::ostringstream oss;
+
+			//Output Stream From String
+			oss << fixedScale.x << " " << fixedScale.y << " " << static_cast<int>(originPos);
+
+			return oss.str();
+		}
+
+		virtual void deserialize(std::string const& data) {
+			std::istringstream iss(data);
+
+			//Temporary Variables
+			int tempOPos;
+
+			//Input Stream
+			iss >> fixedScale.x >> fixedScale.y >> tempOPos;
+
+			//Set Origin Pos
+			originPos = static_cast<Origin>(tempOPos);
+		}
+
+		virtual std::istringstream& deserialize(std::istringstream& stream) {
+			//Temporary Variables
+			int tempOPos;
+
+			//Input Stream
+			stream >> fixedScale.x >> fixedScale.y >> tempOPos;
+
+			//Set Origin Pos
+			originPos = static_cast<Origin>(tempOPos);
+
+			return stream;
+		}
 	};
 
 	// ================================================================================
@@ -176,6 +213,11 @@ namespace Drawables {
 
 		//Custom Draw Function
 		void Custom_Draw() const override;
+
+		//Data Serialization & Deserialization
+		virtual std::string serialize() const override;
+		virtual void deserialize(std::string const& data) override;
+		virtual std::istringstream& deserialize(std::istringstream& stream) override;
 	};
 
 	// ================================================================================
@@ -198,7 +240,6 @@ namespace Drawables {
 
 		//Private Rounded Rect Constructor
 		void constructRoundedRect(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Origin oPos);
-
 	public:
 		//Default Constructor
 		D_RoundedRectangle() = default;
@@ -241,6 +282,11 @@ namespace Drawables {
 
 		//Custom Draw Function
 		void Custom_Draw() const override;
+
+		//Data Serialization & Deserialization
+		virtual std::string serialize() const override;
+		virtual void deserialize(std::string const& data) override;
+		virtual std::istringstream& deserialize(std::istringstream& stream) override;
 	};
 
 	// ================================================================================
@@ -275,6 +321,11 @@ namespace Drawables {
 
 		//Custom Draw Function
 		void Custom_Draw() const override;
+
+		//Data Serialization & Deserialization
+		std::string serialize() const override;
+		void deserialize(std::string const& data) override;
+		virtual std::istringstream& deserialize(std::istringstream& stream) override;
 	};
 
 	// ================================================================================
@@ -309,6 +360,11 @@ namespace Drawables {
 
 		//Custom Draw Function
 		void Custom_Draw() const override;
+
+		//Data Serialization & Deserialization
+		virtual std::string serialize() const override;
+		virtual void deserialize(std::string const& data) override;
+		virtual std::istringstream& deserialize(std::istringstream& stream) override;
 	};
 
 	// ================================================================================
@@ -347,6 +403,11 @@ namespace Drawables {
 
 		//Custom Draw Function
 		void Custom_Draw() const override;
+
+		//Data Serialization & Deserialization
+		virtual std::string serialize() const override;
+		virtual void deserialize(std::string const& data) override;
+		virtual std::istringstream& deserialize(std::istringstream& stream) override;
 	};
 }
 

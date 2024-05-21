@@ -33,6 +33,7 @@ Copyright (c) 2024 Zen Ho
 #include <crtdbg.h> // To check for memory leaks
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <cmath>
 #include <vector>

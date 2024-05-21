@@ -112,6 +112,12 @@ void GSManager::GameStateManager::previousState() {
 
 void GSManager::GameStateManager::exitGame() {
 	b_GameRunning = false;
+
+	currGameState->Free();
+	currGameState->Unload();
+
+	prevGameState->Free();
+	prevGameState->Unload();
 }
 
 bool GSManager::GameStateManager::getGameRunning() const {

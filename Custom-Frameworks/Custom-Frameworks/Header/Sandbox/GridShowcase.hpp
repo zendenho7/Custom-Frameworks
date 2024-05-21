@@ -29,6 +29,11 @@ namespace GridSC {
         std::unique_ptr<Drawables::D_Text> GOLHeader;
         std::unique_ptr<Drawables::D_Text> GOLStatus;
 
+        //Left & Right Toggle Save Data
+        std::unique_ptr <Interface::RectButton> nextData;
+        std::unique_ptr <Interface::RectButton> prevData;
+        int dataIndexTracker;
+
         //Saved Grids
         std::vector<std::string> savedGridData;
         

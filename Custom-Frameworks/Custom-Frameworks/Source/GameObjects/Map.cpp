@@ -93,13 +93,49 @@ void Map::Cell::setClickedColor(sf::Color const& color) {
 	clickedColor = color;
 }
 
+std::string Map::Cell::serialize() const {
+	std::ostringstream oss;
+
+	//Output Stream From String
+	oss << D_RoundedRectangle::serialize() << " " << b_selected << " "
+		<< defColor.r << " " << defColor.g << " " << defColor.b << " " << defColor.a << " "
+		<< clickedColor.r << " " << clickedColor.g << " " << clickedColor.b << " " << clickedColor.a;
+
+	return oss.str();
+}
+
+void Map::Cell::deserialize(std::string const& data) {
+	std::istringstream iss(data);
+
+	//Temporary Variables
+	std::string comma;
+
+	//Input Stream From String
+	D_RoundedRectangle::deserialize(iss) >> b_selected 
+		>> defColor.r >> defColor.g >> defColor.b >> defColor.a 
+		>> clickedColor.r >> clickedColor.g >> clickedColor.b >> clickedColor.a;
+}
+
+std::istringstream& Map::Cell::deserialize(std::istringstream& stream) {
+
+	//Temporary Variables
+	std::string comma;
+
+	//Input Stream From String
+	D_RoundedRectangle::deserialize(stream) >> b_selected 
+		>> defColor.r >> defColor.g >> defColor.b >> defColor.a 
+		>> clickedColor.r >> clickedColor.g >> clickedColor.b >> clickedColor.a;
+
+	return stream;
+}
+
 // ================================================================================
 // Class: Map Grid
 // ================================================================================
 
 Map::Grid::Grid(sf::Vector2<size_t>const& cellcount, sf::Vector2f const& gridPos, sf::Vector2f const& gridborder, sf::Color const& gridColor, sf::Color const& cellColor, sf::Color const& cellClickedColor, sf::Vector2f const& cellSize, float cellgap)
 	:	cellCount{ std::clamp(cellcount.x, static_cast<size_t>(1), std::numeric_limits<size_t>::max()), std::clamp(cellcount.y, static_cast<size_t>(1), std::numeric_limits<size_t>::max()) }, 
-		gridSize{ cellSize.x * cellCount.x, cellSize.y * cellCount.y }, gridContainer(gridColor, gridSize, gridPos), gridBorder{ gridborder }, cellGap{ cellgap }
+		gridSize{ cellSize.x * cellCount.x, cellSize.y * cellCount.y }, gridBorder{ gridborder }, cellGap{ cellgap }, gridContainer(gridColor, gridSize, gridPos)
 {
 	//Scale Grid Container For Border
 	gridContainer.setScale(((gridBorder.x * 2) + gridSize.x) / gridSize.x, ((gridBorder.y * 2) + gridSize.y) / gridSize.y);
@@ -358,4 +394,57 @@ void Map::Grid::drawGrid() {
 			exEvents->window.draw(gridArray[i][j]);
 		}
 	}
+}
+
+std::string Map::Grid::serialize() const {
+	std::ostringstream oss("");
+
+	oss << cellCount.x << " " << cellCount.y << " " << gridSize.x << " " << gridSize.y << " "
+		<< gridBorder.x << " " << gridBorder.y << " " << cellGap << " "
+		<< gridContainer.serialize() << " ";
+
+	//Serialize Array Of Cells
+	for (std::vector<Cell> const& cellVec : gridArray) {
+		for (Cell const& cell : cellVec) {
+			oss << cell.serialize() << " ";
+		}
+	}
+
+	return oss.str();
+}
+
+void Map::Grid::deserialize(std::string const& data) {
+	std::istringstream iss(data);
+
+	std::string comma;
+
+	iss >> cellCount.x >> cellCount.y >> gridSize.x >> gridSize.y 
+		>> gridBorder.x >> gridBorder.y >> cellGap ;
+
+	gridContainer.deserialize(iss) ;
+
+	//Serialize Array Of Cells
+	for (std::vector<Cell>& cellVec : gridArray) {
+		for (Cell& cell : cellVec) {
+			cell.deserialize(iss) ;
+		}
+	}
+}
+
+std::istringstream& Map::Grid::deserialize(std::istringstream& stream) {
+	std::string comma;
+
+	stream >> cellCount.x >> cellCount.y >> gridSize.x >> gridSize.y 
+		>> gridBorder.x >> gridBorder.y >> cellGap ;
+
+	gridContainer.deserialize(stream) ;
+
+	//Serialize Array Of Cells
+	for (std::vector<Cell>& cellVec : gridArray) {
+		for (Cell& cell : cellVec) {
+			cell.deserialize(stream) ;
+		}
+	}
+
+	return stream;
 }

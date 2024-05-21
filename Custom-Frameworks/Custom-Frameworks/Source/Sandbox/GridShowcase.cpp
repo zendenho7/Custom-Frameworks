@@ -21,13 +21,22 @@ void GridSC::State::Load() {
 
 void GridSC::State::Init() {
 
-	exData->addPath("Grid");
-	exData->saveMultipleData("Grid", savedGridData);
-	savedGridData = std::move(exData->loadMultipleData("Grid"));
-
 	//Init GOL Grid
 	GOLGrid = std::make_unique<Map::Grid>(sf::Vector2<size_t>(50, 25), exEvents->windowCenter, sf::Vector2f(15.0f, 15.0f), sf::Color::Transparent, sf::Color::White, sf::Color::Blue, sf::Vector2f(25.0f, 25.0f), 5.0f);
 	GOLGrid->setGridRounding(10.0f);
+
+	//Extract Saved Data
+	exData->addPath("SavedGrid");
+	savedGridData = std::move(exData->loadMultipleData("SavedGrid"));
+	dataIndexTracker = -1;
+
+	//Init Next Data Button
+	nextData = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(((GOLGrid->getGridSize().x / 2) + (150.0f / 2) + 10.0f), 0.0f), 15.0f, 0.0f);
+	nextData->initButtonText("NEXT", exAssets->getPrimaryFont(), sf::Color::Black);
+
+	//Init Prev Data Button
+	prevData = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(-((GOLGrid->getGridSize().x / 2) + (150.0f / 2) + 10.0f), 0.0f), 15.0f, 0.0f);
+	prevData->initButtonText("PREV", exAssets->getPrimaryFont(), sf::Color::Black);
 
 	//GOL Header Init
 	GOLHeader = std::make_unique<Drawables::D_Text>("GAME OF LIME SIMULATION", exAssets->getPrimaryFont(), sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -350.0f));
@@ -36,7 +45,7 @@ void GridSC::State::Init() {
 	GOLHeader->Custom_SetFixedScale();
 
 	//GOL Status Init
-	GOLStatus = std::make_unique<Drawables::D_Text>("SIMULATION PAUSED", exAssets->getPrimaryFont(), sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, 375.0f));
+	GOLStatus = std::make_unique<Drawables::D_Text>("SIMULATION PAUSED ( EDITOR MODE )", exAssets->getPrimaryFont(), sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, 375.0f));
 	GOLStatus->Custom_OffsetToCenter();
 	GOLStatus->setScale(0.4f, 0.4f);
 	GOLStatus->Custom_SetFixedScale();
@@ -57,9 +66,11 @@ void GridSC::State::Init() {
 	b_SimPaused = true;
 
 	//Init DropDown
-	helperDropDown = std::make_unique<Interface::DropDown>("TOOLS", sf::Color::White, sf::Color::Black, sf::Vector2f(100.0f, 50.0f), sf::Vector2f(1525.0f, 50.0f), sf::Color::Black, sf::Vector2f(125.0f, 125.0f), 10.0f, Interface::DropDownType::HOVER, Interface::DropDownAlign::DOWN_RIGHT);
+	helperDropDown = std::make_unique<Interface::DropDown>("TOOLS", sf::Color::White, sf::Color::Black, sf::Vector2f(100.0f, 50.0f), sf::Vector2f(1525.0f, 50.0f), sf::Color::Black, sf::Vector2f(125.0f, 175.0f), 10.0f, Interface::DropDownType::HOVER, Interface::DropDownAlign::DOWN_RIGHT);
 	helperDropDown->addButtons("CLEAR GRID", sf::Color::White, sf::Color::Black);
 	helperDropDown->addButtons("TOGGLE SIM", sf::Color::White, sf::Color::Black);
+	helperDropDown->addButtons("SAVE GRID", sf::Color::White, sf::Color::Black);
+	helperDropDown->addButtons("CLEAR SAVED", sf::Color::White, sf::Color::Black);
 	helperDropDown->addButtons("MAIN MENU", sf::Color::White, sf::Color::Black);
 	helperDropDown->arrangeButtons(sf::Vector2f(10.0f, 10.0f), 10.0f, 10.0f);
 }
@@ -79,20 +90,67 @@ void GridSC::State::Update() {
 		b_SimPaused = !b_SimPaused;
 	}
 
+	//Enter Key To Toggle Simulation Status
+	if (helperDropDown->isButtonClicked("CLEAR SAVED")) {
+		savedGridData.clear();
+		exData->saveSingularData("SavedGrid", "");
+	}
+
 	//Go Back To Main Menu Game State
 	if (exEvents->keyTriggered(sf::Keyboard::Scancode::Escape) || helperDropDown->isButtonClicked("MAIN MENU")) {
 		exGSManager->changeState(GSManager::GSTypes::GS_MAINMENU);
 	}
 
-	//Check For Cell Click
+	//Simulation Paused
 	if (b_SimPaused) {
+		//Check For Cell Click
 		GOLGrid->checkCellClicked();
-		GOLStatus->setString("SIMULATION PAUSED");
+		GOLStatus->Custom_SetString("SIMULATION PAUSED ( EDITOR MODE )");
 		bgColor = sf::Color::Cyan;
+
+		//Save Grid Data
+		if (helperDropDown->isButtonClicked("SAVE GRID")) {
+			bool duplicate{ false };
+			std::string saveData{ GOLGrid->serialize() };
+
+			for (std::string const& data : savedGridData) {
+				if (data == saveData)
+					duplicate = true;
+			}
+
+			if (!duplicate) {
+				std::cout << "Grid Data Saved." << '\n';
+				savedGridData.emplace_back(std::move(saveData));
+			}
+		}
+
+		//Update Next Data Button
+		if (nextData->isButtonClicked()) {
+			dataIndexTracker = (dataIndexTracker + 1) <= static_cast<int>(savedGridData.size() - 1) ? (dataIndexTracker + 1) : -1;
+
+			if (dataIndexTracker != -1) {
+				GOLGrid->deserialize(savedGridData.at(dataIndexTracker));
+			}
+			else {
+				GOLGrid->resetGrid();
+			}
+		}
+
+		//Update Prev Data Button
+		if (prevData->isButtonClicked()) {
+			dataIndexTracker = (dataIndexTracker - 1) >= -1 ? (dataIndexTracker - 1) : static_cast<int>(savedGridData.size() - 1);
+
+			if (dataIndexTracker != -1) {
+				GOLGrid->deserialize(savedGridData.at(dataIndexTracker));
+			}
+			else {
+				GOLGrid->resetGrid();
+			}
+		}
 	}
 	else {
 		GOLUpdateLogic();
-		GOLStatus->setString("SIMULATION ONGOING");
+		GOLStatus->Custom_SetString("SIMULATION ONGOING ( SPECTATOR MODE )");
 		bgColor = { 100, 100, 100, 255 };
 	}
 }
@@ -114,12 +172,18 @@ void GridSC::State::Draw() {
 	//Draw GOL Grid
 	GOLGrid->drawGrid();
 
+	//Draw Next & Prev Buttons
+	if (savedGridData.size() > 0 && b_SimPaused) {
+		nextData->Custom_Draw();
+		prevData->Custom_Draw();
+	}
+
 	//Draw DropDown
 	helperDropDown->drawDropDown();
 }
 
 void GridSC::State::Free() {
-
+	exData->saveMultipleData("SavedGrid", savedGridData);
 }
 
 void GridSC::State::Unload() {
