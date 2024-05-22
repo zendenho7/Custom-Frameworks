@@ -27,19 +27,19 @@ void AnimationSC::State::Init() {
 
 	//Stop Button Init
 	stopButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 100.0f), 15.0f, 0.0f);
-	stopButton->initButtonText("PAUSE ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black);
+	stopButton->setRectButtonText("PAUSE ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black);
 
 	//Start Button Init
 	resumeButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 175.0f), 15.0f, 0.0f);
-	resumeButton->initButtonText("RESUME ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black);
+	resumeButton->setRectButtonText("RESUME ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black);
 
 	//Restart Button Init
 	restartButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 250.0f), 15.0f, 0.0f);
-	restartButton->initButtonText("RESTART ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black);
+	restartButton->setRectButtonText("RESTART ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black);
 
 	//End Button Init
 	endButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 325.0f), 15.0f, 0.0f);
-	endButton->initButtonText("END ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black);
+	endButton->setRectButtonText("END ANIMATION", exAssets->getPrimaryFont(), sf::Color::Black);
 
 	//Animation Status Init
 	animationCount = std::make_unique<Drawables::D_Text>(std::move((std::to_string(sheetAnimator->getCompletedAnimations()) += " / ") += sheetAnimator->getAnimationsToComplete() ? std::move(std::to_string(sheetAnimator->getAnimationsToComplete())) : "INF"), exAssets->getPrimaryFont(), sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -300.0f));
@@ -55,11 +55,11 @@ void AnimationSC::State::Init() {
 
 	//Increase Button
 	increaseButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(75.0f, 325.0f), 15.0f, 0.0f);
-	increaseButton->initButtonText("ADD", exAssets->getPrimaryFont(), sf::Color::Black, { 0.5f, 0.5f });
+	increaseButton->setRectButtonText("ADD", exAssets->getPrimaryFont(), sf::Color::Black, { 0.5f, 0.5f });
 
 	//Decrease Button
 	decreaseButton = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(-75.0f, 325.0f), 15.0f, 0.0f);
-	decreaseButton->initButtonText("SUB", exAssets->getPrimaryFont(), sf::Color::Black, { 0.5f, 0.5f });
+	decreaseButton->setRectButtonText("SUB", exAssets->getPrimaryFont(), sf::Color::Black, { 0.5f, 0.5f });
 }
 
 void AnimationSC::State::Update() {

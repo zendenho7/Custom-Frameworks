@@ -15,28 +15,38 @@ Copyright (c) 2024 Zen Ho
 // ================================================================================
 
 Interface::RectButton::RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Drawables::Origin oPos, bool hoverAnimation)
-	: D_Rect(color, size, pos, rounding, rotation, oPos), D_Text(), b_HoverAnimationEnabled{ hoverAnimation }, b_Hovering{ false }, hoverScale{ BTN_HOVER_SCALE }, hoverDuration{ BTN_HOVER_TIME }, textToBtnRatio{ 0.0f, 0.0f }
+	: btnBase(color, size, pos, rounding, rotation, oPos), btnTxt(), b_HoverAnimationEnabled{ hoverAnimation }, b_Hovering{ false }, hoverScale{ BTN_HOVER_SCALE }, hoverDuration{ BTN_HOVER_TIME }, textToBtnRatio{ 0.0f, 0.0f }
 {
+}
+
+void Interface::RectButton::setRectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Drawables::Origin oPos, bool hoverAnimation)
+{
+	btnBase.setD_RoundedRectangle(color, size, pos, rounding, rotation, oPos);
+	b_HoverAnimationEnabled = hoverAnimation;
+	b_Hovering = false;
+	hoverScale = BTN_HOVER_SCALE;
+	hoverDuration = BTN_HOVER_TIME;
+	textToBtnRatio = { 0.0f, 0.0f };
 }
 
 void Interface::RectButton::hoverButton() {
 	//Hovering Speed Based On HoverTime
-	sf::Vector2f btnHoverSpeed{ ((D_Rect.Custom_GetFixedScale().x * hoverScale.x) - D_Rect.Custom_GetFixedScale().x) / (hoverDuration / exTime->getDeltaTime()), ((D_Rect.Custom_GetFixedScale().y * hoverScale.y) - D_Rect.Custom_GetFixedScale().y) / (hoverDuration / exTime->getDeltaTime()) };
-	sf::Vector2f txtHoverSpeed{ ((D_Text.Custom_GetFixedScale().x * hoverScale.x) - D_Text.Custom_GetFixedScale().x) / (hoverDuration / exTime->getDeltaTime()),  ((D_Text.Custom_GetFixedScale().y * hoverScale.y) - D_Text.Custom_GetFixedScale().y) / (hoverDuration / exTime->getDeltaTime()) };
+	sf::Vector2f btnHoverSpeed{ ((btnBase.Custom_GetFixedScale().x * hoverScale.x) - btnBase.Custom_GetFixedScale().x) / (hoverDuration / exTime->getDeltaTime()), ((btnBase.Custom_GetFixedScale().y * hoverScale.y) - btnBase.Custom_GetFixedScale().y) / (hoverDuration / exTime->getDeltaTime()) };
+	sf::Vector2f txtHoverSpeed{ ((btnTxt.Custom_GetFixedScale().x * hoverScale.x) - btnTxt.Custom_GetFixedScale().x) / (hoverDuration / exTime->getDeltaTime()),  ((btnTxt.Custom_GetFixedScale().y * hoverScale.y) - btnTxt.Custom_GetFixedScale().y) / (hoverDuration / exTime->getDeltaTime()) };
 
 	//Hovering Scaling Up Operations
-	D_Rect.setScale(std::clamp(D_Rect.getScale().x + btnHoverSpeed.x, D_Rect.Custom_GetFixedScale().x, D_Rect.Custom_GetFixedScale().x * hoverScale.x), std::clamp(D_Rect.getScale().y + btnHoverSpeed.y, D_Rect.Custom_GetFixedScale().y, D_Rect.Custom_GetFixedScale().y * hoverScale.y));
-	D_Text.setScale(std::clamp(D_Text.getScale().x + txtHoverSpeed.x, D_Text.Custom_GetFixedScale().x, D_Text.Custom_GetFixedScale().x * hoverScale.x), std::clamp(D_Text.getScale().y + txtHoverSpeed.y, D_Text.Custom_GetFixedScale().y, D_Text.Custom_GetFixedScale().y * hoverScale.y));
+	btnBase.setScale(std::clamp(btnBase.getScale().x + btnHoverSpeed.x, btnBase.Custom_GetFixedScale().x, btnBase.Custom_GetFixedScale().x * hoverScale.x), std::clamp(btnBase.getScale().y + btnHoverSpeed.y, btnBase.Custom_GetFixedScale().y, btnBase.Custom_GetFixedScale().y * hoverScale.y));
+	btnTxt.setScale(std::clamp(btnTxt.getScale().x + txtHoverSpeed.x, btnTxt.Custom_GetFixedScale().x, btnTxt.Custom_GetFixedScale().x * hoverScale.x), std::clamp(btnTxt.getScale().y + txtHoverSpeed.y, btnTxt.Custom_GetFixedScale().y, btnTxt.Custom_GetFixedScale().y * hoverScale.y));
 }
 
 void Interface::RectButton::normalButton() {
 	//Hovering Speed Based On HoverTime
-	sf::Vector2f btnHoverSpeed{ ((D_Rect.Custom_GetFixedScale().x * hoverScale.x) - D_Rect.Custom_GetFixedScale().x) / (hoverDuration / exTime->getDeltaTime()), ((D_Rect.Custom_GetFixedScale().y * hoverScale.y) - D_Rect.Custom_GetFixedScale().y) / (hoverDuration / exTime->getDeltaTime()) };
-	sf::Vector2f txtHoverSpeed{ ((D_Text.Custom_GetFixedScale().x * hoverScale.x) - D_Text.Custom_GetFixedScale().x) / (hoverDuration / exTime->getDeltaTime()),  ((D_Text.Custom_GetFixedScale().y * hoverScale.y) - D_Text.Custom_GetFixedScale().y) / (hoverDuration / exTime->getDeltaTime()) };
+	sf::Vector2f btnHoverSpeed{ ((btnBase.Custom_GetFixedScale().x * hoverScale.x) - btnBase.Custom_GetFixedScale().x) / (hoverDuration / exTime->getDeltaTime()), ((btnBase.Custom_GetFixedScale().y * hoverScale.y) - btnBase.Custom_GetFixedScale().y) / (hoverDuration / exTime->getDeltaTime()) };
+	sf::Vector2f txtHoverSpeed{ ((btnTxt.Custom_GetFixedScale().x * hoverScale.x) - btnTxt.Custom_GetFixedScale().x) / (hoverDuration / exTime->getDeltaTime()),  ((btnTxt.Custom_GetFixedScale().y * hoverScale.y) - btnTxt.Custom_GetFixedScale().y) / (hoverDuration / exTime->getDeltaTime()) };
 
 	//Hovering Scaling Down Operations
-	D_Rect.setScale(std::clamp(D_Rect.getScale().x - btnHoverSpeed.x, D_Rect.Custom_GetFixedScale().x, D_Rect.Custom_GetFixedScale().x * hoverScale.x), std::clamp(D_Rect.getScale().y - btnHoverSpeed.y, D_Rect.Custom_GetFixedScale().y, D_Rect.Custom_GetFixedScale().y * hoverScale.y));
-	D_Text.setScale(std::clamp(D_Text.getScale().x - txtHoverSpeed.x, D_Text.Custom_GetFixedScale().x, D_Text.Custom_GetFixedScale().x * hoverScale.x), std::clamp(D_Text.getScale().y - txtHoverSpeed.y, D_Text.Custom_GetFixedScale().y, D_Text.Custom_GetFixedScale().y * hoverScale.y));
+	btnBase.setScale(std::clamp(btnBase.getScale().x - btnHoverSpeed.x, btnBase.Custom_GetFixedScale().x, btnBase.Custom_GetFixedScale().x * hoverScale.x), std::clamp(btnBase.getScale().y - btnHoverSpeed.y, btnBase.Custom_GetFixedScale().y, btnBase.Custom_GetFixedScale().y * hoverScale.y));
+	btnTxt.setScale(std::clamp(btnTxt.getScale().x - txtHoverSpeed.x, btnTxt.Custom_GetFixedScale().x, btnTxt.Custom_GetFixedScale().x * hoverScale.x), std::clamp(btnTxt.getScale().y - txtHoverSpeed.y, btnTxt.Custom_GetFixedScale().y, btnTxt.Custom_GetFixedScale().y * hoverScale.y));
 }
 
 bool Interface::RectButton::getHoverStatus() const {
@@ -46,7 +56,7 @@ bool Interface::RectButton::getHoverStatus() const {
 bool Interface::RectButton::isButtonClicked() {
 
 	//Check For Mouse Click Within Bounds
-	if (UI_Collision::Rect_Button(D_Rect.getGlobalBounds()))
+	if (UI_Collision::Rect_Button(btnBase.getGlobalBounds()))
 	{
 		//Hover Button
 		if (b_HoverAnimationEnabled) {
@@ -68,7 +78,7 @@ bool Interface::RectButton::isButtonClicked() {
 	}
 
 	//Return Button Back To Origin State
-	if (D_Rect.getScale().x > D_Rect.Custom_GetFixedScale().x && D_Rect.getScale().y > D_Rect.Custom_GetFixedScale().y)
+	if (btnBase.getScale().x > btnBase.Custom_GetFixedScale().x && btnBase.getScale().y > btnBase.Custom_GetFixedScale().y)
 		normalButton();
 
 	return false;
@@ -76,15 +86,15 @@ bool Interface::RectButton::isButtonClicked() {
 
 void Interface::RectButton::rescaleTxt() {
 	//Calculate Scale
-	sf::Vector2f txtratio{ D_Text.getLocalBounds().getSize().x / D_Rect.getGlobalBounds().getSize().x, D_Text.getLocalBounds().getSize().y / D_Rect.getGlobalBounds().getSize().y };
-	float maxScale{ std::min(D_Rect.getGlobalBounds().getSize().x / D_Text.getLocalBounds().getSize().x, D_Rect.getGlobalBounds().getSize().y / D_Text.getLocalBounds().getSize().y) };
+	sf::Vector2f txtratio{ btnTxt.getLocalBounds().getSize().x / btnBase.getGlobalBounds().getSize().x, btnTxt.getLocalBounds().getSize().y / btnBase.getGlobalBounds().getSize().y };
+	float maxScale{ std::min(btnBase.getGlobalBounds().getSize().x / btnTxt.getLocalBounds().getSize().x, btnBase.getGlobalBounds().getSize().y / btnTxt.getLocalBounds().getSize().y) };
 	float txtscale{ txtratio.x - textToBtnRatio.x > txtratio.y - textToBtnRatio.y
-		? std::clamp((D_Rect.getGlobalBounds().getSize().x * textToBtnRatio.x) / D_Text.getLocalBounds().getSize().x, 0.0f, maxScale)
-		: std::clamp((D_Rect.getGlobalBounds().getSize().y * textToBtnRatio.y) / D_Text.getLocalBounds().getSize().y, 0.0f, maxScale) };
+		? std::clamp((btnBase.getGlobalBounds().getSize().x * textToBtnRatio.x) / btnTxt.getLocalBounds().getSize().x, 0.0f, maxScale)
+		: std::clamp((btnBase.getGlobalBounds().getSize().y * textToBtnRatio.y) / btnTxt.getLocalBounds().getSize().y, 0.0f, maxScale) };
 
 	//Set Scale
-	D_Text.setScale(txtscale, txtscale);
-	D_Text.Custom_SetFixedScale();
+	btnTxt.setScale(txtscale, txtscale);
+	btnTxt.Custom_SetFixedScale();
 }
 
 void Interface::RectButton::setHoverSettings(bool hoverAnimation, sf::Vector2f const& scale, float duration) {
@@ -100,116 +110,182 @@ void Interface::RectButton::setTextToButtonRatio(sf::Vector2f const& ratio) {
 	rescaleTxt();
 }
 
-void Interface::RectButton::initButtonText(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& txtBtnRatio, sf::Uint8 charSize, Drawables::Origin oPos) {
+void Interface::RectButton::setRectButtonText(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& txtBtnRatio, sf::Uint8 charSize, Drawables::Origin oPos) {
 	
 	//Set Txt Ratio
 	textToBtnRatio = txtBtnRatio;
 
 	//Init Text
-	D_Text.setFont(font);
-	D_Text.setString(txt);
-	D_Text.setCharacterSize(charSize);
-	D_Text.setFillColor(color);
+	btnTxt.setFont(font);
+	btnTxt.setString(txt);
+	btnTxt.setCharacterSize(charSize);
+	btnTxt.setFillColor(color);
 
 	//Calculate Scale
 	rescaleTxt();
 
 	//Set Based On Btn Attributes
-	D_Text.setPosition(D_Rect.getPosition());
-	D_Text.setRotation(D_Rect.getRotation());
+	btnTxt.setPosition(btnBase.getPosition());
+	btnTxt.setRotation(btnBase.getRotation());
 
 	//Offset To Center Of Bounding Box
-	D_Text.Custom_OffsetToCenter();
+	btnTxt.Custom_OffsetToCenter();
 
 	//Set Origin Of Rect
-	D_Text.Custom_SetOrigin(oPos);
+	btnTxt.Custom_SetOrigin(oPos);
 }
 
 void Interface::RectButton::setPosition(sf::Vector2f const& pos) {
-	D_Rect.setPosition(pos);
-	D_Text.setPosition(pos);
-	D_Text.Custom_OffsetToCenter();
+	btnBase.setPosition(pos);
+	btnTxt.setPosition(pos);
+	btnTxt.Custom_OffsetToCenter();
 }
 
 sf::Vector2f Interface::RectButton::getPosition() const {
-	return D_Rect.Custom_GetOriginPosition();
+	return btnBase.Custom_GetOriginPosition();
 }
 
 void Interface::RectButton::setSize(sf::Vector2f const& size) {
-	D_Rect.setSize(size);
-	D_Rect.Custom_SetOrigin();
+	btnBase.setSize(size);
+	btnBase.Custom_SetOrigin();
 
 	rescaleTxt();
 }
 
 sf::Vector2f Interface::RectButton::getSize() const {
-	return D_Rect.getSize();
+	return btnBase.getSize();
 }
 
 void Interface::RectButton::setScale(sf::Vector2f const& scale) {
-	D_Rect.setScale(scale);
-	D_Rect.Custom_SetFixedScale();
+	btnBase.setScale(scale);
+	btnBase.Custom_SetFixedScale();
 
 	rescaleTxt();
 }
 
 sf::Vector2f Interface::RectButton::getScale() const {
-	return D_Rect.getScale();
+	return btnBase.getScale();
 }
 
 sf::FloatRect Interface::RectButton::getLocalBounds() const {
-	return D_Rect.getLocalBounds();
+	return btnBase.getLocalBounds();
 }
 
 sf::FloatRect Interface::RectButton::getGlobalBounds() const {
-	return D_Rect.getGlobalBounds();
+	return btnBase.getGlobalBounds();
 }
 
 void Interface::RectButton::setButtonColor(sf::Color const& color) {
-	D_Rect.setFillColor(color);
+	btnBase.setFillColor(color);
 }
 
 sf::Color Interface::RectButton::getButtonColor() const {
-	return D_Rect.getFillColor();
+	return btnBase.getFillColor();
 }
 
 void Interface::RectButton::setTxtColor(sf::Color const& color) {
-	D_Rect.setFillColor(color);
+	btnBase.setFillColor(color);
 }
 
 sf::Color Interface::RectButton::getTxtColor() const {
-	return D_Text.getFillColor();
+	return btnTxt.getFillColor();
 }
 
 void Interface::RectButton::setButtonRounding(float rounding) {
-	D_Rect.setCornerRounding(rounding);
+	btnBase.setCornerRounding(rounding);
 }
 
 float Interface::RectButton::getButtonRounding() const {
-	return D_Rect.getCornerRounding();
+	return btnBase.getCornerRounding();
 }
 
 void Interface::RectButton::Custom_Draw() const {
 
 	//Draw Rect Button
-	D_Rect.Custom_Draw();
+	btnBase.Custom_Draw();
 
 	//Draw BtnTxt If Text Is Present
-	if (!D_Text.getString().isEmpty()) {
-		D_Text.Custom_Draw();
+	if (!btnTxt.getString().isEmpty()) {
+		btnTxt.Custom_Draw();
 	}
+}
+
+std::string Interface::RectButton::serialize() const {
+	std::ostringstream oss;
+
+	//Output Stream From String
+	oss << btnBase.serialize() << " " << btnTxt.serialize() << " "
+		<< b_HoverAnimationEnabled << " " << b_Hovering << " " << hoverDuration << " "
+		<< hoverScale.x << " " << hoverScale.y << " " << textToBtnRatio.x << " " << textToBtnRatio.y;
+
+	return oss.str();
+}
+
+void Interface::RectButton::deserialize(std::string const& data) {
+	std::istringstream iss(data);
+
+	//Input Stream From String
+	btnBase.deserialize(iss);
+	btnTxt.deserialize(iss) 
+		>> b_HoverAnimationEnabled >> b_Hovering >> hoverDuration
+		>> hoverScale.x >> hoverScale.y >> textToBtnRatio.x >> textToBtnRatio.y;
+}
+
+std::istringstream& Interface::RectButton::deserialize(std::istringstream& stream) {
+
+	//Input Stream From String
+	btnBase.deserialize(stream);
+	btnTxt.deserialize(stream)
+		>> b_HoverAnimationEnabled >> b_Hovering >> hoverDuration
+		>> hoverScale.x >> hoverScale.y >> textToBtnRatio.x >> textToBtnRatio.y;
+
+	return stream;
 }
 
 // ================================================================================
 // Class: DropDown
 // ================================================================================
 
-Interface::DropDown::DropDown(std::string const& btntxt, sf::Color const& btntxtcolor, sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding, DropDownType type, DropDownAlign alignment)
-	: b_DropDownHidden{ true }, b_MouseOverDropDown{ false }, alignmentStyle{ alignment }, buttonType{ type },
-	dropDownBtn(btncolor, btnsize, btnpos, rounding, 0.0f, Drawables::Origin::CENTER, false), dropDownContainer(dropdowncolor, dropdownsize, sf::Vector2f(0.0f, 0.0f), rounding)
+Interface::DropDown::DropDown(std::string const& btntxt, sf::Color const& btntxtcolor, sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding, DropDownBtnType type, DropDownAlign alignment)
+	: dropDownBtn(btncolor, btnsize, btnpos, rounding, 0.0f, Drawables::Origin::CENTER, false), dropDownContainer(dropdowncolor, dropdownsize, sf::Vector2f(0.0f, 0.0f), rounding),
+	b_DropDownHidden{ true }, b_MouseOverDropDown{ false }, alignmentStyle{ alignment }, buttonType{ type }
 {
 	//Init DropDown Button text
-	dropDownBtn.initButtonText(btntxt, exAssets->getPrimaryFont(), btntxtcolor);
+	dropDownBtn.setRectButtonText(btntxt, exAssets->getPrimaryFont(), btntxtcolor);
+
+	//Set Position Of DropDown Container
+	switch (alignmentStyle) {
+	case DropDownAlign::DOWN_CENTER:
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x, dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
+		break;
+	case DropDownAlign::DOWN_LEFT:
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
+		break;
+	case DropDownAlign::DOWN_RIGHT:
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
+		break;
+	case DropDownAlign::UP_CENTER:
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x, dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
+		break;
+	case DropDownAlign::UP_LEFT:
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
+		break;
+	case DropDownAlign::UP_RIGHT:
+		dropDownContainer.setPosition(dropDownBtn.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
+		break;
+	default:
+		break;
+	}
+}
+
+void Interface::DropDown::setDropDown(std::string const& btntxt, sf::Color const& btntxtcolor, sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding, DropDownBtnType type, DropDownAlign alignment)
+{
+	alignmentStyle = alignment;
+	buttonType = type;
+	dropDownBtn.setRectButton(btncolor, btnsize, btnpos, rounding, 0.0f, Drawables::Origin::CENTER, false);
+	dropDownContainer.setD_RoundedRectangle(dropdowncolor, dropdownsize, sf::Vector2f(0.0f, 0.0f), rounding);
+	//Init DropDown Button text
+	dropDownBtn.setRectButtonText(btntxt, exAssets->getPrimaryFont(), btntxtcolor);
 
 	//Set Position Of DropDown Container
 	switch (alignmentStyle) {
@@ -237,9 +313,9 @@ Interface::DropDown::DropDown(std::string const& btntxt, sf::Color const& btntxt
 }
 
 void Interface::DropDown::addButtons(std::string const& identifier, sf::Color const& btnColor, sf::Color const& txtColor, bool usePrimaryFont) {
-	dropDownButtonsKey.emplace_back(std::move(identifier));
+	dropDownButtonsKey.emplace_back(identifier);
 	dropDownButtons.emplace(std::piecewise_construct, std::forward_as_tuple(dropDownButtonsKey[dropDownButtonsKey.size() - 1]), std::forward_as_tuple(btnColor, sf::Vector2f(), sf::Vector2f()));
-	dropDownButtons[dropDownButtonsKey[dropDownButtonsKey.size() - 1]].initButtonText(dropDownButtonsKey[dropDownButtonsKey.size() - 1], usePrimaryFont ? exAssets->getPrimaryFont() : exAssets->getSecondaryFont(), txtColor);
+	dropDownButtons[dropDownButtonsKey[dropDownButtonsKey.size() - 1]].setRectButtonText(dropDownButtonsKey[dropDownButtonsKey.size() - 1], usePrimaryFont ? exAssets->getPrimaryFont() : exAssets->getSecondaryFont(), txtColor);
 }
 
 void Interface::DropDown::arrangeButtons(sf::Vector2f const& padding, float spaceBetweenButtons, float buttonRounding, DropDownArrangement arrangementStyle) {
@@ -299,7 +375,7 @@ void Interface::DropDown::updateDropDown() {
 
 	//Update DropDown Based On DropDown Type
 	switch (buttonType) {
-	case DropDownType::HOVER:
+	case DropDownBtnType::HOVER:
 		//Update Button
 		dropDownBtn.isButtonClicked();
 
@@ -313,7 +389,7 @@ void Interface::DropDown::updateDropDown() {
 			}
 		}
 		break;
-	case DropDownType::CLICK:
+	case DropDownBtnType::CLICK:
 		if (dropDownBtn.isButtonClicked()) {
 			b_DropDownHidden = !b_DropDownHidden;
 		}
@@ -336,4 +412,63 @@ void Interface::DropDown::drawDropDown() {
 			dropDownButtons[key].Custom_Draw();
 		}
 	}
+}
+
+std::string Interface::DropDown::serialize() const {
+	std::ostringstream oss;
+
+	//Output Stream From String
+	oss << dropDownBtn.serialize() << " " << dropDownContainer.serialize() << " "
+		<< b_DropDownHidden << " " << b_MouseOverDropDown << " "
+		<< static_cast<int>(buttonType) << " " << static_cast<int>(alignmentStyle) << " ";
+
+	for (std::string const& key : dropDownButtonsKey) {
+		oss << key << " " << dropDownButtons.at(key).serialize() << " ";
+	}
+
+	return oss.str();
+}
+
+void Interface::DropDown::deserialize(std::string const& data) {
+	std::istringstream iss(data);
+
+	//Temporary Variables
+	int btntype;
+	int alignstyle;
+
+	//Output Stream From String
+	dropDownBtn.deserialize(iss);
+	dropDownContainer.deserialize(iss)
+		>> b_DropDownHidden >> b_MouseOverDropDown
+		>> btntype >> alignstyle;
+
+	buttonType = static_cast<DropDownBtnType>(btntype);
+	alignmentStyle = static_cast<DropDownAlign>(alignstyle);
+
+	for (std::string& key : dropDownButtonsKey) {
+		iss >> key;
+		dropDownButtons.at(key).deserialize(iss);
+	}
+}
+
+std::istringstream& Interface::DropDown::deserialize(std::istringstream& stream) {
+	//Temporary Variables
+	int btntype;
+	int alignstyle;
+
+	//Output Stream From String
+	dropDownBtn.deserialize(stream);
+	dropDownContainer.deserialize(stream)
+		>> b_DropDownHidden >> b_MouseOverDropDown
+		>> btntype >> alignstyle;
+
+	buttonType = static_cast<DropDownBtnType>(btntype);
+	alignmentStyle = static_cast<DropDownAlign>(alignstyle);
+
+	for (std::string& key : dropDownButtonsKey) {
+		stream >> key;
+		dropDownButtons.at(key).deserialize(stream);
+	}
+
+	return stream;
 }

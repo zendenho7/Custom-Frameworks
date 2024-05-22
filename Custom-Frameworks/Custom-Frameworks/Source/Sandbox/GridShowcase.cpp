@@ -32,11 +32,11 @@ void GridSC::State::Init() {
 
 	//Init Next Data Button
 	nextData = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(((GOLGrid->getGridSize().x / 2) + (150.0f / 2) + 10.0f), 0.0f), 15.0f, 0.0f);
-	nextData->initButtonText("NEXT", exAssets->getPrimaryFont(), sf::Color::Black);
+	nextData->setRectButtonText("NEXT", exAssets->getPrimaryFont(), sf::Color::Black);
 
 	//Init Prev Data Button
 	prevData = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(-((GOLGrid->getGridSize().x / 2) + (150.0f / 2) + 10.0f), 0.0f), 15.0f, 0.0f);
-	prevData->initButtonText("PREV", exAssets->getPrimaryFont(), sf::Color::Black);
+	prevData->setRectButtonText("PREV", exAssets->getPrimaryFont(), sf::Color::Black);
 
 	//GOL Header Init
 	GOLHeader = std::make_unique<Drawables::D_Text>("GAME OF LIME SIMULATION | EMPTY GRID", exAssets->getPrimaryFont(), sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -350.0f));
@@ -66,7 +66,7 @@ void GridSC::State::Init() {
 	b_SimPaused = true;
 
 	//Init DropDown
-	helperDropDown = std::make_unique<Interface::DropDown>("TOOLS", sf::Color::White, sf::Color::Black, sf::Vector2f(100.0f, 50.0f), sf::Vector2f(1525.0f, 50.0f), sf::Color::Black, sf::Vector2f(125.0f, 175.0f), 10.0f, Interface::DropDownType::HOVER, Interface::DropDownAlign::DOWN_RIGHT);
+	helperDropDown = std::make_unique<Interface::DropDown>("TOOLS", sf::Color::White, sf::Color::Black, sf::Vector2f(100.0f, 50.0f), sf::Vector2f(1525.0f, 50.0f), sf::Color::Black, sf::Vector2f(125.0f, 175.0f), 10.0f, Interface::DropDownBtnType::HOVER, Interface::DropDownAlign::DOWN_RIGHT);
 	helperDropDown->addButtons("CLEAR GRID", sf::Color::White, sf::Color::Black);
 	helperDropDown->addButtons("TOGGLE SIM", sf::Color::White, sf::Color::Black);
 	helperDropDown->addButtons("SAVE GRID", sf::Color::White, sf::Color::Black);

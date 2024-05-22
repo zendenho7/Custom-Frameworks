@@ -14,14 +14,11 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\GameObjects\Map.hpp"
 
 // ================================================================================
-// Class: Map Cell
+// Class: Cell
 // ================================================================================
 
 Map::Cell::Cell(sf::Color const& defcolor, sf::Color const& clickedcolor, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding)
 	: D_RoundedRectangle(defcolor, size, pos, 0.0f, rounding, Drawables::Origin::TOP_LEFT), b_selected{ false }, defColor{ defcolor }, clickedColor{ clickedcolor } {}
-
-Map::Cell::Cell(Cell const& copy)
-	: D_RoundedRectangle(copy.defColor, copy.getLocalBounds().getSize(), copy.getPosition(), copy.getRotation(), copy.getCornerRounding(), copy.Custom_GetOrigin()), b_selected{ false }, defColor{ copy.defColor }, clickedColor{ copy.clickedColor } {}
 
 void Map::Cell::setCell(sf::Color const& defcolor, sf::Color const& clickedcolor, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding) {
 	setD_RoundedRectangle(defcolor, size, pos, 0.0f, rounding, Drawables::Origin::TOP_LEFT);
@@ -107,9 +104,6 @@ std::string Map::Cell::serialize() const {
 void Map::Cell::deserialize(std::string const& data) {
 	std::istringstream iss(data);
 
-	//Temporary Variables
-	;
-
 	//Input Stream From String
 	D_RoundedRectangle::deserialize(iss) >> b_selected 
 		>> defColor.r >> defColor.g >> defColor.b >> defColor.a 
@@ -117,9 +111,6 @@ void Map::Cell::deserialize(std::string const& data) {
 }
 
 std::istringstream& Map::Cell::deserialize(std::istringstream& stream) {
-
-	//Temporary Variables
-	;
 
 	//Input Stream From String
 	D_RoundedRectangle::deserialize(stream) >> b_selected 
@@ -416,33 +407,30 @@ std::string Map::Grid::serialize() const {
 void Map::Grid::deserialize(std::string const& data) {
 	std::istringstream iss(data);
 
-	;
-
 	iss >> cellCount.x >> cellCount.y >> gridSize.x >> gridSize.y 
 		>> gridBorder.x >> gridBorder.y >> cellGap ;
 
-	gridContainer.deserialize(iss) ;
+	gridContainer.deserialize(iss);
 
 	//Serialize Array Of Cells
 	for (std::vector<Cell>& cellVec : gridArray) {
 		for (Cell& cell : cellVec) {
-			cell.deserialize(iss) ;
+			cell.deserialize(iss);
 		}
 	}
 }
 
 std::istringstream& Map::Grid::deserialize(std::istringstream& stream) {
-	;
 
 	stream >> cellCount.x >> cellCount.y >> gridSize.x >> gridSize.y 
 		>> gridBorder.x >> gridBorder.y >> cellGap ;
 
-	gridContainer.deserialize(stream) ;
+	gridContainer.deserialize(stream);
 
 	//Serialize Array Of Cells
 	for (std::vector<Cell>& cellVec : gridArray) {
 		for (Cell& cell : cellVec) {
-			cell.deserialize(stream) ;
+			cell.deserialize(stream);
 		}
 	}
 

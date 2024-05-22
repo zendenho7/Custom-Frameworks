@@ -32,26 +32,6 @@ Drawables::D_Text::D_Text(std::string const& txt, sf::Font const& font, sf::Colo
 	Custom_SetOrigin(oPos);
 }
 
-Drawables::D_Text::D_Text(D_Text const& copy) 
-	: D_Base<sf::Text>(*this)
-{
-	setFont(*copy.getFont());
-	setString(copy.getString());
-	setCharacterSize(copy.getCharacterSize());
-	setFillColor(copy.getFillColor());
-	setPosition(copy.getPosition());
-	setRotation(copy.getRotation());
-	setLetterSpacing(copy.getLetterSpacing());
-	setLineSpacing(copy.getLineSpacing());
-	setOutlineThickness(copy.getOutlineThickness());
-	setOutlineColor(copy.getOutlineColor());
-	setScale(copy.getScale());
-	setStyle(copy.getStyle());
-
-	//Set Origin Of Text
-	Custom_SetOrigin(copy.Custom_GetOrigin());
-}
-
 void Drawables::D_Text::setD_Text(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& pos, sf::Uint8 charSize, float rotation, Origin oPos)
 {
 	setFont(font);
@@ -63,24 +43,6 @@ void Drawables::D_Text::setD_Text(std::string const& txt, sf::Font const& font, 
 
 	//Set Origin Of Text
 	Custom_SetOrigin(oPos);
-}
-
-void Drawables::D_Text::setD_Text(D_Text const& copy) {
-	setFont(*copy.getFont());
-	setString(copy.getString());
-	setCharacterSize(copy.getCharacterSize());
-	setFillColor(copy.getFillColor());
-	setPosition(copy.getPosition());
-	setRotation(copy.getRotation());
-	setLetterSpacing(copy.getLetterSpacing());
-	setLineSpacing(copy.getLineSpacing());
-	setOutlineThickness(copy.getOutlineThickness());
-	setOutlineColor(copy.getOutlineColor());
-	setScale(copy.getScale());
-	setStyle(copy.getStyle());
-
-	//Set Origin Of Text
-	Custom_SetOrigin(copy.Custom_GetOrigin());
 }
 
 void Drawables::D_Text::Custom_OffsetToCenter() {
@@ -207,19 +169,6 @@ Drawables::D_RoundedRectangle::D_RoundedRectangle(sf::Color const& color, sf::Ve
 	constructRoundedRect(color, size, pos, cornerRounding, rotation, oPos);
 }
 
-Drawables::D_RoundedRectangle::D_RoundedRectangle(D_RoundedRectangle const& copy)
-	: cornerRounding{ copy.getCornerRounding() }, D_Base<sf::ConvexShape>()
-{
-	//Construct Rounded Rect
-	constructRoundedRect(copy.getFillColor(), copy.getSize(), copy.getPosition(), cornerRounding, copy.getRotation(), copy.Custom_GetOrigin());
-
-	setOutlineColor(copy.getOutlineColor());
-	setOutlineThickness(copy.getOutlineThickness());
-	setScale(copy.getScale());
-	setTexture(copy.getTexture());
-	setTextureRect(copy.getTextureRect());
-}
-
 void Drawables::D_RoundedRectangle::setD_RoundedRectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Origin oPos)
 {
 	//Init Corner Rounding
@@ -227,22 +176,6 @@ void Drawables::D_RoundedRectangle::setD_RoundedRectangle(sf::Color const& color
 
 	//Construct Rounded Rect
 	constructRoundedRect(color, size, pos, cornerRounding, rotation, oPos);
-}
-
-void Drawables::D_RoundedRectangle::setD_RoundedRectangle(D_RoundedRectangle const& copy)
-{
-	//Init Corner Rounding
-	cornerRounding = copy.getCornerRounding();
-
-	//Construct Rounded Rect
-	constructRoundedRect(copy.getFillColor(), copy.getSize(), copy.getPosition(), cornerRounding, copy.getRotation(), copy.Custom_GetOrigin());
-
-	//Copy Components
-	setOutlineColor(copy.getOutlineColor());
-	setOutlineThickness(copy.getOutlineThickness());
-	setScale(copy.getScale());
-	setTexture(copy.getTexture());
-	setTextureRect(copy.getTextureRect());
 }
 
 void Drawables::D_RoundedRectangle::constructRoundedRect(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Origin oPos) {
@@ -451,22 +384,6 @@ Drawables::D_Rectangle::D_Rectangle(sf::Color const& color, sf::Vector2f const& 
 	Custom_SetOrigin(oPos);
 }
 
-Drawables::D_Rectangle::D_Rectangle(D_Rectangle const& copy) {
-	//Set Drawables Components
-	setFillColor(copy.getFillColor());
-	setSize(copy.getSize());
-	setPosition(copy.getPosition());
-	setRotation(copy.getRotation());
-	setOutlineColor(copy.getOutlineColor());
-	setOutlineThickness(copy.getOutlineThickness());
-	setScale(copy.getScale());
-	setTexture(copy.getTexture());
-	setTextureRect(copy.getTextureRect());
-
-	//Set Origin
-	Custom_SetOrigin(copy.Custom_GetOrigin());
-}
-
 void Drawables::D_Rectangle::setD_Rectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, Origin oPos)
 {
 	//Set Drawables Components
@@ -479,22 +396,6 @@ void Drawables::D_Rectangle::setD_Rectangle(sf::Color const& color, sf::Vector2f
 	Custom_SetOrigin(oPos);
 }
 
-void Drawables::D_Rectangle::setD_Rectangle(D_Rectangle const& copy) {
-	//Set Drawables Components
-	setFillColor(copy.getFillColor());
-	setSize(copy.getSize());
-	setPosition(copy.getPosition());
-	setRotation(copy.getRotation());
-	setOutlineColor(copy.getOutlineColor());
-	setOutlineThickness(copy.getOutlineThickness());
-	setScale(copy.getScale());
-	setTexture(copy.getTexture());
-	setTextureRect(copy.getTextureRect());
-
-	//Set Origin
-	Custom_SetOrigin(copy.Custom_GetOrigin());
-}
-
 void Drawables::D_Rectangle::Custom_Draw() const {
 	exEvents->window.draw(*this);
 }
@@ -503,7 +404,7 @@ std::string Drawables::D_Rectangle::serialize() const {
 	std::ostringstream oss;
 
 	//Output Stream From String
-	oss << getFillColor().r << " " << getFillColor().g << " " << getFillColor().b << " " << getFillColor().a << " "
+	oss << D_Base<sf::RectangleShape>::serialize() << " " << getFillColor().r << " " << getFillColor().g << " " << getFillColor().b << " " << getFillColor().a << " "
 		<< getSize().x << " " << getSize().y << " " << getPosition().x << " " << getPosition().y << " "
 		<< getRotation() << " " << static_cast<int>(Custom_GetOrigin()) << " "
 		<< getOutlineColor().r << " " << getOutlineColor().g << " " << getOutlineColor().b << " " << getOutlineColor().a << " "
@@ -527,7 +428,7 @@ void Drawables::D_Rectangle::deserialize(std::string const& data) {
 	sf::Vector2f scale;
 
 	//Input Stream From String
-	iss >> color.r >> color.g >> color.b >> color.a
+	D_Base<sf::RectangleShape>::deserialize(iss) >> color.r >> color.g >> color.b >> color.a
 		>> size.x >> size.y >> pos.x  >> pos.y >> rotation >> oPos
 		>> outlinecolor.r >> outlinecolor.g >> outlinecolor.b >> outlinecolor.a
 		>> outlinethickness >> scale.x >> scale.y;
@@ -558,7 +459,7 @@ std::istringstream& Drawables::D_Rectangle::deserialize(std::istringstream& stre
 	sf::Vector2f scale;
 
 	//Input Stream From String
-	stream >> color.r >> color.g >> color.b >> color.a
+	D_Base<sf::RectangleShape>::deserialize(stream) >> color.r >> color.g >> color.b >> color.a
 		>> size.x >> size.y >> pos.x >> pos.y >> rotation >> oPos
 		>> outlinecolor.r >> outlinecolor.g >> outlinecolor.b >> outlinecolor.a
 		>> outlinethickness >> scale.x >> scale.y;
@@ -595,23 +496,6 @@ Drawables::D_Circle::D_Circle(sf::Color const& color, float radius, sf::Vector2f
 	Custom_SetOrigin(oPos);
 }
 
-Drawables::D_Circle::D_Circle(D_Circle const& copy) {
-	//Set Drawables Components
-	setRadius(copy.getRadius());
-	setPosition(copy.getPosition());
-	setRotation(copy.getRotation());
-	setFillColor(copy.getFillColor());
-	setPointCount(copy.getPointCount());
-	setOutlineColor(copy.getOutlineColor());
-	setOutlineThickness(copy.getOutlineThickness());
-	setScale(copy.getScale());
-	setTexture(copy.getTexture());
-	setTextureRect(copy.getTextureRect());
-
-	//Set Origin
-	Custom_SetOrigin(copy.Custom_GetOrigin());
-}
-
 void Drawables::D_Circle::setD_Circle(sf::Color const& color, float radius, sf::Vector2f const& pos, float rotation, Origin oPos)
 {
 	//Set Drawables Components
@@ -624,23 +508,6 @@ void Drawables::D_Circle::setD_Circle(sf::Color const& color, float radius, sf::
 	Custom_SetOrigin(oPos);
 }
 
-void Drawables::D_Circle::setD_Circle(D_Circle const& copy) {
-	//Set Drawables Components
-	setFillColor(copy.getFillColor());
-	setRadius(copy.getRadius());
-	setPosition(copy.getPosition());
-	setRotation(copy.getRotation());
-	setPointCount(copy.getPointCount());
-	setOutlineColor(copy.getOutlineColor());
-	setOutlineThickness(copy.getOutlineThickness());
-	setScale(copy.getScale());
-	setTexture(copy.getTexture());
-	setTextureRect(copy.getTextureRect());
-
-	//Set Origin
-	Custom_SetOrigin(copy.Custom_GetOrigin());
-}
-
 void Drawables::D_Circle::Custom_Draw() const {
 	exEvents->window.draw(*this);
 }
@@ -649,7 +516,7 @@ std::string Drawables::D_Circle::serialize() const {
 	std::ostringstream oss;
 
 	//Output Stream From String
-	oss << getFillColor().r << " " << getFillColor().g << " " << getFillColor().b << " " << getFillColor().a << " "
+	oss << D_Base<sf::CircleShape>::serialize() << " " << getFillColor().r << " " << getFillColor().g << " " << getFillColor().b << " " << getFillColor().a << " "
 		<< getRadius() << " " << getPosition().x << " " << getPosition().y << " " << getRotation() << " " 
 		<< getPointCount() << " " << static_cast<int>(Custom_GetOrigin()) << " "
 		<< getOutlineColor().r << " " << getOutlineColor().g << " " << getOutlineColor().b << " " << getOutlineColor().a << " "
@@ -673,7 +540,7 @@ void Drawables::D_Circle::deserialize(std::string const& data) {
 	sf::Vector2f scale;
 
 	//Input Stream From String
-	iss >> color.r >> color.g >> color.b >> color.a
+	D_Base<sf::CircleShape>::deserialize(iss) >> color.r >> color.g >> color.b >> color.a
 		>> radius >> pos.x >> pos.y >> rotation >> pointcount >> oPos
 		>> outlinecolor.r >> outlinecolor.g >> outlinecolor.b >> outlinecolor.a
 		>> outlinethickness >> scale.x >> scale.y;
@@ -705,7 +572,7 @@ std::istringstream& Drawables::D_Circle::deserialize(std::istringstream& stream)
 	sf::Vector2f scale;
 
 	//Input Stream From String
-	stream >> color.r >> color.g >> color.b >> color.a
+	D_Base<sf::CircleShape>::deserialize(stream) >> color.r >> color.g >> color.b >> color.a
 		>> radius >> pos.x >> pos.y >> rotation >> pointcount >> oPos
 		>> outlinecolor.r >> outlinecolor.g >> outlinecolor.b >> outlinecolor.a
 		>> outlinethickness >> scale.x >> scale.y;
@@ -763,16 +630,70 @@ void Drawables::D_Sprite::setD_Sprite(sf::Texture const& tex, sf::IntRect const&
 
 void Drawables::D_Sprite::Custom_Draw() const {
 	exEvents->window.draw(*this);
+
 }
 
 std::string Drawables::D_Sprite::serialize() const {
-	return std::string();
+	std::ostringstream oss;
+
+	//Output Stream From String
+	oss << D_Base<sf::Sprite>::serialize() << " " << getTextureRect().left << " " << getTextureRect().top << " " << getTextureRect().width << " " << getTextureRect().height << " "
+		<< getScale().x << " " << getScale().y << " " << getPosition().x << " " << getPosition().y << " " << getRotation() << " "
+		<< getColor().r << " " << getColor().g << " " << getColor().b << " " << getColor().a << " " << static_cast<int>(Custom_GetOrigin());
+
+	return oss.str();
 }
 
 void Drawables::D_Sprite::deserialize(std::string const& data) {
 	std::istringstream iss(data);
+
+	//Temporary Variables
+	sf::IntRect texrect;
+	sf::Vector2f scale;
+	sf::Vector2f pos;
+	float rotation;
+	sf::Color color;
+	int oPos;
+
+	//Input Stream From String
+	D_Base<sf::Sprite>::deserialize(iss) >> texrect.left >> texrect.top >> texrect.width >> texrect.height
+		>> scale.x >> scale.y >> pos.x >> pos.y >> rotation >> color.r >> color.g >> color.b >> color.a
+		>> oPos;
+
+	//Set Drawables Components
+	setTextureRect(texrect);
+	setScale(scale);
+	setPosition(pos);
+	setRotation(rotation);
+	setColor(color);
+
+	//Set Origin
+	Custom_SetOrigin(static_cast<Origin>(oPos));
 }
 
 std::istringstream& Drawables::D_Sprite::deserialize(std::istringstream& stream) {
+	//Temporary Variables
+	sf::IntRect texrect;
+	sf::Vector2f scale;
+	sf::Vector2f pos;
+	float rotation;
+	sf::Color color;
+	int oPos;
+
+	//Input Stream From String
+	D_Base<sf::Sprite>::deserialize(stream) >> texrect.left >> texrect.top >> texrect.width >> texrect.height
+		>> scale.x >> scale.y >> pos.x >> pos.y >> rotation >> color.r >> color.g >> color.b >> color.a
+		>> oPos;
+
+	//Set Drawables Components
+	setTextureRect(texrect);
+	setScale(scale);
+	setPosition(pos);
+	setRotation(rotation);
+	setColor(color);
+
+	//Set Origin
+	Custom_SetOrigin(static_cast<Origin>(oPos));
+
 	return stream;
 }

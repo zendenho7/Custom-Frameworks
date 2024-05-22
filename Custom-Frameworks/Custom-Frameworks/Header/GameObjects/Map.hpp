@@ -15,7 +15,9 @@ Copyright (c) 2024 Zen Ho
 #include "..\..\Header\Utility\Utils.hpp"
 
 namespace Map {
-
+	// ================================================================================
+	// Class: Cell
+	// ================================================================================
 	class Cell : public Drawables::D_RoundedRectangle {
 	private:
 		//Flag For If Cell Is Selected
@@ -29,11 +31,16 @@ namespace Map {
 
 	public:
 		//Ddefault Cell Constructor
-		Cell() = default;
+		Cell() : b_selected{ false } {}
 
 		//Cell Constructor
 		Cell(sf::Color const& defcolor, sf::Color const& clickedcolor, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f);
-		Cell(Cell const& copy);
+
+		//Default Copy Constructor
+		Cell(Cell const& copy) = default;
+
+		//Default Copy Assignment
+		Cell& operator=(Cell const& copy) = default;
 
 		//Set Cell
 		void setCell(sf::Color const& defcolor, sf::Color const& clickedcolor, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f);
@@ -66,6 +73,9 @@ namespace Map {
 		virtual std::istringstream& deserialize(std::istringstream& stream) override;
 	};
 	
+	// ================================================================================
+	// Class: Grid
+	// ================================================================================
 	class Grid {
 	private:
 

@@ -28,11 +28,11 @@ namespace Interface {
 	// ================================================================================
 	class RectButton {
 	private:
-		//Drawable Rect ( Base Of Button )
-		Drawables::D_RoundedRectangle D_Rect;
+		//Drawable Rect
+		Drawables::D_RoundedRectangle btnBase;
 
 		//Drawable Text
-		Drawables::D_Text D_Text;
+		Drawables::D_Text btnTxt;
 
 		//Hovering Operators
 		bool b_HoverAnimationEnabled;
@@ -52,7 +52,7 @@ namespace Interface {
 	public:
 
 		//Default Constructor
-		RectButton() = default;
+		RectButton() : btnBase(), btnTxt(), b_HoverAnimationEnabled{ false }, b_Hovering{ false }, hoverDuration{ 0.0f }{}
 
 		/// <summary>
 		/// RectButton Constructor
@@ -65,6 +65,24 @@ namespace Interface {
 		/// <param name="oPos">: Origin Of Button</param>
 		/// <param name="hover">: Hovering Enabled(true) or Disabled(false)</param>
 		RectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, float rotation = 0.0f, Drawables::Origin oPos = Drawables::Origin::CENTER, bool hoverAnimation = true);
+
+		//Default Copy Constructor
+		RectButton(RectButton const& copy) = default;
+
+		//Default Copy Assignment
+		RectButton& operator=(RectButton const& copy) = default;
+		
+		/// <summary>
+		/// RectButton Setter
+		/// </summary>
+		/// <param name="color">: Color Of Button</param>
+		/// <param name="size">: Size Of Button</param>
+		/// <param name="pos">: Position Of Button</param>
+		/// <param name="rounding">: Rounding Of Button</param>
+		/// <param name="rotation">: Rotation Of Button</param>
+		/// <param name="oPos">: Origin Of Button</param>
+		/// <param name="hover">: Hovering Enabled(true) or Disabled(false)</param>
+		void setRectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, float rotation = 0.0f, Drawables::Origin oPos = Drawables::Origin::CENTER, bool hoverAnimation = true);
 
 		/// <summary>
 		/// Hover Settings
@@ -83,7 +101,7 @@ namespace Interface {
 		/// <param name="txtBtnRatio">: Ratio Of Button Allocated For Text</param>
 		/// <param name="charSize">: Char Size Of D_Text (Load @ Default Size Of 72 For Higher Resolution ) | Size Can Be Changed By Scaling</param>
 		/// <param name="oPos">: Origin Of Text</param>
-		void initButtonText(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& txtBtnRatio = BTN_TXT_TO_BTN_RATIO, sf::Uint8 charSize = Drawables::DEF_CHAR_SIZE, Drawables::Origin oPos = Drawables::Origin::CENTER);
+		void setRectButtonText(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& txtBtnRatio = BTN_TXT_TO_BTN_RATIO, sf::Uint8 charSize = Drawables::DEF_CHAR_SIZE, Drawables::Origin oPos = Drawables::Origin::CENTER);
 
 		//Set Text To Button Ratio ( Text Will Be Fit Within This Ratio )
 		void setTextToButtonRatio(sf::Vector2f const& ratio);
@@ -138,6 +156,11 @@ namespace Interface {
 
 		//Draw Button Onto Render Target
 		void Custom_Draw() const;
+
+		//Data Serialization & Deserialization
+		virtual std::string serialize() const;
+		virtual void deserialize(std::string const& data);
+		virtual std::istringstream& deserialize(std::istringstream& stream);
 	};
 
 	// ================================================================================
@@ -152,7 +175,7 @@ namespace Interface {
 		UP_RIGHT,
 	};
 
-	enum class DropDownType : sf::Uint8 {
+	enum class DropDownBtnType : sf::Uint8 {
 		HOVER = 0,
 		CLICK
 	};
@@ -168,19 +191,19 @@ namespace Interface {
 	class DropDown {
 	private:
 
-		//Drop Down Booleans
-		bool b_DropDownHidden;
-		bool b_MouseOverDropDown;
-
-		//Type & Style
-		DropDownType buttonType;
-		DropDownAlign alignmentStyle;
-
 		//Button To Show DropDown
 		RectButton dropDownBtn;
 
 		//Drop Down Container
 		Drawables::D_RoundedRectangle dropDownContainer;
+
+		//Drop Down Booleans
+		bool b_DropDownHidden;
+		bool b_MouseOverDropDown;
+
+		//Type & Style
+		DropDownBtnType buttonType;
+		DropDownAlign alignmentStyle;
 
 		//Drop Down Components
 		std::vector<std::string> dropDownButtonsKey;
@@ -188,10 +211,19 @@ namespace Interface {
 
 	public:
 		//Default Constructor
-		DropDown() = default;
+		DropDown() : dropDownBtn(), dropDownContainer(), b_DropDownHidden{ true }, b_MouseOverDropDown{ false }, buttonType{ DropDownBtnType::HOVER }, alignmentStyle{ DropDownAlign::DOWN_CENTER } {}
 
 		//DropDown Constructor
-		DropDown(std::string const& btntxt, sf::Color const& btntxtcolor, sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding = 0, DropDownType type = DropDownType::HOVER, DropDownAlign alignment = DropDownAlign::DOWN_CENTER);
+		DropDown(std::string const& btntxt, sf::Color const& btntxtcolor, sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding = 0, DropDownBtnType type = DropDownBtnType::HOVER, DropDownAlign alignment = DropDownAlign::DOWN_CENTER);
+
+		//Default Copy Constructor
+		DropDown(DropDown const& copy) = default;
+
+		//Default Copy Assignment
+		DropDown& operator=(DropDown const& copy) = default;
+
+		//Set DropDown
+		void setDropDown(std::string const& btntxt, sf::Color const& btntxtcolor, sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding = 0, DropDownBtnType type = DropDownBtnType::HOVER, DropDownAlign alignment = DropDownAlign::DOWN_CENTER);
 
 		//Add Components To DropDown
 		void addButtons(std::string const& identifier, sf::Color const& btnColor, sf::Color const& txtColor, bool usePrimaryFont = true);
@@ -207,6 +239,11 @@ namespace Interface {
 
 		//Draw DropDown
 		void drawDropDown();
+
+		//Data Serialization & Deserialization
+		virtual std::string serialize() const;
+		virtual void deserialize(std::string const& data);
+		virtual std::istringstream& deserialize(std::istringstream& stream);
 	};
 }
 
