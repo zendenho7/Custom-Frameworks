@@ -1,13 +1,20 @@
 # Custom Frameworks On SFML
 Custom Frameworks Experimentation With C++ Using SFML Framework
 
-## Features Implemented:
+## GamePlay:
+- Resizable Grid
+
+## Graphical User Interface:
+- Rounded Rectangle Button
+- DropDown
+- Panel
+
+## Animation:
 - Sprite Sheet Animation
 - Fade Animation
+
+## Others:
 - Drawables ( Derived From sf::Drawable With Custom Functionalities )
-- Rounded Rectangle Button
-- Resizable Grid
-- DropDown
 - Data Serialization & Deserialization ( For Data Storage )
 
 ## Showcase GameStates:
