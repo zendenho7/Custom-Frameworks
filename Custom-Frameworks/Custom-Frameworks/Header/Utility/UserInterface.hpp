@@ -85,7 +85,7 @@ namespace Interface {
 		/// <param name="rotation">: Rotation Of Button</param>
 		/// <param name="oPos">: Origin Of Button</param>
 		/// <param name="hover">: Hovering Enabled(true) or Disabled(false)</param>
-		void setRectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, float rotation = 0.0f, Drawables::Origin oPos = Drawables::Origin::CENTER, bool hoverAnimation = true);
+		void initRectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, float rotation = 0.0f, Drawables::Origin oPos = Drawables::Origin::CENTER, bool hoverAnimation = true);
 
 		/// <summary>
 		/// Hover Settings
@@ -104,7 +104,7 @@ namespace Interface {
 		/// <param name="txtBtnRatio">: Ratio Of Button Allocated For Text</param>
 		/// <param name="charSize">: Char Size Of D_Text (Load @ Default Size Of 72 For Higher Resolution ) | Size Can Be Changed By Scaling</param>
 		/// <param name="oPos">: Origin Of Text</param>
-		void setRectButtonText(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& txtBtnRatio = BTN_TXT_TO_BTN_RATIO, sf::Uint8 charSize = Drawables::DEF_CHAR_SIZE, Drawables::Origin oPos = Drawables::Origin::CENTER);
+		void initRectButtonText(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& txtBtnRatio = BTN_TXT_TO_BTN_RATIO, sf::Uint8 charSize = Drawables::DEF_CHAR_SIZE, Drawables::Origin oPos = Drawables::Origin::CENTER);
 
 		//Set Text To Button Ratio ( Text Will Be Fit Within This Ratio )
 		void setTextToButtonRatio(sf::Vector2f const& ratio);
@@ -114,6 +114,12 @@ namespace Interface {
 
 		//Get Hover Status
 		bool getHoverStatus() const;
+
+		//Set Button Text
+		void setText(std::string const& txt);
+
+		//Get Button Text
+		std::string getText() const;
 
 		//Set Button Position
 		void setPosition(sf::Vector2f const& pos);
@@ -167,7 +173,17 @@ namespace Interface {
 	};
 
 	// ================================================================================
-	// DropDown Enums
+	// Class: DropDown
+	// ================================================================================
+	class Container {
+	private:
+
+	public:
+
+	};
+
+	// ================================================================================
+	// Class: DropDown
 	// ================================================================================
 	enum class DropDownAlign : sf::Uint8 {
 		DOWN_CENTER = 0,
@@ -186,16 +202,14 @@ namespace Interface {
 	enum class DropDownArrangement : sf::Uint8 {
 		VERTICAL = 0,
 		HORIZONTAL
+
 	};
 
-	// ================================================================================
-	// Class: DropDown
-	// ================================================================================
 	class DropDown {
 	private:
 
 		//Button To Show DropDown
-		RectButton dropDownBtn;
+		RectButton triggerButton;
 
 		//Drop Down Container
 		Drawables::D_RoundedRectangle dropDownContainer;
@@ -214,10 +228,10 @@ namespace Interface {
 
 	public:
 		//Default Constructor
-		DropDown() : dropDownBtn(), dropDownContainer(), b_DropDownHidden{ true }, b_MouseOverDropDown{ false }, buttonType{ DropDownBtnType::HOVER }, alignmentStyle{ DropDownAlign::DOWN_CENTER } {}
+		DropDown() : triggerButton(), dropDownContainer(), b_DropDownHidden{ true }, b_MouseOverDropDown{ false }, buttonType{ DropDownBtnType::HOVER }, alignmentStyle{ DropDownAlign::DOWN_CENTER } {}
 
 		//DropDown Constructor
-		DropDown(std::string const& btntxt, sf::Color const& btntxtcolor, sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding = 0, DropDownBtnType type = DropDownBtnType::HOVER, DropDownAlign alignment = DropDownAlign::DOWN_CENTER);
+		DropDown(std::string const& triggerbtntxt, sf::Color const& triggerbtntxtcolor, sf::Color const& triggerbtncolor, sf::Vector2f const& triggerbtnsize, sf::Vector2f const& triggerbtnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding = 0, DropDownBtnType type = DropDownBtnType::HOVER, DropDownAlign alignment = DropDownAlign::DOWN_CENTER);
 
 		//Default Copy Constructor
 		DropDown(DropDown const& copy) = default;
@@ -226,7 +240,7 @@ namespace Interface {
 		DropDown& operator=(DropDown const& copy) = default;
 
 		//Set DropDown
-		void setDropDown(std::string const& btntxt, sf::Color const& btntxtcolor, sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding = 0, DropDownBtnType type = DropDownBtnType::HOVER, DropDownAlign alignment = DropDownAlign::DOWN_CENTER);
+		void initDropDown(std::string const& triggerbtntxt, sf::Color const& triggerbtntxtcolor, sf::Color const& triggerbtncolor, sf::Vector2f const& triggerbtnsize, sf::Vector2f const& triggerbtnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding = 0, DropDownBtnType type = DropDownBtnType::HOVER, DropDownAlign alignment = DropDownAlign::DOWN_CENTER);
 
 		//Add Components To DropDown
 		void addButtons(std::string const& identifier, sf::Color const& btnColor, sf::Color const& txtColor, bool usePrimaryFont = true);
@@ -236,6 +250,12 @@ namespace Interface {
 
 		//Check If Button Is Clicked
 		bool isButtonClicked(std::string const& identifier);
+
+		//Set Button Txt
+		void setButtonText(std::string const& identifier, std::string const& txt);
+
+		//Get Button Txt
+		std::string getButtonText(std::string const& identifier) const;
 
 		//Update DropDown
 		void updateDropDown();

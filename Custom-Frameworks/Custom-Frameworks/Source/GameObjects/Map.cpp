@@ -23,15 +23,15 @@ GitHub: https://github.com/zendenho7
 Map::Cell::Cell(sf::Color const& defcolor, sf::Color const& clickedcolor, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding)
 	: D_RoundedRectangle(defcolor, size, pos, 0.0f, rounding, Drawables::Origin::TOP_LEFT), b_selected{ false }, defColor{ defcolor }, clickedColor{ clickedcolor } {}
 
-void Map::Cell::setCell(sf::Color const& defcolor, sf::Color const& clickedcolor, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding) {
-	setD_RoundedRectangle(defcolor, size, pos, 0.0f, rounding, Drawables::Origin::TOP_LEFT);
+void Map::Cell::initCell(sf::Color const& defcolor, sf::Color const& clickedcolor, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding) {
+	initD_RoundedRectangle(defcolor, size, pos, 0.0f, rounding, Drawables::Origin::TOP_LEFT);
 	b_selected = false;
 	defColor = defcolor;
 	clickedColor = clickedcolor;
 }
 
-void Map::Cell::setCell(Cell const& copy) {
-	setD_RoundedRectangle(copy.defColor, copy.getLocalBounds().getSize(), copy.getPosition(), copy.getRotation(), copy.getCornerRounding(), copy.Custom_GetOrigin());
+void Map::Cell::initCell(Cell const& copy) {
+	initD_RoundedRectangle(copy.defColor, copy.getLocalBounds().getSize(), copy.getPosition(), copy.getRotation(), copy.getCornerRounding(), copy.Custom_GetOrigin());
 	b_selected = false;
 	defColor = copy.defColor;
 	clickedColor = copy.clickedColor;
@@ -158,10 +158,10 @@ Map::Grid::Grid(sf::Vector2<size_t>const& cellcount, sf::Vector2f const& gridPos
 	}
 }
 
-void Map::Grid::setGrid(sf::Vector2<size_t>const& cellcount, sf::Vector2f const& gridPos, sf::Vector2f const& gridborder, sf::Color const& gridColor, sf::Color const& cellColor, sf::Color const& cellClickedColor, sf::Vector2f const& cellSize, float cellgap) {
+void Map::Grid::initGrid(sf::Vector2<size_t>const& cellcount, sf::Vector2f const& gridPos, sf::Vector2f const& gridborder, sf::Color const& gridColor, sf::Color const& cellColor, sf::Color const& cellClickedColor, sf::Vector2f const& cellSize, float cellgap) {
 	cellCount = { std::clamp(cellcount.x, static_cast<size_t>(1), std::numeric_limits<size_t>::max()), std::clamp(cellcount.y, static_cast<size_t>(1), std::numeric_limits<size_t>::max()) };
 	gridSize = { cellSize.x * cellCount.x, cellSize.y * cellCount.y };
-	gridContainer.setD_RoundedRectangle(gridColor, gridSize, gridPos);
+	gridContainer.initD_RoundedRectangle(gridColor, gridSize, gridPos);
 	gridBorder = gridborder;
 	cellGap = cellgap;
 	
@@ -192,21 +192,13 @@ void Map::Grid::setGrid(sf::Vector2<size_t>const& cellcount, sf::Vector2f const&
 	}
 }
 
-Map::Cell& Map::Grid::modifyCell(sf::Vector2<size_t> const& index) {
-	return gridArray[index.y][index.x];
-}
-
-Map::Cell const& Map::Grid::getCell(sf::Vector2<size_t> const& index) const {
-	return gridArray[index.y][index.x];
-}
-
 void Map::Grid::reorganiseGrid() {
 
 	//Calculate New GridSize
 	gridSize = { gridArray[0][0].getLocalBounds().getSize().x * cellCount.x, gridArray[0][0].getLocalBounds().getSize().y * cellCount.y };
 
 	//Set Grid Container
-	gridContainer.setD_RoundedRectangle(gridContainer.getFillColor(), gridSize, gridContainer.getPosition());
+	gridContainer.initD_RoundedRectangle(gridContainer.getFillColor(), gridSize, gridContainer.getPosition());
 
 	//Scale Grid Container For Border
 	gridContainer.setScale(((gridBorder.x * 2) + gridSize.x) / gridSize.x, ((gridBorder.y * 2) + gridSize.y) / gridSize.y);
@@ -233,7 +225,7 @@ void Map::Grid::reorganiseGrid() {
 		for (size_t j{ 0 }; j < cellCount.x; cellPos.x += (gridArray[i][j].getGlobalBounds().getSize().x + cellGap), j++) {
 
 			//Set Fill Color
-			gridArray[i][j].setCell(gridArray[0][0]);
+			gridArray[i][j].initCell(gridArray[0][0]);
 
 			//Offset To GridPosition
 			gridArray[i][j].setPosition(cellPos + offset);
@@ -245,11 +237,11 @@ void Map::Grid::reorganiseGrid() {
 	}
 }
 
-sf::Vector2<size_t> Map::Grid::getCellCount() const {
+sf::Vector2<size_t> Map::Grid::getGridCellCount() const {
 	return { gridArray[0].size(), gridArray.size() };
 }
 
-void Map::Grid::setCellCount(sf::Vector2<size_t> const& cellcount) {
+void Map::Grid::setGridCellCount(sf::Vector2<size_t> const& cellcount) {
 
 	//Clamp Cell Count To Minimum 1
 	cellCount = { std::clamp(cellcount.x, static_cast<size_t>(1), std::numeric_limits<size_t>::max()), std::clamp(cellcount.y, static_cast<size_t>(1), std::numeric_limits<size_t>::max()) };
@@ -258,11 +250,11 @@ void Map::Grid::setCellCount(sf::Vector2<size_t> const& cellcount) {
 	reorganiseGrid();
 }
 
-sf::Vector2f Map::Grid::getCellSize() const {
+sf::Vector2f Map::Grid::getGridCellSize() const {
 	return { gridArray[0][0].getLocalBounds().getSize() };
 }
 
-void Map::Grid::setCellSize(sf::Vector2f const& cellsize) {
+void Map::Grid::setGridCellSize(sf::Vector2f const& cellsize) {
 
 	//Resize Topleft Cell
 	gridArray[0][0].setSize(cellsize);
@@ -285,11 +277,11 @@ void Map::Grid::setGridBorder(sf::Vector2f const& gridborder) {
 	gridContainer.setScale(((gridBorder.x * 2) + gridSize.x) / gridSize.x, ((gridBorder.y * 2) + gridSize.y) / gridSize.y);
 }
 
-float Map::Grid::getCellGap() const {
+float Map::Grid::getGridCellGap() const {
 	return cellGap;
 }
 
-void Map::Grid::setCellGap(float cellgap) {
+void Map::Grid::setGridCellGap(float cellgap) {
 	cellGap = std::clamp(cellgap, 0.0f, std::min(gridArray[0][0].getLocalBounds().getSize().x, gridArray[0][0].getLocalBounds().getSize().y));
 
 	//Reorganise Grid Based On Top Left Cell
@@ -304,11 +296,11 @@ void Map::Grid::setGridRounding(float rounding) {
 	gridContainer.setCornerRounding(rounding);
 }
 
-float Map::Grid::getCellRounding() const {
+float Map::Grid::getGridCellRounding() const {
 	return gridArray[0][0].getCornerRounding();
 }
 
-void Map::Grid::setCellRounding(float rounding) {
+void Map::Grid::setGridCellRounding(float rounding) {
 	for (size_t i{ 0 }; i < cellCount.y; i++) {
 		for (size_t j{ 0 }; j < cellCount.x; j++) {
 			gridArray[i][j].setCornerRounding(rounding);
@@ -324,26 +316,26 @@ void Map::Grid::setGridColor(sf::Color const& color) {
 	gridContainer.setFillColor(color);
 }
 
-sf::Color const& Map::Grid::getCellDefColor() const {
+sf::Color const& Map::Grid::getGridCellDefColor() const {
 	return gridArray[0][0].getDefColor();
 }
 
-sf::Color const& Map::Grid::getCellClickedColor() const {
-	return gridArray[0][0].getClickedColor();
-}
-
-void Map::Grid::setCellDefColor(sf::Color const& color) {
+void Map::Grid::setGridCellDefColor(sf::Color const& color) {
 	for (size_t i{ 0 }; i < cellCount.y; i++) {
 		for (size_t j{ 0 }; j < cellCount.x; j++) {
 			gridArray[i][j].setDefColor(color);
 
-			if(!gridArray[i][j].getCellSelected())
-			gridArray[i][j].setFillColor(color);
+			if (!gridArray[i][j].getCellSelected())
+				gridArray[i][j].setFillColor(color);
 		}
 	}
 }
 
-void Map::Grid::setCellClickedColor(sf::Color const& color) {
+sf::Color const& Map::Grid::getGridCellClickedColor() const {
+	return gridArray[0][0].getClickedColor();
+}
+
+void Map::Grid::setGridCellClickedColor(sf::Color const& color) {
 	for (size_t i{ 0 }; i < cellCount.y; i++) {
 		for (size_t j{ 0 }; j < cellCount.x; j++) {
 			gridArray[i][j].setClickedColor(color);
@@ -352,6 +344,22 @@ void Map::Grid::setCellClickedColor(sf::Color const& color) {
 				gridArray[i][j].setFillColor(color);
 		}
 	}
+}
+
+bool Map::Grid::getCellSelected(size_t x, size_t y) const {
+	return gridArray[y][x].getCellSelected();
+}
+
+void Map::Grid::setCellSelected(size_t x, size_t y, bool selected) {
+	gridArray[y][x].setCellSelected(selected);
+}
+
+sf::Color Map::Grid::getCellColor(size_t x, size_t y) const {
+	return gridArray[y][x].getFillColor();
+}
+
+void Map::Grid::setCellColor(size_t x, size_t y, sf::Color const& color) {
+	gridArray[y][x].setFillColor(color);
 }
 
 void Map::Grid::updateIsGridClicked() {

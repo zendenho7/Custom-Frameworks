@@ -35,7 +35,7 @@ Drawables::D_Text::D_Text(std::string const& txt, sf::Font const& font, sf::Colo
 	Custom_SetOrigin(oPos);
 }
 
-void Drawables::D_Text::setD_Text(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& pos, sf::Uint8 charSize, float rotation, Origin oPos)
+void Drawables::D_Text::initD_Text(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& pos, sf::Uint8 charSize, float rotation, Origin oPos)
 {
 	setFont(font);
 	setString(txt);
@@ -172,7 +172,7 @@ Drawables::D_RoundedRectangle::D_RoundedRectangle(sf::Color const& color, sf::Ve
 	constructRoundedRect(color, size, pos, cornerRounding, rotation, oPos);
 }
 
-void Drawables::D_RoundedRectangle::setD_RoundedRectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Origin oPos)
+void Drawables::D_RoundedRectangle::initD_RoundedRectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Origin oPos)
 {
 	//Init Corner Rounding
 	cornerRounding = rounding;
@@ -217,8 +217,8 @@ void Drawables::D_RoundedRectangle::setPoints() {
 	//Check For Rounding
 	if (cornerRounding > 0.0f) {
 		//If Rounding Reserve Number Of Edges * Points Per Edge For Rounding
-		setPointCount(static_cast<size_t>(RECT_EDGES * ROUNDING_POINTS_PER_EDGE));
-		rectTotalPoints.reserve(static_cast<size_t>(RECT_EDGES * ROUNDING_POINTS_PER_EDGE));
+		setPointCount(RECT_EDGES * ROUNDING_POINTS_PER_EDGE);
+		rectTotalPoints.reserve(RECT_EDGES * ROUNDING_POINTS_PER_EDGE);
 
 		//Calculate Offset From Rect Edegs Angle & Length
 		float offsetAngle{ (5.0f / 8.0f) * static_cast<float>(2.0 * M_PI) };
@@ -387,7 +387,7 @@ Drawables::D_Rectangle::D_Rectangle(sf::Color const& color, sf::Vector2f const& 
 	Custom_SetOrigin(oPos);
 }
 
-void Drawables::D_Rectangle::setD_Rectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, Origin oPos)
+void Drawables::D_Rectangle::initD_Rectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, Origin oPos)
 {
 	//Set Drawables Components
 	setFillColor(color);
@@ -499,7 +499,7 @@ Drawables::D_Circle::D_Circle(sf::Color const& color, float radius, sf::Vector2f
 	Custom_SetOrigin(oPos);
 }
 
-void Drawables::D_Circle::setD_Circle(sf::Color const& color, float radius, sf::Vector2f const& pos, float rotation, Origin oPos)
+void Drawables::D_Circle::initD_Circle(sf::Color const& color, float radius, sf::Vector2f const& pos, float rotation, Origin oPos)
 {
 	//Set Drawables Components
 	setFillColor(color);
@@ -616,7 +616,7 @@ Drawables::D_Sprite::D_Sprite(sf::Texture const& tex, sf::IntRect const& spriteP
 	Custom_SetOrigin(oPos);
 }
 
-void Drawables::D_Sprite::setD_Sprite(sf::Texture const& tex, sf::IntRect const& spritePos, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, sf::Uint8 opacity, Origin oPos)
+void Drawables::D_Sprite::initD_Sprite(sf::Texture const& tex, sf::IntRect const& spritePos, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation, sf::Uint8 opacity, Origin oPos)
 {
 	//Set Drawables Components
 	setTexture(tex);

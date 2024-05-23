@@ -48,13 +48,19 @@ namespace Animation {
 
 	protected:
 		//Default Constructor
-		BaseAnimator() : animationsToComplete{ 0 }, completedAnimations{ 0 }, animationStop{ false }, animationFinished{ false }, b_pingpong{ false }, b_reverse{ false }, animationSpeed{ 0.0f } {}
+		BaseAnimator();
+
+		//Base Animator Constructor
+		BaseAnimator(bool pingpong, int animationstocomplete, float animatespeed);
 
 		//Default Copy Constructor
 		BaseAnimator(BaseAnimator const& copy) = default;
 
 		//Remove Copy Assignment
 		BaseAnimator& operator=(BaseAnimator const& copy) = delete;
+
+		//Init Base Animator
+		void initBaseAnimator(bool pingpong, int animationstocomplete, float animatespeed);
 
 	public:
 
@@ -68,7 +74,7 @@ namespace Animation {
 		virtual void restartAnimation();
 
 		//Set Animation Finished
-		void setAnimationFinished();
+		void initSheetAnimatorFinished();
 
 		//Return If Animation Has Stopped
 		bool isAnimationFinished() const;
@@ -80,7 +86,7 @@ namespace Animation {
 		bool getPingPongAnimation() const;
 
 		//Set Animations To Complete Count
-		void setAnimationsToComplete(int count);
+		void initSheetAnimatorsToComplete(int count);
 
 		//Get Animations To Complete Count
 		int getAnimationsToComplete();
@@ -89,10 +95,15 @@ namespace Animation {
 		int getCompletedAnimations() const;
 
 		//Set Speed Of Animation
-		void setAnimationSpeed(float speed);
+		void initSheetAnimatorSpeed(float speed);
 
 		//Get Speed Of Animation
 		float getAnimationSpeed() const;
+
+		//Data Serialization & Deserialization
+		virtual std::string serialize() const;
+		virtual void deserialize(std::string const& data);
+		virtual std::istringstream& deserialize(std::istringstream& stream);
 	};
 
 	// ================================================================================
@@ -127,6 +138,12 @@ namespace Animation {
 		//Default Constructor
 		SheetAnimator() : BaseAnimator(), numSprites{ 0 } {}
 
+		//Default Copy Constructor
+		SheetAnimator(SheetAnimator const& copy) = default;
+
+		//Default Copy Assignment
+		SheetAnimator& operator=(SheetAnimator const& copy) = default;
+
 		/// <summary>
 		/// Constructor For Sprite Sheet Animation
 		/// Note:
@@ -153,7 +170,7 @@ namespace Animation {
 		/// <param name="animatespeed">: Speed Of Animation From Start To End</param>
 		/// <param name="pingpong">: PingPong Animation ( Start To End, End To Start )</param>
 		/// <param name="numOfAnimations">: Number Of Recurring Animations Before Stopping ( 0 = Infinite )</param>
-		void setAnimation(sf::Vector2u const& sheetsize, sf::Vector2i const& spritesize, sf::Vector2u const& startIndex, sf::Vector2u const& endIndex, float animatespeed = ANIMATE_SPEED, bool pingpong = false, int numOfAnimations = 0);
+		void initSheetAnimator(sf::Vector2u const& sheetsize, sf::Vector2i const& spritesize, sf::Vector2u const& startIndex, sf::Vector2u const& endIndex, float animatespeed = ANIMATE_SPEED, bool pingpong = false, int numOfAnimations = 0);
 
 		//Override Restart Animation From Base Animator
 		void restartAnimation() override;
@@ -161,6 +178,11 @@ namespace Animation {
 		//Animte Sprite Sheet Function Call ( If Start == End, Animation Will Go Through The Whole Spritesheet )
 		void animateTexture(sf::Shape& obj);
 		void animateTexture(sf::Sprite& obj);
+
+		//Data Serialization & Deserialization
+		virtual std::string serialize() const;
+		virtual void deserialize(std::string const& data);
+		virtual std::istringstream& deserialize(std::istringstream& stream);
 	};
 
 	// ================================================================================
@@ -180,8 +202,13 @@ namespace Animation {
 
 	public:
 		//Default Constructor
-		FadeAnimator() 
-			: BaseAnimator(), startOpacity{ 0 }, endOpacity{ 255 }, currentOpacity{ 0.0f }, startMoreThanEnd { false } {};
+		FadeAnimator();
+
+		//Default Copy Constructor
+		FadeAnimator(FadeAnimator const& copy) = default;
+
+		//Default Copy Assignment
+		FadeAnimator& operator=(FadeAnimator const& copy) = default;
 
 		/// <summary>
 		/// Constructor For Fade Animation
@@ -191,13 +218,7 @@ namespace Animation {
 		/// <param name="animatespeed">P: Speed Of Animation</param>
 		/// <param name="pingpong">: PingPong Animation</param>
 		/// <param name="numOfAnimations">: Number Of Recurring Animations Before Stopping ( 0 = Infinite )</param>
-		FadeAnimator(sf::Uint8 startingOpacity, sf::Uint8 endingOpacity, float animatespeed = FADE_SPEED, bool pingpong = false, int numOfAnimations = 0)
-			: BaseAnimator(), startOpacity{ startingOpacity }, endOpacity{ endingOpacity }, currentOpacity{ static_cast<float>(startOpacity) }, startMoreThanEnd { startOpacity > endOpacity }
-		{
-			b_pingpong = pingpong;
-			animationsToComplete = numOfAnimations;
-			animationSpeed = animatespeed;
-		}
+		FadeAnimator(sf::Uint8 startingOpacity, sf::Uint8 endingOpacity, float animatespeed = FADE_SPEED, bool pingpong = false, int numOfAnimations = 0);
 
 		/// <summary>
 		/// Fade Animation Setter
@@ -207,15 +228,7 @@ namespace Animation {
 		/// <param name="animatespeed">P: Speed Of Animation</param>
 		/// <param name="pingpong">: PingPong Animation</param>
 		/// <param name="numOfAnimations">: Number Of Recurring Animations Before Stopping ( 0 = Infinite )</param>
-		void setFadeAnimator(sf::Uint8 startingOpacity, sf::Uint8 endingOpacity, float animatespeed = FADE_SPEED, bool pingpong = false , int numOfAnimations = 0) {
-			animationSpeed = animatespeed;
-			b_pingpong = pingpong;
-			animationsToComplete = numOfAnimations;
-			startOpacity = startingOpacity;
-			endingOpacity = endingOpacity;
-			currentOpacity = static_cast<float>(startOpacity);
-			startMoreThanEnd = startOpacity > endOpacity;
-		}
+		void initFadeAnimator(sf::Uint8 startingOpacity, sf::Uint8 endingOpacity, float animatespeed = FADE_SPEED, bool pingpong = false, int numOfAnimations = 0);
 
 		//Fade Drawable
 		template<typename T>
@@ -280,6 +293,11 @@ namespace Animation {
 				}
 			}
 		}
+
+		//Data Serialization & Deserialization
+		virtual std::string serialize() const;
+		virtual void deserialize(std::string const& data);
+		virtual std::istringstream& deserialize(std::istringstream& stream);
 	};
 }
 

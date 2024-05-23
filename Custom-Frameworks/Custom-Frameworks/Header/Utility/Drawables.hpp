@@ -215,7 +215,7 @@ namespace Drawables {
 		/// <param name="charSize">: Char Size Of D_Text (Load @ Default Size Of 72 For Higher Resolution) | Size Can Be Changed By Scaling</param>
 		/// <param name="rotation">: Rotation Of D_Text</param>
 		/// <param name="oPos">: Origin Of D_Text</param>
-		void setD_Text(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& pos, sf::Uint8 charSize = DEF_CHAR_SIZE, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+		void initD_Text(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& pos, sf::Uint8 charSize = DEF_CHAR_SIZE, float rotation = 0.0f, Origin oPos = Origin::CENTER);
 
 		// To Be Called Only After Setting Position
 		void Custom_OffsetToCenter();
@@ -238,8 +238,8 @@ namespace Drawables {
 	class D_RoundedRectangle : public D_Base<sf::ConvexShape> {
 	private:
 		//Rounded Rect Constants
-		const int	RECT_EDGES{ 4 };
-		const int	ROUNDING_POINTS_PER_EDGE{ 10 };
+		const size_t	RECT_EDGES{ 4 };
+		const size_t	ROUNDING_POINTS_PER_EDGE{ 10 };
 
 		//Vertex Manager
 		sf::Vector2f rectVertex[4];
@@ -284,7 +284,7 @@ namespace Drawables {
 		/// <param name="rounding">: Rounding Size Of Rounded Rectangle</param>
 		/// <param name="rotation">: Rotation Of Rounded Rectangle</param>
 		/// <param name="oPos">: Origin Of Rounded Rectangle</param>
-		void setD_RoundedRectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+		void initD_RoundedRectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f, float rotation = 0.0f, Origin oPos = Origin::CENTER);
 
 		//Get Size
 		sf::Vector2f getSize() const;
@@ -341,7 +341,7 @@ namespace Drawables {
 		/// <param name="pos">: Position Of Rectangle</param>
 		/// <param name="rotation">: Rotation Of Rectangle</param>
 		/// <param name="oPos">: Origin Of Rectangle</param>
-		void setD_Rectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+		void initD_Rectangle(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, Origin oPos = Origin::CENTER);
 
 		//Custom Draw Function
 		virtual void Custom_Draw() const override;
@@ -386,7 +386,7 @@ namespace Drawables {
 		/// <param name="pos">: Position Of Circle</param>
 		/// <param name="rotation">: Rotation Of Circle</param>
 		/// <param name="oPos">: Origin Of Circle</param>
-		void setD_Circle(sf::Color const& color, float radius, sf::Vector2f const& pos, float rotation = 0.0f, Origin oPos = Origin::CENTER);
+		void initD_Circle(sf::Color const& color, float radius, sf::Vector2f const& pos, float rotation = 0.0f, Origin oPos = Origin::CENTER);
 
 		//Custom Draw Function
 		void Custom_Draw() const override;
@@ -435,7 +435,7 @@ namespace Drawables {
 		/// <param name="rotation">: Rotation Of Sprite</param>
 		/// <param name="opacity">: Opacity Of Sprite</param>
 		/// <param name="oPos">: Origin Of Sprite</param>
-		void setD_Sprite(sf::Texture const& tex, sf::IntRect const& spritePos, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, sf::Uint8 opacity = 255, Origin oPos = Origin::CENTER);
+		void initD_Sprite(sf::Texture const& tex, sf::IntRect const& spritePos, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, sf::Uint8 opacity = 255, Origin oPos = Origin::CENTER);
 
 		//Custom Draw Function
 		void Custom_Draw() const override;

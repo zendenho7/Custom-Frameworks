@@ -19,8 +19,21 @@ GitHub: https://github.com/zendenho7
 // ================================================================================
 // Class: Base Animator
 // ================================================================================
+Animation::BaseAnimator::BaseAnimator()
+	: animationsToComplete{ 0 }, completedAnimations{ 0 }, animationStop{ false },
+	animationFinished{ false }, b_pingpong{ false }, b_reverse{ false }, animationSpeed{ 0.0f } 
+{}
 
-//Private Functions
+Animation::BaseAnimator::BaseAnimator(bool pingpong, int animationstocomplete, float animatespeed)
+	: animationsToComplete{ animationstocomplete }, completedAnimations{ 0 }, animationStop{ false },
+	animationFinished{ false }, b_pingpong{ pingpong }, b_reverse{ false }, animationSpeed{ animatespeed } 
+{}
+
+void Animation::BaseAnimator::initBaseAnimator(bool pingpong, int animationstocomplete, float animatespeed) {
+	b_pingpong = pingpong;
+	animationsToComplete = animationstocomplete;
+	animationSpeed = animatespeed;
+}
 
 void Animation::BaseAnimator::animationEndChecker() {
 	//Incr Completed Animations
@@ -30,8 +43,6 @@ void Animation::BaseAnimator::animationEndChecker() {
 		animationsToComplete = completedAnimations;
 	}
 }
-
-//Public Functions
 
 void Animation::BaseAnimator::stopAnimation() {
 	animationStop = true;
@@ -51,7 +62,7 @@ void Animation::BaseAnimator::restartAnimation() {
 	b_reverse = false;
 }
 
-void Animation::BaseAnimator::setAnimationFinished() {
+void Animation::BaseAnimator::initSheetAnimatorFinished() {
 	animationFinished = true;
 	animationStop = true;
 }
@@ -68,7 +79,7 @@ bool Animation::BaseAnimator::getPingPongAnimation() const {
 	return b_pingpong;
 }
 
-void Animation::BaseAnimator::setAnimationsToComplete(int count) {
+void Animation::BaseAnimator::initSheetAnimatorsToComplete(int count) {
 	animationsToComplete = count;
 }
 
@@ -80,7 +91,7 @@ int Animation::BaseAnimator::getCompletedAnimations() const {
 	return completedAnimations;
 }
 
-void Animation::BaseAnimator::setAnimationSpeed(float speed) {
+void Animation::BaseAnimator::initSheetAnimatorSpeed(float speed) {
 	animationSpeed = speed;
 }
 
@@ -88,11 +99,35 @@ float Animation::BaseAnimator::getAnimationSpeed() const {
 	return animationSpeed;
 }
 
+std::string Animation::BaseAnimator::serialize() const {
+	std::ostringstream oss;
+
+	//Output Stream From String
+	oss << animationsToComplete << " " << completedAnimations << " " << animationStop << " "
+		<< animationFinished << " " << b_pingpong << " " << b_reverse << " " << animationSpeed;
+
+	return oss.str();
+}
+
+void Animation::BaseAnimator::deserialize(std::string const& data) {
+	std::istringstream iss(data);
+
+	//Output Stream From String
+	iss >> animationsToComplete >> completedAnimations >> animationStop
+		>> animationFinished >> b_pingpong >> b_reverse >> animationSpeed;
+}
+
+std::istringstream& Animation::BaseAnimator::deserialize(std::istringstream& stream) {
+	//Output Stream From String
+	stream >> animationsToComplete >> completedAnimations >> animationStop
+		>> animationFinished >> b_pingpong >> b_reverse >> animationSpeed;
+
+	return stream;
+}
+
 // ================================================================================
 // Class: Sprite Sheet Animator
 // ================================================================================
-
-//Private Functions
 
 void Animation::SheetAnimator::iterateForward() {
 	//Iterate Sprites Forward
@@ -150,8 +185,6 @@ void Animation::SheetAnimator::numSpritesToAnimate(sf::Vector2u const& startInde
 	}
 }
 
-//Public Functions
-
 Animation::SheetAnimator::SheetAnimator(sf::Vector2u const& sheetsize, sf::Vector2i const& spritesize, sf::Vector2u const& startIndex, sf::Vector2u const& endIndex, float animatespeed, bool pingpong, int numOfAnimations)
 	:	BaseAnimator(),sheetSize{ sheetsize }, spriteSize{ spritesize }, numSprites{ 0 }, timer(),
 		startSprite{ startIndex.x * spriteSize.x, startIndex.y * spriteSize.y }, endSprite{ endIndex.x * spriteSize.x, endIndex.y * spriteSize.y }, currSprite{ startSprite } 
@@ -169,7 +202,7 @@ Animation::SheetAnimator::SheetAnimator(sf::Vector2u const& sheetsize, sf::Vecto
 	numSpritesToAnimate(startIndex, endIndex);
 }
 
-void Animation::SheetAnimator::setAnimation(sf::Vector2u const& sheetsize, sf::Vector2i const& spritesize, sf::Vector2u const& startIndex, sf::Vector2u const& endIndex, float animatespeed, bool pingpong, int numOfAnimations) {
+void Animation::SheetAnimator::initSheetAnimator(sf::Vector2u const& sheetsize, sf::Vector2i const& spritesize, sf::Vector2u const& startIndex, sf::Vector2u const& endIndex, float animatespeed, bool pingpong, int numOfAnimations) {
 	//Assert Index Out Of Range
 	assert((startIndex.x < (sheetSize.x / spriteSize.x) && startIndex.y < (sheetSize.y / spriteSize.y)) && "Start Index Out Of Range!");
 	assert((endIndex.x < (sheetSize.x / spriteSize.x) && endIndex.y < (sheetSize.y / spriteSize.y)) && "End Index Out Of Range!");
@@ -286,4 +319,81 @@ void Animation::SheetAnimator::animateTexture(sf::Sprite& obj) {
 			b_reverse = false;
 		}
 	}
+}
+
+std::string Animation::SheetAnimator::serialize() const {
+	std::ostringstream oss;
+
+	//Output Stream From String
+	oss << BaseAnimator::serialize() << " " << sheetSize.x << " " << sheetSize.y << " "
+		<< spriteSize.x << " " << spriteSize.y << " " << numSprites << " "
+		<< startSprite.x << " " << startSprite.y << " " << endSprite.x << " " << endSprite.y << " "
+		<< currSprite.x << " " << currSprite.y;
+
+	return oss.str();
+}
+
+void Animation::SheetAnimator::deserialize(std::string const& data) {
+	std::istringstream iss(data);
+
+	//Output Stream From String
+	BaseAnimator::deserialize(iss) >> sheetSize.x >> sheetSize.y
+		>> spriteSize.x >> spriteSize.y >> numSprites
+		>> startSprite.x >> startSprite.y >> endSprite.x >> endSprite.y
+		>> currSprite.x >> currSprite.y;
+}
+
+std::istringstream& Animation::SheetAnimator::deserialize(std::istringstream& stream) {
+	//Output Stream From String
+	BaseAnimator::deserialize(stream) >> sheetSize.x >> sheetSize.y
+		>> spriteSize.x >> spriteSize.y >> numSprites
+		>> startSprite.x >> startSprite.y >> endSprite.x >> endSprite.y
+		>> currSprite.x >> currSprite.y;
+
+	return stream;
+}
+
+// ================================================================================
+// Class: Fade Animator
+// ================================================================================
+
+Animation::FadeAnimator::FadeAnimator()
+	: BaseAnimator(), startOpacity{ 0 }, endOpacity{ 255 }, currentOpacity{ 0.0f }, startMoreThanEnd{ false } 
+{}
+
+Animation::FadeAnimator::FadeAnimator(sf::Uint8 startingOpacity, sf::Uint8 endingOpacity, float animatespeed, bool pingpong, int numOfAnimations)
+	: BaseAnimator(pingpong, numOfAnimations, animatespeed), startOpacity{ startingOpacity }, endOpacity{ endingOpacity }, currentOpacity{ static_cast<float>(startOpacity) }, startMoreThanEnd{ startOpacity > endOpacity }
+{}
+
+void Animation::FadeAnimator::initFadeAnimator(sf::Uint8 startingOpacity, sf::Uint8 endingOpacity, float animatespeed, bool pingpong, int numOfAnimations) {
+	animationSpeed = animatespeed;
+	b_pingpong = pingpong;
+	animationsToComplete = numOfAnimations;
+	startOpacity = startingOpacity;
+	endingOpacity = endingOpacity;
+	currentOpacity = static_cast<float>(startOpacity);
+	startMoreThanEnd = startOpacity > endOpacity;
+}
+
+std::string Animation::FadeAnimator::serialize() const {
+	std::ostringstream oss;
+
+	//Output Stream From String
+	oss << BaseAnimator::serialize() << " " << startOpacity << " " << endOpacity << " " << currentOpacity << " " << startMoreThanEnd;
+
+	return oss.str();
+}
+
+void Animation::FadeAnimator::deserialize(std::string const& data) {
+	std::istringstream iss(data);
+
+	//Output Stream From String
+	BaseAnimator::deserialize(iss) >> startOpacity >> endOpacity >> currentOpacity >> startMoreThanEnd;
+}
+
+std::istringstream& Animation::FadeAnimator::deserialize(std::istringstream& stream) {
+	//Output Stream From String
+	BaseAnimator::deserialize(stream) >> startOpacity >> endOpacity >> currentOpacity >> startMoreThanEnd;
+
+	return stream;
 }

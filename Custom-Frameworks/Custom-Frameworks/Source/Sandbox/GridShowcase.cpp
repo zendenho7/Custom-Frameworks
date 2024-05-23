@@ -40,11 +40,11 @@ void GridSC::State::Init() {
 
 	//Init Next Data Button
 	nextData = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(((GOLGrid->getGridSize().x / 2) + (150.0f / 2) + 10.0f), 0.0f), 15.0f, 0.0f);
-	nextData->setRectButtonText("NEXT", exAssets->getPrimaryFont(), sf::Color::Black);
+	nextData->initRectButtonText("NEXT", exAssets->getPrimaryFont(), sf::Color::Black);
 
 	//Init Prev Data Button
 	prevData = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(100.0f, 50.0f), exEvents->windowCenter + sf::Vector2f(-((GOLGrid->getGridSize().x / 2) + (150.0f / 2) + 10.0f), 0.0f), 15.0f, 0.0f);
-	prevData->setRectButtonText("PREV", exAssets->getPrimaryFont(), sf::Color::Black);
+	prevData->initRectButtonText("PREV", exAssets->getPrimaryFont(), sf::Color::Black);
 
 	//GOL Header Init
 	GOLHeader = std::make_unique<Drawables::D_Text>("GAME OF LIME SIMULATION | EMPTY GRID", exAssets->getPrimaryFont(), sf::Color::Black, exEvents->windowCenter + sf::Vector2f(0.0f, -350.0f));
@@ -62,11 +62,11 @@ void GridSC::State::Init() {
 	exTime->setDisplayPos(sf::Vector2f(0.0f, 0.0f));
 
 	//Resize Boolean Array
-	selectedArray.resize(GOLGrid->getCellCount().y);
-	for (size_t i = 0; i < GOLGrid->getCellCount().y; i++) {
-		selectedArray[i].resize(GOLGrid->getCellCount().x);
-		for (size_t j = 0; j < GOLGrid->getCellCount().x; j++) {
-			selectedArray[i][j] = GOLGrid->getCell({ j, i }).getCellSelected();
+	selectedArray.resize(GOLGrid->getGridCellCount().y);
+	for (size_t i = 0; i < GOLGrid->getGridCellCount().y; i++) {
+		selectedArray[i].resize(GOLGrid->getGridCellCount().x);
+		for (size_t j = 0; j < GOLGrid->getGridCellCount().x; j++) {
+			selectedArray[i][j] = GOLGrid->getCellSelected(j, i);
 		}
 	}
 
@@ -211,9 +211,9 @@ void GridSC::State::Unload() {
 void GridSC::State::GOLUpdateLogic() {
 
 	//Set Boolean Buffer Grid
-	for (size_t i = 0; i < GOLGrid->getCellCount().y; i++) {
-		for (size_t j = 0; j < GOLGrid->getCellCount().x; j++) {
-			selectedArray[i][j] = GOLGrid->getCell({ j, i }).getCellSelected();
+	for (size_t i = 0; i < GOLGrid->getGridCellCount().y; i++) {
+		for (size_t j = 0; j < GOLGrid->getGridCellCount().x; j++) {
+			selectedArray[i][j] = GOLGrid->getCellSelected(j, i);
 		}
 	}
 
@@ -227,7 +227,7 @@ void GridSC::State::GOLUpdateLogic() {
 			//Check Cell Neighbours
 			for (int k = static_cast<int>(i - 1); k <= static_cast<int>(i + 1); k++) {
 				for (int m = static_cast<int>(j - 1); m <= static_cast<int>(j + 1); m++) {
-					if ((k == i && m == j) || k >= GOLGrid->getCellCount().y || m >= GOLGrid->getCellCount().x || k < 0 || m < 0)
+					if ((k == i && m == j) || k >= GOLGrid->getGridCellCount().y || m >= GOLGrid->getGridCellCount().x || k < 0 || m < 0)
 						continue;
 
 					//Increment Alive Count
@@ -240,19 +240,18 @@ void GridSC::State::GOLUpdateLogic() {
 			/*Decide If Cell Is Alive Or Dead*/
 			if (selectedArray[i][j]) {
 				if ((aliveCount == 2) || (aliveCount == 3)) {
-					GOLGrid->modifyCell({ j, i }).setCellSelected(true);
+					GOLGrid->setCellSelected( j, i ,true);
 				}
 				else {
-					GOLGrid->modifyCell({ j, i }).setCellSelected(false);
+					GOLGrid->setCellSelected(j, i, false);
 				}
 			}
 			else {
 				if (aliveCount == 3) {
-					GOLGrid->modifyCell({ j, i }).setCellSelected(true);
+					GOLGrid->setCellSelected(j, i, true);
 				}
 				else {
-					GOLGrid->modifyCell({ j, i }).setCellSelected(false);
-
+					GOLGrid->setCellSelected(j, i, false);
 				}
 			}
 		}

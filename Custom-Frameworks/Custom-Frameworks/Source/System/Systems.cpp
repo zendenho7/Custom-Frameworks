@@ -237,7 +237,7 @@ void Systems::EventHandler::eventsUpdate() {
 // ================================================================================
 void Systems::TimeHandler::setDisplay(sf::Font const& font, sf::Color const& color, Drawables::Origin oPos) {
     //FPS Display
-    fpsDisplay.setD_Text(std::to_string(frameRate), font, color, sf::Vector2f(0.0f, 0.0f), Drawables::DEF_CHAR_SIZE, 0.0f, oPos);
+    fpsDisplay.initD_Text(std::to_string(frameRate), font, color, sf::Vector2f(0.0f, 0.0f), Drawables::DEF_CHAR_SIZE, 0.0f, oPos);
     fpsDisplay.setScale(0.4f, 0.4f);
     fpsDisplay.Custom_SetFixedScale();
 
@@ -245,7 +245,7 @@ void Systems::TimeHandler::setDisplay(sf::Font const& font, sf::Color const& col
         fpsDisplay.Custom_OffsetToCenter();
 
     //DeltaTime Display
-    deltaTimeDisplay.setD_Text(std::to_string(deltaTime), font, color, sf::Vector2f(0.0f, 0.0f), Drawables::DEF_CHAR_SIZE, 0.0f, oPos);
+    deltaTimeDisplay.initD_Text(std::to_string(deltaTime), font, color, sf::Vector2f(0.0f, 0.0f), Drawables::DEF_CHAR_SIZE, 0.0f, oPos);
     deltaTimeDisplay.setScale(0.4f, 0.4f);
     deltaTimeDisplay.Custom_SetFixedScale();
 

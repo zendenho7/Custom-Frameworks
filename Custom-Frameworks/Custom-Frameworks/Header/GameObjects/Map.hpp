@@ -45,9 +45,9 @@ namespace Map {
 		//Default Copy Assignment
 		Cell& operator=(Cell const& copy) = default;
 
-		//Set Cell
-		void setCell(sf::Color const& defcolor, sf::Color const& clickedcolor, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f);
-		void setCell(Cell const& copy);
+		//Init Cell
+		void initCell(sf::Color const& defcolor, sf::Color const& clickedcolor, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding = 0.0f);
+		void initCell(Cell const& copy);
 
 		//Is Cell Clicked
 		bool isCellClicked();
@@ -56,16 +56,16 @@ namespace Map {
 		bool getCellSelected() const;
 
 		//Set Selected
-		void setCellSelected(bool seleceted);
+		void setCellSelected(bool selected);
 
 		//Get Default Color
 		sf::Color const& getDefColor() const;
 
-		//Get Clicked Color
-		sf::Color const& getClickedColor() const;
-
 		//Set Def Color
 		void setDefColor(sf::Color const& color);
+
+		//Get Clicked Color
+		sf::Color const& getClickedColor() const;
 
 		//Set Clicked Color
 		void setClickedColor(sf::Color const& color);
@@ -81,7 +81,6 @@ namespace Map {
 	// ================================================================================
 	class Grid {
 	private:
-
 		//Grid Count
 		sf::Vector2<size_t> cellCount;
 
@@ -111,25 +110,19 @@ namespace Map {
 		Grid(sf::Vector2<size_t>const& cellcount, sf::Vector2f const& gridPos, sf::Vector2f const& gridborder, sf::Color const& gridColor, sf::Color const& cellColor, sf::Color const& cellClickedColor, sf::Vector2f const& cellSize, float cellgap);
 
 		//Resize & Position Grid
-		void setGrid(sf::Vector2<size_t>const& cellcount, sf::Vector2f const& gridPos, sf::Vector2f const& gridborder, sf::Color const& gridColor, sf::Color const& cellColor, sf::Color const& cellClickedColor, sf::Vector2f const& cellSize, float cellgap);
-
-		//Modify Cell
-		Cell& modifyCell(sf::Vector2<size_t> const& index);
-
-		//Get Cell
-		Cell const& getCell(sf::Vector2<size_t> const& index) const;
+		void initGrid(sf::Vector2<size_t>const& cellcount, sf::Vector2f const& gridPos, sf::Vector2f const& gridborder, sf::Color const& gridColor, sf::Color const& cellColor, sf::Color const& cellClickedColor, sf::Vector2f const& cellSize, float cellgap);
 
 		//Get Cell Count
-		sf::Vector2<size_t> getCellCount() const;
+		sf::Vector2<size_t> getGridCellCount() const;
 
 		//Set Cell Count
-		void setCellCount(sf::Vector2<size_t> const& cellcount);
+		void setGridCellCount(sf::Vector2<size_t> const& cellcount);
 
 		//Get Cell Size
-		sf::Vector2f getCellSize() const;
+		sf::Vector2f getGridCellSize() const;
 
 		//Set Cell Size
-		void setCellSize(sf::Vector2f const& cellsize);
+		void setGridCellSize(sf::Vector2f const& cellsize);
 
 		//Get Grid Size
 		sf::Vector2f getGridSize() const;
@@ -141,10 +134,10 @@ namespace Map {
 		void setGridBorder(sf::Vector2f const& gridborder);
 
 		//Get Cell Gap
-		float getCellGap() const;
+		float getGridCellGap() const;
 
 		//Set Cell Gap
-		void setCellGap(float cellgap);
+		void setGridCellGap(float cellgap);
 
 		//Get Grid Rounding
 		float getGridRounding() const;
@@ -153,10 +146,10 @@ namespace Map {
 		void setGridRounding(float rounding);
 
 		//Get Grid Rounding
-		float getCellRounding() const;
+		float getGridCellRounding() const;
 
 		//Set Grid Rounding
-		void setCellRounding(float rounding);
+		void setGridCellRounding(float rounding);
 
 		//Get Grid Color
 		sf::Color const& getGridColor() const;
@@ -165,16 +158,28 @@ namespace Map {
 		void setGridColor(sf::Color const& color);
 
 		//Get Cell Default Color
-		sf::Color const& getCellDefColor() const;
+		sf::Color const& getGridCellDefColor() const;
+
+		//Set Cell Def & Clicked Color
+		void setGridCellDefColor(sf::Color const& color);
 
 		//Get Cell Clicked Color
-		sf::Color const& getCellClickedColor() const;
+		sf::Color const& getGridCellClickedColor() const;
 
 		//Set Cell Def & Clicked Color
-		void setCellDefColor(sf::Color const& color);
+		void setGridCellClickedColor(sf::Color const& color);
 
-		//Set Cell Def & Clicked Color
-		void setCellClickedColor(sf::Color const& color);
+		//Get Selected
+		bool getCellSelected(size_t x, size_t y) const;
+
+		//Set Selected
+		void setCellSelected(size_t x, size_t y, bool selected);
+
+		//Get Default Color
+		sf::Color getCellColor(size_t x, size_t y) const;
+
+		//Set Def Color
+		void setCellColor(size_t x, size_t y,sf::Color const& color);
 
 		//Check If Cell Is Clicked
 		void updateIsGridClicked();

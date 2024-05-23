@@ -55,7 +55,7 @@ void SplashScreen::State::Update() {
 
 	//Speed Up Animation
 	if (SFMLFadeAnimator->getCompletedAnimations() == 1) {
-		SFMLFadeAnimator->setAnimationSpeed(1.0f);
+		SFMLFadeAnimator->initSheetAnimatorSpeed(1.0f);
 	}
 
 	//Button To Enter Next Game State

@@ -22,9 +22,9 @@ Interface::RectButton::RectButton(sf::Color const& color, sf::Vector2f const& si
 {
 }
 
-void Interface::RectButton::setRectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Drawables::Origin oPos, bool hoverAnimation)
+void Interface::RectButton::initRectButton(sf::Color const& color, sf::Vector2f const& size, sf::Vector2f const& pos, float rounding, float rotation, Drawables::Origin oPos, bool hoverAnimation)
 {
-	btnBase.setD_RoundedRectangle(color, size, pos, rounding, rotation, oPos);
+	btnBase.initD_RoundedRectangle(color, size, pos, rounding, rotation, oPos);
 	b_HoverAnimationEnabled = hoverAnimation;
 	b_Hovering = false;
 	hoverScale = BTN_HOVER_SCALE;
@@ -113,7 +113,7 @@ void Interface::RectButton::setTextToButtonRatio(sf::Vector2f const& ratio) {
 	rescaleTxt();
 }
 
-void Interface::RectButton::setRectButtonText(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& txtBtnRatio, sf::Uint8 charSize, Drawables::Origin oPos) {
+void Interface::RectButton::initRectButtonText(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& txtBtnRatio, sf::Uint8 charSize, Drawables::Origin oPos) {
 	
 	//Set Txt Ratio
 	textToBtnRatio = txtBtnRatio;
@@ -136,6 +136,15 @@ void Interface::RectButton::setRectButtonText(std::string const& txt, sf::Font c
 
 	//Set Origin Of Rect
 	btnTxt.Custom_SetOrigin(oPos);
+}
+
+void Interface::RectButton::setText(std::string const& txt) {
+	btnTxt.Custom_SetString(txt);
+	rescaleTxt();
+}
+
+std::string Interface::RectButton::getText() const {
+	return btnTxt.getString();
 }
 
 void Interface::RectButton::setPosition(sf::Vector2f const& pos) {
@@ -249,66 +258,66 @@ std::istringstream& Interface::RectButton::deserialize(std::istringstream& strea
 // Class: DropDown
 // ================================================================================
 
-Interface::DropDown::DropDown(std::string const& btntxt, sf::Color const& btntxtcolor, sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding, DropDownBtnType type, DropDownAlign alignment)
-	: dropDownBtn(btncolor, btnsize, btnpos, rounding, 0.0f, Drawables::Origin::CENTER, false), dropDownContainer(dropdowncolor, dropdownsize, sf::Vector2f(0.0f, 0.0f), rounding),
+Interface::DropDown::DropDown(std::string const& triggerbtntxt, sf::Color const& triggerbtntxtcolor, sf::Color const& triggerbtncolor, sf::Vector2f const& triggerbtnsize, sf::Vector2f const& triggerbtnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding, DropDownBtnType type, DropDownAlign alignment)
+	: triggerButton(triggerbtncolor, triggerbtnsize, triggerbtnpos, rounding, 0.0f, Drawables::Origin::CENTER, false), dropDownContainer(dropdowncolor, dropdownsize, sf::Vector2f(0.0f, 0.0f), rounding),
 	b_DropDownHidden{ true }, b_MouseOverDropDown{ false }, alignmentStyle{ alignment }, buttonType{ type }
 {
 	//Init DropDown Button text
-	dropDownBtn.setRectButtonText(btntxt, exAssets->getPrimaryFont(), btntxtcolor);
+	triggerButton.initRectButtonText(triggerbtntxt, exAssets->getPrimaryFont(), triggerbtntxtcolor);
 
 	//Set Position Of DropDown Container
 	switch (alignmentStyle) {
 	case DropDownAlign::DOWN_CENTER:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x, dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(triggerButton.getPosition().x, triggerButton.getPosition().y + (triggerButton.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	case DropDownAlign::DOWN_LEFT:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(triggerButton.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - triggerButton.getGlobalBounds().width) / 2), triggerButton.getPosition().y + (triggerButton.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	case DropDownAlign::DOWN_RIGHT:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(triggerButton.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - triggerButton.getGlobalBounds().width) / 2), triggerButton.getPosition().y + (triggerButton.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	case DropDownAlign::UP_CENTER:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x, dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(triggerButton.getPosition().x, triggerButton.getPosition().y - (triggerButton.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	case DropDownAlign::UP_LEFT:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(triggerButton.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - triggerButton.getGlobalBounds().width) / 2), triggerButton.getPosition().y - (triggerButton.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	case DropDownAlign::UP_RIGHT:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(triggerButton.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - triggerButton.getGlobalBounds().width) / 2), triggerButton.getPosition().y - (triggerButton.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	default:
 		break;
 	}
 }
 
-void Interface::DropDown::setDropDown(std::string const& btntxt, sf::Color const& btntxtcolor, sf::Color const& btncolor, sf::Vector2f const& btnsize, sf::Vector2f const& btnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding, DropDownBtnType type, DropDownAlign alignment)
+void Interface::DropDown::initDropDown(std::string const& triggerbtntxt, sf::Color const& triggerbtntxtcolor, sf::Color const& triggerbtncolor, sf::Vector2f const& triggerbtnsize, sf::Vector2f const& triggerbtnpos, sf::Color const& dropdowncolor, sf::Vector2f const& dropdownsize, float rounding, DropDownBtnType type, DropDownAlign alignment)
 {
 	alignmentStyle = alignment;
 	buttonType = type;
-	dropDownBtn.setRectButton(btncolor, btnsize, btnpos, rounding, 0.0f, Drawables::Origin::CENTER, false);
-	dropDownContainer.setD_RoundedRectangle(dropdowncolor, dropdownsize, sf::Vector2f(0.0f, 0.0f), rounding);
+	triggerButton.initRectButton(triggerbtncolor, triggerbtnsize, triggerbtnpos, rounding, 0.0f, Drawables::Origin::CENTER, false);
+	dropDownContainer.initD_RoundedRectangle(dropdowncolor, dropdownsize, sf::Vector2f(0.0f, 0.0f), rounding);
 	//Init DropDown Button text
-	dropDownBtn.setRectButtonText(btntxt, exAssets->getPrimaryFont(), btntxtcolor);
+	triggerButton.initRectButtonText(triggerbtntxt, exAssets->getPrimaryFont(), triggerbtntxtcolor);
 
 	//Set Position Of DropDown Container
 	switch (alignmentStyle) {
 	case DropDownAlign::DOWN_CENTER:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x, dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(triggerButton.getPosition().x, triggerButton.getPosition().y + (triggerButton.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	case DropDownAlign::DOWN_LEFT:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(triggerButton.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - triggerButton.getGlobalBounds().width) / 2), triggerButton.getPosition().y + (triggerButton.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	case DropDownAlign::DOWN_RIGHT:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y + (dropDownBtn.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(triggerButton.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - triggerButton.getGlobalBounds().width) / 2), triggerButton.getPosition().y + (triggerButton.getGlobalBounds().height / 2) + (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	case DropDownAlign::UP_CENTER:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x, dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(triggerButton.getPosition().x, triggerButton.getPosition().y - (triggerButton.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	case DropDownAlign::UP_LEFT:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(triggerButton.getPosition().x + (std::abs(dropDownContainer.getGlobalBounds().width - triggerButton.getGlobalBounds().width) / 2), triggerButton.getPosition().y - (triggerButton.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	case DropDownAlign::UP_RIGHT:
-		dropDownContainer.setPosition(dropDownBtn.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - dropDownBtn.getGlobalBounds().width) / 2), dropDownBtn.getPosition().y - (dropDownBtn.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
+		dropDownContainer.setPosition(triggerButton.getPosition().x - (std::abs(dropDownContainer.getGlobalBounds().width - triggerButton.getGlobalBounds().width) / 2), triggerButton.getPosition().y - (triggerButton.getGlobalBounds().height / 2) - (dropDownContainer.getGlobalBounds().height / 2));
 		break;
 	default:
 		break;
@@ -318,7 +327,7 @@ void Interface::DropDown::setDropDown(std::string const& btntxt, sf::Color const
 void Interface::DropDown::addButtons(std::string const& identifier, sf::Color const& btnColor, sf::Color const& txtColor, bool usePrimaryFont) {
 	dropDownButtonsKey.emplace_back(identifier);
 	dropDownButtons.emplace(std::piecewise_construct, std::forward_as_tuple(dropDownButtonsKey[dropDownButtonsKey.size() - 1]), std::forward_as_tuple(btnColor, sf::Vector2f(), sf::Vector2f()));
-	dropDownButtons[dropDownButtonsKey[dropDownButtonsKey.size() - 1]].setRectButtonText(dropDownButtonsKey[dropDownButtonsKey.size() - 1], usePrimaryFont ? exAssets->getPrimaryFont() : exAssets->getSecondaryFont(), txtColor);
+	dropDownButtons[dropDownButtonsKey[dropDownButtonsKey.size() - 1]].initRectButtonText(dropDownButtonsKey[dropDownButtonsKey.size() - 1], usePrimaryFont ? exAssets->getPrimaryFont() : exAssets->getSecondaryFont(), txtColor);
 }
 
 void Interface::DropDown::arrangeButtons(sf::Vector2f const& padding, float spaceBetweenButtons, float buttonRounding, DropDownArrangement arrangementStyle) {
@@ -360,6 +369,14 @@ bool Interface::DropDown::isButtonClicked(std::string const& identifier) {
 	return !b_DropDownHidden ? dropDownButtons.at(identifier).isButtonClicked() : false;
 }
 
+void Interface::DropDown::setButtonText(std::string const& identifier, std::string const& txt) {
+	dropDownButtons.at(identifier).setText(txt);
+}
+
+std::string Interface::DropDown::getButtonText(std::string const& identifier) const {
+	return dropDownButtons.at(identifier).getText();
+}
+
 void Interface::DropDown::updateDropDown() {
 
 	if (!b_DropDownHidden) {
@@ -380,10 +397,10 @@ void Interface::DropDown::updateDropDown() {
 	switch (buttonType) {
 	case DropDownBtnType::HOVER:
 		//Update Button
-		dropDownBtn.isButtonClicked();
+		triggerButton.isButtonClicked();
 
 		//Show Or Hide DropDown
-		if (dropDownBtn.getHoverStatus()) {
+		if (triggerButton.getHoverStatus()) {
 			b_DropDownHidden = false;
 		}
 		else {
@@ -393,7 +410,7 @@ void Interface::DropDown::updateDropDown() {
 		}
 		break;
 	case DropDownBtnType::CLICK:
-		if (dropDownBtn.isButtonClicked()) {
+		if (triggerButton.isButtonClicked()) {
 			b_DropDownHidden = !b_DropDownHidden;
 		}
 		break;
@@ -404,7 +421,7 @@ void Interface::DropDown::updateDropDown() {
 
 void Interface::DropDown::drawDropDown() {
 	//Draw DropDown Btn Activator
-	dropDownBtn.Custom_Draw();
+	triggerButton.Custom_Draw();
 
 	//Draw Container & Buttons If DropDown Is Shown
 	if (!b_DropDownHidden) {
@@ -421,7 +438,7 @@ std::string Interface::DropDown::serialize() const {
 	std::ostringstream oss;
 
 	//Output Stream From String
-	oss << dropDownBtn.serialize() << " " << dropDownContainer.serialize() << " "
+	oss << triggerButton.serialize() << " " << dropDownContainer.serialize() << " "
 		<< b_DropDownHidden << " " << b_MouseOverDropDown << " "
 		<< static_cast<int>(buttonType) << " " << static_cast<int>(alignmentStyle) << " ";
 
@@ -440,7 +457,7 @@ void Interface::DropDown::deserialize(std::string const& data) {
 	int alignstyle;
 
 	//Output Stream From String
-	dropDownBtn.deserialize(iss);
+	triggerButton.deserialize(iss);
 	dropDownContainer.deserialize(iss)
 		>> b_DropDownHidden >> b_MouseOverDropDown
 		>> btntype >> alignstyle;
@@ -460,7 +477,7 @@ std::istringstream& Interface::DropDown::deserialize(std::istringstream& stream)
 	int alignstyle;
 
 	//Output Stream From String
-	dropDownBtn.deserialize(stream);
+	triggerButton.deserialize(stream);
 	dropDownContainer.deserialize(stream)
 		>> b_DropDownHidden >> b_MouseOverDropDown
 		>> btntype >> alignstyle;
