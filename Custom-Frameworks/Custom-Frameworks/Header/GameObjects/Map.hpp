@@ -3,7 +3,10 @@
 @project      Custom Framworks
 @author       Zen Ho
 @brief        This is the header file for map objects declarations
-Copyright (c) 2024 Zen Ho
+
+Copyright © 2024, Zen Ho
+Licensed under the MIT License. See LICENSE file in the root directory.
+GitHub: https://github.com/zendenho7
 *****************************************************************************************************************/
 
 #pragma once
@@ -174,7 +177,7 @@ namespace Map {
 		void setCellClickedColor(sf::Color const& color);
 
 		//Check If Cell Is Clicked
-		void checkCellClicked();
+		void updateIsGridClicked();
 
 		//Reset All Cells Within Grid
 		void resetGrid();

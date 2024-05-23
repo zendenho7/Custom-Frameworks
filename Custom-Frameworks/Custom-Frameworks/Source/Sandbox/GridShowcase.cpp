@@ -4,7 +4,9 @@
 @author       Zen Ho
 @brief        This file contains our Grid Showcase Definitions
 
-Copyright (c) 2024 Zen Ho
+Copyright © 2024, Zen Ho
+Licensed under the MIT License. See LICENSE file in the root directory.
+GitHub: https://github.com/zendenho7
 *****************************************************************************************************************/
 
 // ================================================================================
@@ -20,6 +22,12 @@ void GridSC::State::Load() {
 }
 
 void GridSC::State::Init() {
+
+	//Starting BG Color
+	bgColor = sf::Color::Cyan;
+
+	//Simulation Flag
+	b_SimPaused = true;
 
 	//Init GOL Grid
 	GOLGrid = std::make_unique<Map::Grid>(sf::Vector2<size_t>(50, 25), exEvents->windowCenter, sf::Vector2f(15.0f, 15.0f), sf::Color::Transparent, sf::Color::White, sf::Color::Blue, sf::Vector2f(25.0f, 25.0f), 5.0f);
@@ -62,9 +70,6 @@ void GridSC::State::Init() {
 		}
 	}
 
-	//Simulation Flag
-	b_SimPaused = true;
-
 	//Init DropDown
 	helperDropDown = std::make_unique<Interface::DropDown>("TOOLS", sf::Color::White, sf::Color::Black, sf::Vector2f(100.0f, 50.0f), sf::Vector2f(1525.0f, 50.0f), sf::Color::Black, sf::Vector2f(125.0f, 175.0f), 10.0f, Interface::DropDownBtnType::HOVER, Interface::DropDownAlign::DOWN_RIGHT);
 	helperDropDown->addButtons("CLEAR GRID", sf::Color::White, sf::Color::Black);
@@ -106,7 +111,7 @@ void GridSC::State::Update() {
 	//Simulation Paused
 	if (b_SimPaused) {
 		//Check For Cell Click
-		GOLGrid->checkCellClicked();
+		GOLGrid->updateIsGridClicked();
 		GOLStatus->Custom_SetString("SIMULATION PAUSED ( EDITOR MODE )");
 		bgColor = sf::Color::Cyan;
 

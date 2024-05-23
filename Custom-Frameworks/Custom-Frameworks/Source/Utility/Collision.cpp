@@ -4,7 +4,9 @@
 @author       Zen Ho
 @brief        This is the source file for all collision systems definition
 
-Copyright (c) 2024 Zen Ho
+Copyright © 2024, Zen Ho
+Licensed under the MIT License. See LICENSE file in the root directory.
+GitHub: https://github.com/zendenho7
 *****************************************************************************************************************/
 
 // ================================================================================

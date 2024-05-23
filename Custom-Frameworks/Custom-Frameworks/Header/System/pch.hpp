@@ -4,7 +4,9 @@
 @author       Zen Ho
 @brief        This file includes all the external include header file
 
-Copyright (c) 2024 Zen Ho
+Copyright © 2024, Zen Ho
+Licensed under the MIT License. See LICENSE file in the root directory.
+GitHub: https://github.com/zendenho7
 *****************************************************************************************************************/
 
 #pragma once

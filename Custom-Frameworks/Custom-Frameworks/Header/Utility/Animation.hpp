@@ -3,7 +3,10 @@
 @project      Custom Framworks
 @author       Zen Ho
 @brief        This is the header file for Animation classes & object
-Copyright (c) 2024 Zen Ho
+
+Copyright © 2024, Zen Ho
+Licensed under the MIT License. See LICENSE file in the root directory.
+GitHub: https://github.com/zendenho7
 *****************************************************************************************************************/
 
 #pragma once
@@ -43,9 +46,17 @@ namespace Animation {
 		//Check If Animation Ends
 		void animationEndChecker();
 
-	public:
+	protected:
 		//Default Constructor
 		BaseAnimator() : animationsToComplete{ 0 }, completedAnimations{ 0 }, animationStop{ false }, animationFinished{ false }, b_pingpong{ false }, b_reverse{ false }, animationSpeed{ 0.0f } {}
+
+		//Default Copy Constructor
+		BaseAnimator(BaseAnimator const& copy) = default;
+
+		//Remove Copy Assignment
+		BaseAnimator& operator=(BaseAnimator const& copy) = delete;
+
+	public:
 
 		//Stop Animation
 		virtual void stopAnimation();

@@ -3,7 +3,10 @@
 @project      Custom Framworks
 @author       Zen Ho
 @brief        This is the source file for the defintion of user interface classes & objects
-Copyright (c) 2024 Zen Ho
+
+Copyright © 2024, Zen Ho
+Licensed under the MIT License. See LICENSE file in the root directory.
+GitHub: https://github.com/zendenho7
 *****************************************************************************************************************/
 
 #include "..\..\Header\System\pch.hpp"
@@ -354,7 +357,7 @@ void Interface::DropDown::arrangeButtons(sf::Vector2f const& padding, float spac
 }
 
 bool Interface::DropDown::isButtonClicked(std::string const& identifier) {
-	return dropDownButtons.at(identifier).isButtonClicked();
+	return !b_DropDownHidden ? dropDownButtons.at(identifier).isButtonClicked() : false;
 }
 
 void Interface::DropDown::updateDropDown() {

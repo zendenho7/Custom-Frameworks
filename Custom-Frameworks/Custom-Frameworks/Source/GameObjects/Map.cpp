@@ -3,7 +3,10 @@
 @project      Custom Framworks
 @author       Zen Ho
 @brief        This is the source file for Map objects defintions
-Copyright (c) 2024 Zen Ho
+
+Copyright © 2024, Zen Ho
+Licensed under the MIT License. See LICENSE file in the root directory.
+GitHub: https://github.com/zendenho7
 *****************************************************************************************************************/
 
 // ================================================================================
@@ -351,7 +354,7 @@ void Map::Grid::setCellClickedColor(sf::Color const& color) {
 	}
 }
 
-void Map::Grid::checkCellClicked() {
+void Map::Grid::updateIsGridClicked() {
 	//Update Grid
 	for (size_t i = 0; i < gridArray.size(); i++) {
 		for (size_t j = 0; j < gridArray[i].size(); j++) {

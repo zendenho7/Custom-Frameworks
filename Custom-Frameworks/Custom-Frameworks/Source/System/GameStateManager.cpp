@@ -4,7 +4,9 @@
 @author       Zen Ho
 @brief        This file manages all of the different gamestates in this application
 
-Copyright (c) 2024 Zen Ho
+Copyright © 2024, Zen Ho
+Licensed under the MIT License. See LICENSE file in the root directory.
+GitHub: https://github.com/zendenho7
 *****************************************************************************************************************/
 
 // ================================================================================
