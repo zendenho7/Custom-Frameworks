@@ -60,6 +60,10 @@ void Drawables::D_Text::Custom_SetString(std::string const& txt) {
 	Custom_UpdateOrigin();
 }
 
+void Drawables::D_Text::Custom_SetGlobalSize(sf::Vector2f const& size) {
+	setScale(size.x / getLocalBounds().getSize().x, size.y / getLocalBounds().getSize().y);
+}
+
 void Drawables::D_Text::Custom_Draw() const {
 	exEvents->window.draw(*this);
 }
@@ -629,6 +633,10 @@ void Drawables::D_Sprite::initD_Sprite(sf::Texture const& tex, sf::IntRect const
 
 	//Set Origin
 	Custom_SetOrigin(oPos);
+}
+
+void Drawables::D_Sprite::Custom_SetGlobalSize(sf::Vector2f const& size) {
+	setScale(size.x / getLocalBounds().getSize().x, size.y / getLocalBounds().getSize().y);
 }
 
 void Drawables::D_Sprite::Custom_Draw() const {

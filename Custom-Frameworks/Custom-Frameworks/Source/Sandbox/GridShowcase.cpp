@@ -77,7 +77,7 @@ void GridSC::State::Init() {
 	helperDropDown->addButtons("SAVE GRID", sf::Color::White, sf::Color::Black);
 	helperDropDown->addButtons("CLEAR SAVED", sf::Color::White, sf::Color::Black);
 	helperDropDown->addButtons("MAIN MENU", sf::Color::White, sf::Color::Black);
-	helperDropDown->arrangeButtons(sf::Vector2f(10.0f, 10.0f), 10.0f, 10.0f);
+	helperDropDown->arrangeButtons(sf::Vector2f(10.0f, 10.0f), 10.0f, 10.0f, Interface::DropDownArrangement::VERTICAL);
 }
 
 void GridSC::State::Update() {

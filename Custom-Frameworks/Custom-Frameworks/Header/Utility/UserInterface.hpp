@@ -173,13 +173,73 @@ namespace Interface {
 	};
 
 	// ================================================================================
-	// Class: DropDown
+	// Class: Dynamic Panel ( Capable Of Storing Buttons, Sprite & Text )
 	// ================================================================================
-	class Container {
-	private:
+	enum class PanelComponentTypes : sf::Uint8 {
+		SPRITE = 0,
+		TEXT,
+		BUTTON,
+		SEPERATOR
+	};
 
+	enum class PanelArrangment : sf::Uint8 {
+		VERTICAL = 0,
+		HORIZONTAL
+	};
+
+	class Panel {
+	private:
+		//Container For Panel
+		Drawables::D_RoundedRectangle container;
+
+		//Panel Key & Type Storage
+		std::vector<std::pair<std::string, std::pair<PanelComponentTypes, float>>> panelComponentsKey;
+
+		//Panel Sprite Storage
+		std::unordered_map<std::string, Drawables::D_Sprite> panelSprites;
+
+		//Panel Text Storage
+		std::unordered_map<std::string, Drawables::D_Text> panelTexts;
+
+		//Panel Button Storage
+		std::unordered_map<std::string, RectButton> panelButtons;
+
+		//Calculate Components Scale
+		sf::Vector2f calculateComponentsScale(sf::Vector2f const& targetSize, sf::Vector2f const& currSize);
 	public:
 
+		//Default Constructor
+		Panel() = default;
+
+		//Default Copy Constructor
+		Panel(Panel const& copy) = default;
+
+		//Default Copy Assignment
+		Panel& operator=(Panel const& copy) = default;
+
+		//Panel Constructor
+		Panel(sf::Color const& panelColor, sf::Vector2f const& panelSize, sf::Vector2f const& panelPos, float panelRounding = 0);
+
+		//Add Sprite Component
+		void addSpriteComponent(std::string const& identifier, float sizeRatio, sf::Texture const& tex, sf::IntRect const& spritePos, sf::Uint8 opacity);
+
+		//Add Text Component
+		void addTextComponent(std::string const& identifier, float sizeRatio, std::string const& txt, sf::Font const& font, sf::Color const& txtColor);
+
+		//Add Button Component
+		void addButtonComponent(std::string const& identifier, float sizeRatio, sf::Color const& btnColor, float buttonRounding, std::string const& btntxt, sf::Font const& font, sf::Color const& txtColor);
+
+		//Add Seperator Component
+		void addSeperatorComponent(std::string const& identifier, float sizeRatio);
+
+		//Arrange Panel Components
+		void arrangeComponents(sf::Vector2f const& padding, float spacebetweenComponents, PanelArrangment arrangementStyle = PanelArrangment::VERTICAL);
+
+		//Check If Button Is Clicked
+		bool isButtonClicked(std::string const& identifier);
+
+		//Draw Panel
+		void drawPanel();
 	};
 
 	// ================================================================================

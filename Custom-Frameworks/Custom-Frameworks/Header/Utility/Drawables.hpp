@@ -223,6 +223,9 @@ namespace Drawables {
 		//Custom Setting Of String
 		void Custom_SetString(std::string const& txt);
 
+		//Custom Setting Of GlobalBound Size ( Scaling To Desired Size )
+		void Custom_SetGlobalSize(sf::Vector2f const& size);
+
 		//Custom Draw Function
 		virtual void Custom_Draw() const override;
 
@@ -436,6 +439,9 @@ namespace Drawables {
 		/// <param name="opacity">: Opacity Of Sprite</param>
 		/// <param name="oPos">: Origin Of Sprite</param>
 		void initD_Sprite(sf::Texture const& tex, sf::IntRect const& spritePos, sf::Vector2f const& size, sf::Vector2f const& pos, float rotation = 0.0f, sf::Uint8 opacity = 255, Origin oPos = Origin::CENTER);
+
+		//Custom Setting Of GlobalBound Size ( Scaling To Desired Size )
+		void Custom_SetGlobalSize(sf::Vector2f const& size);
 
 		//Custom Draw Function
 		void Custom_Draw() const override;

@@ -21,38 +21,28 @@ void MainMenu::State::Load() {
 }
 
 void MainMenu::State::Init() {
-	//Main Menu Header Init
-	mmHeader = std::make_unique<Drawables::D_Text>("MAIN MENU", exAssets->getPrimaryFont(), sf::Color(0, 0, 0, 255), exEvents->windowCenter + sf::Vector2f(0.0f, -150.0f));
-	mmHeader->Custom_OffsetToCenter();
-	mmHeader->setScale(0.70f, 0.70f);
-	mmHeader->Custom_SetFixedScale();
-
-	//Animation Showcase Init
-	animationSS = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 75.0f), exEvents->windowCenter + sf::Vector2f(0.0f, -50.0f), 15.0f, 0.0f);
-	animationSS->initRectButtonText("ANIMATION SHOWCASE", exAssets->getPrimaryFont(), sf::Color::Black);
-
-	//GOL Showcase Init
-	golSS = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 75.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 50.0f), 15.0f, 0.0f);
-	golSS->initRectButtonText("GAMEOFLIFE SHOWCASE", exAssets->getPrimaryFont(), sf::Color::Black);
-
-	//Exit Button Init
-	exitBtn = std::make_unique<Interface::RectButton>(sf::Color::White, sf::Vector2f(250.0f, 75.0f), exEvents->windowCenter + sf::Vector2f(0.0f, 150.0f), 15.0f, 0.0f);
-	exitBtn->initRectButtonText("EXIT APPLICATION", exAssets->getPrimaryFont(), sf::Color::Black);
+	mainmenuPanel = std::make_unique<Interface::Panel>(sf::Color::Cyan, sf::Vector2f(500.0f, 500.0f), exEvents->windowCenter, 10.0f);
+	mainmenuPanel->addSpriteComponent("TESTSPRITE", 0.3f, exAssets->getTexture("SFML"), sf::IntRect(0, 0, 512, 512), 255);
+	mainmenuPanel->addTextComponent("HEADER", 0.1f, "MAIN MENU", exAssets->getPrimaryFont(), sf::Color(0, 0, 0, 255));
+	mainmenuPanel->addButtonComponent("ANIMATION", 0.2f, sf::Color::White, 10.0f, "ANIMATION SHOWCASE", exAssets->getPrimaryFont(), sf::Color::Black);
+	mainmenuPanel->addButtonComponent("GAME OF LIFE", 0.2f, sf::Color::White, 10.0f, "GAMEOFLIFE SHOWCASE", exAssets->getPrimaryFont(), sf::Color::Black);
+	mainmenuPanel->addButtonComponent("EXIT", 0.2f, sf::Color::White, 10.0f, "EXIT APPLICATION", exAssets->getPrimaryFont(), sf::Color::Black);
+	mainmenuPanel->arrangeComponents(sf::Vector2f(75.0f, 50.0f), 25.0f, Interface::PanelArrangment::VERTICAL);
 }
 
 void MainMenu::State::Update() {
 	//Animation Button
-	if (animationSS->isButtonClicked()) {
+	if (mainmenuPanel->isButtonClicked("ANIMATION")) {
 		exGSManager->changeState(GSManager::GSTypes::GS_ANIMATION_SC);
 	}
 
-	//GOL Button
-	if (golSS->isButtonClicked()) {
+	////GOL Button
+	if (mainmenuPanel->isButtonClicked("GAME OF LIFE")) {
 		exGSManager->changeState(GSManager::GSTypes::GS_GRID_SC);
 	}
 
-	//GOL Button
-	if (exitBtn->isButtonClicked()) {
+	////GOL Button
+	if (mainmenuPanel->isButtonClicked("EXIT")) {
 		exGSManager->exitGame();
 	}
 }
@@ -61,17 +51,8 @@ void MainMenu::State::Draw() {
 	//Clear Window
 	exEvents->window.clear({ 100, 100, 100, 255 });
 
-	//Draw Text
-	exEvents->window.draw(*mmHeader);
-
-	//Draw Button To Animation Showcase
-	animationSS->Custom_Draw();
-
-	//Draw Button To GOL Showcase
-	golSS->Custom_Draw();
-
-	//Draw Exit Button
-	exitBtn->Custom_Draw();
+	//Draw MainMenu Panel
+	mainmenuPanel->drawPanel();
 }
 
 void MainMenu::State::Free() {

@@ -28,10 +28,7 @@ namespace MainMenu {
     private:
 
         //Game Objects
-        std::unique_ptr<Drawables::D_Text> mmHeader;
-        std::unique_ptr <Interface::RectButton> animationSS;
-        std::unique_ptr <Interface::RectButton> golSS;
-        std::unique_ptr <Interface::RectButton> exitBtn;
+        std::unique_ptr <Interface::Panel> mainmenuPanel;
 
     public:
 
