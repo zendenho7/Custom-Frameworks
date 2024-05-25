@@ -192,6 +192,9 @@ namespace Interface {
 		//Container For Panel
 		Drawables::D_RoundedRectangle container;
 
+		//Components Area
+		sf::Vector2f componentsArea;
+
 		//Panel Key & Type Storage
 		std::vector<std::pair<std::string, std::pair<PanelComponentTypes, float>>> panelComponentsKey;
 
@@ -220,6 +223,9 @@ namespace Interface {
 		//Panel Constructor
 		Panel(sf::Color const& panelColor, sf::Vector2f const& panelSize, sf::Vector2f const& panelPos, float panelRounding = 0);
 
+		//Initialize Panel
+		void initPanel(sf::Color const& panelColor, sf::Vector2f const& panelSize, sf::Vector2f const& panelPos, float panelRounding = 0);
+
 		//Add Sprite Component
 		void addSpriteComponent(std::string const& identifier, float sizeRatio, sf::Texture const& tex, sf::IntRect const& spritePos, sf::Uint8 opacity);
 
@@ -238,8 +244,37 @@ namespace Interface {
 		//Check If Button Is Clicked
 		bool isButtonClicked(std::string const& identifier);
 
+		//Set Button Txt
+		void setButtonText(std::string const& identifier, std::string const& txt);
+
+		//Get Button Txt
+		std::string getButtonText(std::string const& identifier) const;
+
+		//Set Button Color
+		void setButtonColor(std::string const& identifier, sf::Color const& color);
+
+		//Get Button Color
+		sf::Color getButtonColor(std::string const& identifier) const;
+
+		//Set Text String
+		void setTextString(std::string const& identifier, std::string const& txt);
+
+		//Get Text String
+		std::string getTextString(std::string const& identifier) const;
+
+		//Set Text Color
+		void setTextColor(std::string const& identifier, sf::Color const& color);
+
+		//Get Text String
+		sf::Color getTextColor(std::string const& identifier) const;
+
 		//Draw Panel
 		void drawPanel();
+
+		//Data Serialization & Deserialization
+		virtual std::string serialize() const;
+		virtual void deserialize(std::string const& data);
+		virtual std::istringstream& deserialize(std::istringstream& stream);
 	};
 
 	// ================================================================================
