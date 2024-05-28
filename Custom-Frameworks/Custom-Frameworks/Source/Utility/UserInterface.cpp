@@ -279,23 +279,24 @@ sf::Vector2f Interface::Panel::calculateComponentsScale(sf::Vector2f const& targ
 }
 
 void Interface::Panel::addSpriteComponent(std::string const& identifier, float sizeRatio, sf::Texture const& tex, sf::IntRect const& spritePos, sf::Uint8 opacity) {
-	panelComponentsKey.emplace_back(std::pair<std::string, std::pair<PanelComponentTypes, float>>(identifier, { PanelComponentTypes::SPRITE, sizeRatio }));
-	panelSprites.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey[panelComponentsKey.size() - 1].first), std::forward_as_tuple(tex, spritePos, sf::Vector2f(), sf::Vector2f(),0.0f, opacity));
+	panelComponentsKey.emplace_back(std::pair<std::string, PanelComponentTypes>(identifier, PanelComponentTypes::SPRITE));
+	panelSprites.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey.at(panelComponentsKey.size() - 1).first), std::forward_as_tuple(std::pair<Drawables::D_Sprite, float>(Drawables::D_Sprite(tex, spritePos, sf::Vector2f(), sf::Vector2f(),0.0f, opacity), sizeRatio)));
 }
 
 void Interface::Panel::addTextComponent(std::string const& identifier, float sizeRatio, std::string const& txt, sf::Font const& font, sf::Color const& txtColor) {
-	panelComponentsKey.emplace_back(std::pair<std::string, std::pair<PanelComponentTypes, float>>(identifier, { PanelComponentTypes::TEXT, sizeRatio }));
-	panelTexts.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey[panelComponentsKey.size() - 1].first), std::forward_as_tuple(txt, font, txtColor, sf::Vector2f()));
+	panelComponentsKey.emplace_back(std::pair<std::string, PanelComponentTypes>(identifier, PanelComponentTypes::TEXT));
+	panelTexts.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey.at(panelComponentsKey.size() - 1).first), std::forward_as_tuple(std::pair<Drawables::D_Text, float>(Drawables::D_Text(txt, font, txtColor, sf::Vector2f()), sizeRatio)));
 }
 
 void Interface::Panel::addButtonComponent(std::string const& identifier, float sizeRatio, sf::Color const& btnColor, float buttonRounding, std::string const& btntxt, sf::Font const& font, sf::Color const& txtColor) {
-	panelComponentsKey.emplace_back(std::pair<std::string, std::pair<PanelComponentTypes, float>>(identifier, { PanelComponentTypes::BUTTON, sizeRatio }));
-	panelButtons.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey[panelComponentsKey.size() - 1].first), std::forward_as_tuple(btnColor, sf::Vector2f(buttonRounding * 2, buttonRounding * 2), sf::Vector2f(), buttonRounding));
-	panelButtons.at(panelComponentsKey[panelComponentsKey.size() - 1].first).initRectButtonText(btntxt, font, txtColor);
+	panelComponentsKey.emplace_back(std::pair<std::string, PanelComponentTypes>(identifier, PanelComponentTypes::BUTTON));
+	panelButtons.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey.at(panelComponentsKey.size() - 1).first), std::forward_as_tuple(std::pair<RectButton, float>(RectButton(btnColor, sf::Vector2f(buttonRounding * 2, buttonRounding * 2), sf::Vector2f(), buttonRounding), sizeRatio)));
+	panelButtons.at(panelComponentsKey.at(panelComponentsKey.size() - 1).first).first.initRectButtonText(btntxt, font, txtColor);
 }
 
 void Interface::Panel::addSeperatorComponent(std::string const& identifier, float sizeRatio) {
-	panelComponentsKey.emplace_back(std::pair<std::string, std::pair<PanelComponentTypes, float>>(identifier, { PanelComponentTypes::SEPERATOR, sizeRatio }));
+	panelComponentsKey.emplace_back(std::pair<std::string, PanelComponentTypes>(identifier, PanelComponentTypes::SEPERATOR));
+	panelSeparator.emplace(panelComponentsKey.at(panelComponentsKey.size() - 1).first, sizeRatio);
 }
 
 void Interface::Panel::arrangeComponents(sf::Vector2f const& padding, float spacebetweenComponents, PanelArrangment arrangementStyle) {
@@ -310,29 +311,29 @@ void Interface::Panel::arrangeComponents(sf::Vector2f const& padding, float spac
 		startpos = { container.Custom_GetOriginPosition().x, container.Custom_GetOriginPosition().y - (componentsArea.y / 2) };
 		componentsArea.y -= totalSpace;
 
-		for (std::pair<std::string, std::pair<PanelComponentTypes, float>> const& key : panelComponentsKey) {
-			switch (key.second.first) {
+		for (std::pair<std::string, PanelComponentTypes> const& key : panelComponentsKey) {
+			switch (key.second) {
 			case PanelComponentTypes::SPRITE:
-				panelSprites.at(key.first).setScale(calculateComponentsScale({ componentsArea.x, key.second.second * componentsArea.y }, panelSprites.at(key.first).getLocalBounds().getSize()));
-				panelSprites.at(key.first).setPosition(startpos + sf::Vector2f(0.0f, (key.second.second * componentsArea.y) / 2));
-				panelSprites.at(key.first).Custom_SetFixedScale();
-				(startpos.y += (key.second.second * componentsArea.y)) += spacebetweenComponents;
+				panelSprites.at(key.first).first.setScale(calculateComponentsScale({ componentsArea.x, panelSprites.at(key.first).second * componentsArea.y }, panelSprites.at(key.first).first.getLocalBounds().getSize()));
+				panelSprites.at(key.first).first.setPosition(startpos + sf::Vector2f(0.0f, (panelSprites.at(key.first).second * componentsArea.y) / 2));
+				panelSprites.at(key.first).first.Custom_SetFixedScale();
+				(startpos.y += (panelSprites.at(key.first).second * componentsArea.y)) += spacebetweenComponents;
 				break;
 			case PanelComponentTypes::TEXT:
-				panelTexts.at(key.first).setScale(calculateComponentsScale({ componentsArea.x, key.second.second * componentsArea.y }, panelTexts.at(key.first).getLocalBounds().getSize()));
-				panelTexts.at(key.first).setPosition(startpos + sf::Vector2f(0.0f, (key.second.second * componentsArea.y) / 2));
-				panelTexts.at(key.first).Custom_SetFixedScale();
-				panelTexts.at(key.first).Custom_OffsetToCenter();
-				(startpos.y += (key.second.second * componentsArea.y)) += spacebetweenComponents;
+				panelTexts.at(key.first).first.setScale(calculateComponentsScale({ componentsArea.x, panelTexts.at(key.first).second * componentsArea.y }, panelTexts.at(key.first).first.getLocalBounds().getSize()));
+				panelTexts.at(key.first).first.setPosition(startpos + sf::Vector2f(0.0f, (panelTexts.at(key.first).second * componentsArea.y) / 2));
+				panelTexts.at(key.first).first.Custom_SetFixedScale();
+				panelTexts.at(key.first).first.Custom_OffsetToCenter();
+				(startpos.y += (panelTexts.at(key.first).second * componentsArea.y)) += spacebetweenComponents;
 				break;
 			case PanelComponentTypes::BUTTON:
-				panelButtons.at(key.first).setSize({ componentsArea.x, key.second.second * componentsArea.y });
-				panelButtons.at(key.first).setPosition(startpos + sf::Vector2f(0.0f, (key.second.second * componentsArea.y) / 2));
-				panelButtons.at(key.first).setButtonRounding(panelButtons.at(key.first).getButtonRounding());
-				(startpos.y += (key.second.second * componentsArea.y)) += spacebetweenComponents;
+				panelButtons.at(key.first).first.setSize({ componentsArea.x, panelButtons.at(key.first).second * componentsArea.y });
+				panelButtons.at(key.first).first.setPosition(startpos + sf::Vector2f(0.0f, (panelButtons.at(key.first).second * componentsArea.y) / 2));
+				panelButtons.at(key.first).first.setButtonRounding(panelButtons.at(key.first).first.getButtonRounding());
+				(startpos.y += (panelButtons.at(key.first).second * componentsArea.y)) += spacebetweenComponents;
 				break;
 			case PanelComponentTypes::SEPERATOR:
-				(startpos.y += (key.second.second * componentsArea.y)) += spacebetweenComponents;
+				(startpos.y += (panelSeparator.at(key.first) * componentsArea.y)) += spacebetweenComponents;
 				break;
 			default:
 				break;
@@ -343,29 +344,29 @@ void Interface::Panel::arrangeComponents(sf::Vector2f const& padding, float spac
 		startpos = { container.Custom_GetOriginPosition().x - (componentsArea.x / 2), container.Custom_GetOriginPosition().y };
 		componentsArea.x -= totalSpace;
 
-		for (std::pair<std::string, std::pair<PanelComponentTypes, float>> const& key : panelComponentsKey) {
-			switch (key.second.first) {
+		for (std::pair<std::string, PanelComponentTypes> const& key : panelComponentsKey) {
+			switch (key.second) {
 			case PanelComponentTypes::SPRITE:
-				panelSprites.at(key.first).setScale(calculateComponentsScale({ key.second.second * componentsArea.x, componentsArea.y }, panelSprites.at(key.first).getLocalBounds().getSize()));
-				panelSprites.at(key.first).setPosition(startpos + sf::Vector2f((key.second.second * componentsArea.x) / 2, 0.0f));
-				panelSprites.at(key.first).Custom_SetFixedScale();
-				(startpos.x += (key.second.second * componentsArea.x)) += spacebetweenComponents;
+				panelSprites.at(key.first).first.setScale(calculateComponentsScale({ panelSprites.at(key.first).second * componentsArea.x, componentsArea.y }, panelSprites.at(key.first).first.getLocalBounds().getSize()));
+				panelSprites.at(key.first).first.setPosition(startpos + sf::Vector2f((panelSprites.at(key.first).second * componentsArea.x) / 2, 0.0f));
+				panelSprites.at(key.first).first.Custom_SetFixedScale();
+				(startpos.x += (panelSprites.at(key.first).second * componentsArea.x)) += spacebetweenComponents;
 				break;
 			case PanelComponentTypes::TEXT:
-				panelTexts.at(key.first).setScale(calculateComponentsScale({ key.second.second * componentsArea.x, componentsArea.y }, panelTexts.at(key.first).getLocalBounds().getSize()));
-				panelTexts.at(key.first).setPosition(startpos + sf::Vector2f((key.second.second * componentsArea.x) / 2, 0.0f));
-				panelTexts.at(key.first).Custom_SetFixedScale();
-				panelTexts.at(key.first).Custom_OffsetToCenter();
-				(startpos.x += (key.second.second * componentsArea.x)) += spacebetweenComponents;
+				panelTexts.at(key.first).first.setScale(calculateComponentsScale({ panelTexts.at(key.first).second * componentsArea.x, componentsArea.y }, panelTexts.at(key.first).first.getLocalBounds().getSize()));
+				panelTexts.at(key.first).first.setPosition(startpos + sf::Vector2f((panelTexts.at(key.first).second * componentsArea.x) / 2, 0.0f));
+				panelTexts.at(key.first).first.Custom_SetFixedScale();
+				panelTexts.at(key.first).first.Custom_OffsetToCenter();
+				(startpos.x += (panelTexts.at(key.first).second * componentsArea.x)) += spacebetweenComponents;
 				break;
 			case PanelComponentTypes::BUTTON:
-				panelButtons.at(key.first).setSize({ key.second.second * componentsArea.x, componentsArea.y });
-				panelButtons.at(key.first).setPosition(startpos + sf::Vector2f((key.second.second * componentsArea.x) / 2, 0.0f));
-				panelButtons.at(key.first).setButtonRounding(panelButtons.at(key.first).getButtonRounding());
-				(startpos.x += (key.second.second * componentsArea.x)) += spacebetweenComponents;
+				panelButtons.at(key.first).first.setSize({ panelButtons.at(key.first).second * componentsArea.x, componentsArea.y });
+				panelButtons.at(key.first).first.setPosition(startpos + sf::Vector2f((panelButtons.at(key.first).second * componentsArea.x) / 2, 0.0f));
+				panelButtons.at(key.first).first.setButtonRounding(panelButtons.at(key.first).first.getButtonRounding());
+				(startpos.x += (panelButtons.at(key.first).second * componentsArea.x)) += spacebetweenComponents;
 				break;
 			case PanelComponentTypes::SEPERATOR:
-				(startpos.x += (key.second.second * componentsArea.x)) += spacebetweenComponents;
+				(startpos.x += (panelSeparator.at(key.first) * componentsArea.x)) += spacebetweenComponents;
 				break;
 			default:
 				break;
@@ -378,39 +379,39 @@ void Interface::Panel::arrangeComponents(sf::Vector2f const& padding, float spac
 }
 
 bool Interface::Panel::isButtonClicked(std::string const& identifier) {
-	return panelButtons.at(identifier).isButtonClicked();
+	return panelButtons.at(identifier).first.isButtonClicked();
 }
 
 void Interface::Panel::setButtonText(std::string const& identifier, std::string const& txt) {
-	panelButtons.at(identifier).setText(txt);
+	panelButtons.at(identifier).first.setText(txt);
 }
 
 std::string Interface::Panel::getButtonText(std::string const& identifier) const {
-	return panelButtons.at(identifier).getText();
+	return panelButtons.at(identifier).first.getText();
 }
 
 void Interface::Panel::setButtonColor(std::string const& identifier, sf::Color const& color) {
-	panelButtons.at(identifier).setButtonColor(color);
+	panelButtons.at(identifier).first.setButtonColor(color);
 }
 
 sf::Color Interface::Panel::getButtonColor(std::string const& identifier) const {
-	return panelButtons.at(identifier).getButtonColor();
+	return panelButtons.at(identifier).first.getButtonColor();
 }
 
 void Interface::Panel::setTextString(std::string const& identifier, std::string const& txt) {
-	panelTexts.at(identifier).Custom_SetString(txt);
+	panelTexts.at(identifier).first.Custom_SetString(txt);
 }
 
 std::string Interface::Panel::getTextString(std::string const& identifier) const {
-	return panelTexts.at(identifier).getString();
+	return panelTexts.at(identifier).first.getString();
 }
 
 void Interface::Panel::setTextColor(std::string const& identifier, sf::Color const& color) {
-	panelTexts.at(identifier).setFillColor(color);
+	panelTexts.at(identifier).first.setFillColor(color);
 }
 
 sf::Color Interface::Panel::getTextColor(std::string const& identifier) const {
-	return panelTexts.at(identifier).getFillColor();
+	return panelTexts.at(identifier).first.getFillColor();
 }
 
 void Interface::Panel::drawPanel() {
@@ -419,16 +420,16 @@ void Interface::Panel::drawPanel() {
 	exEvents->window.draw(container);
 
 	//Draw All Components
-	for (std::pair<std::string, std::pair<PanelComponentTypes, float>> const& key : panelComponentsKey) {
-		switch (key.second.first) {
+	for (std::pair<std::string, PanelComponentTypes> const& key : panelComponentsKey) {
+		switch (key.second) {
 		case PanelComponentTypes::SPRITE:
-			panelSprites.at(key.first).Custom_Draw();
+			panelSprites.at(key.first).first.Custom_Draw();
 			break;
 		case PanelComponentTypes::TEXT:
-			panelTexts.at(key.first).Custom_Draw();
+			panelTexts.at(key.first).first.Custom_Draw();
 			break;
 		case PanelComponentTypes::BUTTON:
-			panelButtons.at(key.first).Custom_Draw();
+			panelButtons.at(key.first).first.Custom_Draw();
 			break;
 		case PanelComponentTypes::SEPERATOR:
 			break;
@@ -442,23 +443,24 @@ std::string Interface::Panel::serialize() const {
 	std::ostringstream oss;
 
 	//Output Stream From String
-	oss << container.serialize() << " " << componentsArea.x  << " " << componentsArea.y << " ";
+	oss << container.serialize() << " " << componentsArea.x  << " " << componentsArea.y << " " << panelComponentsKey.size() << " ";
 
 	//Serialize All Components
-	for (std::pair<std::string, std::pair<PanelComponentTypes, float>> const& key : panelComponentsKey) {
-		oss << key.first << " " << static_cast<int>(key.second.first) << " " << key.second.second << " ";
+	for (std::pair<std::string, PanelComponentTypes> const& key : panelComponentsKey) {
+		oss << key.first.size() << " " << key.first << " " << static_cast<int>(key.second) << " ";
 
-		switch (key.second.first) {
+		switch (key.second) {
 		case PanelComponentTypes::SPRITE:
-			oss << panelSprites.at(key.first).serialize() << " ";
+			oss << panelSprites.at(key.first).first.serialize() << " " << panelSprites.at(key.first).second << " ";
 			break;
 		case PanelComponentTypes::TEXT:
-			oss << panelTexts.at(key.first).serialize() << " ";
+			oss << panelTexts.at(key.first).first.serialize() << " " << panelTexts.at(key.first).second << " ";
 			break;
 		case PanelComponentTypes::BUTTON:
-			oss << panelButtons.at(key.first).serialize() << " ";
+			oss << panelButtons.at(key.first).first.serialize() << " " << panelButtons.at(key.first).second << " ";
 			break;
 		case PanelComponentTypes::SEPERATOR:
+			oss << panelSeparator.at(key.first) << " ";
 			break;
 		default:
 			break;
@@ -471,38 +473,54 @@ std::string Interface::Panel::serialize() const {
 void Interface::Panel::deserialize(std::string const& data) {
 	std::istringstream iss(data);
 
-	//Output Stream From String
-	container.deserialize(iss) >> componentsArea.x >> componentsArea.y;
-
 	//Temporary Variables
-	std::string identifier;
 	int Paneltype;
-	float ratio;
+	size_t size;
+
+	//Output Stream From String
+	container.deserialize(iss) >> componentsArea.x >> componentsArea.y >> size;
 
 	//Clear Containers
 	panelComponentsKey.clear();
 	panelSprites.clear();
 	panelTexts.clear();
 	panelButtons.clear();
+	panelSeparator.clear();
 
-	while (iss) {
-		iss >> identifier >> Paneltype >> ratio;
-		panelComponentsKey.emplace_back(std::pair<std::string, std::pair<PanelComponentTypes, float>>(identifier, { static_cast<PanelComponentTypes>(Paneltype), ratio }));
+	for (size_t i{ 0 }; i < size; i++) {
+
+		//Extracting String Identifier
+		size_t sizeofstr;
+		std::string identifier;
+
+		iss >> sizeofstr;
+		iss.seekg(1, std::ios::cur);
+
+		for (size_t j{ 0 }; j < sizeofstr; j++) {
+			char strchar;
+			iss.get(strchar);
+			identifier += strchar;
+		}
+
+		iss >> Paneltype;
+		panelComponentsKey.emplace_back(std::pair<std::string, PanelComponentTypes>(identifier, static_cast<PanelComponentTypes>(Paneltype)));
 		
-		switch (static_cast<PanelComponentTypes>(Paneltype)) {
+		switch (panelComponentsKey[panelComponentsKey.size() - 1].second) {
 		case PanelComponentTypes::SPRITE:
-			panelSprites.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey[panelComponentsKey.size() - 1].first), std::forward_as_tuple());
-			panelSprites.at(panelComponentsKey[panelComponentsKey.size() - 1].first).deserialize(iss);
+			panelSprites.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey.at(panelComponentsKey.size() - 1).first), std::forward_as_tuple(std::pair<Drawables::D_Sprite, float>()));
+			panelSprites.at(panelComponentsKey.at(panelComponentsKey.size() - 1).first).first.deserialize(iss) >> panelSprites.at(panelComponentsKey.at(panelComponentsKey.size() - 1).first).second;
 			break;
 		case PanelComponentTypes::TEXT:
-			panelTexts.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey[panelComponentsKey.size() - 1].first), std::forward_as_tuple());
-			panelTexts.at(panelComponentsKey[panelComponentsKey.size() - 1].first).deserialize(iss);
+			panelTexts.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey.at(panelComponentsKey.size() - 1).first), std::forward_as_tuple(std::pair<Drawables::D_Text, float>()));
+			panelTexts.at(panelComponentsKey.at(panelComponentsKey.size() - 1).first).first.deserialize(iss) >> panelTexts.at(panelComponentsKey.at(panelComponentsKey.size() - 1).first).second;
 			break;
 		case PanelComponentTypes::BUTTON:
-			panelButtons.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey[panelComponentsKey.size() - 1].first), std::forward_as_tuple());
-			panelButtons.at(panelComponentsKey[panelComponentsKey.size() - 1].first).deserialize(iss);
+			panelButtons.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey.at(panelComponentsKey.size() - 1).first), std::forward_as_tuple(std::pair<RectButton, float>()));
+			panelButtons.at(panelComponentsKey.at(panelComponentsKey.size() - 1).first).first.deserialize(iss) >> panelButtons.at(panelComponentsKey.at(panelComponentsKey.size() - 1).first).second;
 			break;
 		case PanelComponentTypes::SEPERATOR:
+			panelSeparator.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey.at(panelComponentsKey.size() - 1).first), std::forward_as_tuple());
+			iss >> panelSeparator.at(panelComponentsKey.at(panelComponentsKey.size() - 1).first);
 			break;
 		default:
 			break;
@@ -511,38 +529,53 @@ void Interface::Panel::deserialize(std::string const& data) {
 }
 
 std::istringstream& Interface::Panel::deserialize(std::istringstream& stream) {
-	//Output Stream From String
-	container.deserialize(stream) >> componentsArea.x >> componentsArea.y;
-
 	//Temporary Variables
-	std::string identifier;
 	int Paneltype;
-	float ratio;
+	size_t size;
+
+	//Output Stream From String
+	container.deserialize(stream) >> componentsArea.x >> componentsArea.y >> size;
 
 	//Clear Containers
 	panelComponentsKey.clear();
 	panelSprites.clear();
 	panelTexts.clear();
 	panelButtons.clear();
+	panelSeparator.clear();
 
-	while (stream) {
-		stream >> identifier >> Paneltype >> ratio;
-		panelComponentsKey.emplace_back(std::pair<std::string, std::pair<PanelComponentTypes, float>>(identifier, { static_cast<PanelComponentTypes>(Paneltype), ratio }));
+	for (size_t i{ 0 }; i < size; i++) {
 
-		switch (static_cast<PanelComponentTypes>(Paneltype)) {
+		//Extracting String Identifier
+		size_t sizeofstr;
+		std::string identifier;
+
+		stream >> sizeofstr;
+		stream.seekg(1, std::ios::cur);
+		for (size_t j{ 0 }; j < sizeofstr; j++) {
+			char strchar;
+			stream.get(strchar);
+			identifier += strchar;
+		}
+
+		stream >> Paneltype;
+		panelComponentsKey.emplace_back(std::pair<std::string, PanelComponentTypes>(identifier, static_cast<PanelComponentTypes>(Paneltype)));
+
+		switch (panelComponentsKey[panelComponentsKey.size() - 1].second) {
 		case PanelComponentTypes::SPRITE:
-			panelSprites.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey[panelComponentsKey.size() - 1].first), std::forward_as_tuple());
-			panelSprites.at(panelComponentsKey[panelComponentsKey.size() - 1].first).deserialize(stream);
+			panelSprites.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey.at(panelComponentsKey.size() - 1).first), std::forward_as_tuple(std::pair<Drawables::D_Sprite, float>()));
+			panelSprites.at(panelComponentsKey.at(panelComponentsKey.size() - 1).first).first.deserialize(stream) >> panelSprites.at(panelComponentsKey.at(panelComponentsKey.size() - 1).first).second;
 			break;
 		case PanelComponentTypes::TEXT:
-			panelTexts.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey[panelComponentsKey.size() - 1].first), std::forward_as_tuple());
-			panelTexts.at(panelComponentsKey[panelComponentsKey.size() - 1].first).deserialize(stream);
+			panelTexts.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey.at(panelComponentsKey.size() - 1).first), std::forward_as_tuple(std::pair<Drawables::D_Text, float>()));
+			panelTexts.at(panelComponentsKey.at(panelComponentsKey.size() - 1).first).first.deserialize(stream) >> panelTexts.at(panelComponentsKey.at(panelComponentsKey.size() - 1).first).second;
 			break;
 		case PanelComponentTypes::BUTTON:
-			panelButtons.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey[panelComponentsKey.size() - 1].first), std::forward_as_tuple());
-			panelButtons.at(panelComponentsKey[panelComponentsKey.size() - 1].first).deserialize(stream);
+			panelButtons.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey.at(panelComponentsKey.size() - 1).first), std::forward_as_tuple(std::pair<RectButton, float>()));
+			panelButtons.at(panelComponentsKey.at(panelComponentsKey.size() - 1).first).first.deserialize(stream) >> panelButtons.at(panelComponentsKey.at(panelComponentsKey.size() - 1).first).second;
 			break;
 		case PanelComponentTypes::SEPERATOR:
+			panelSeparator.emplace(std::piecewise_construct, std::forward_as_tuple(panelComponentsKey.at(panelComponentsKey.size() - 1).first), std::forward_as_tuple());
+			stream >> panelSeparator.at(panelComponentsKey.at(panelComponentsKey.size() - 1).first);
 			break;
 		default:
 			break;
@@ -738,10 +771,11 @@ std::string Interface::DropDown::serialize() const {
 	//Output Stream From String
 	oss << triggerButton.serialize() << " " << dropDownContainer.serialize() << " "
 		<< b_DropDownHidden << " " << b_MouseOverDropDown << " "
-		<< static_cast<int>(buttonType) << " " << static_cast<int>(alignmentStyle) << " ";
+		<< static_cast<int>(buttonType) << " " << static_cast<int>(alignmentStyle) << " "
+		<< dropDownButtonsKey.size() << " ";
 
 	for (std::string const& key : dropDownButtonsKey) {
-		oss << key << " " << dropDownButtons.at(key).serialize() << " ";
+		oss << key.size() << " " << key << " " << dropDownButtons.at(key).serialize() << " ";
 	}
 
 	return oss.str();
@@ -753,19 +787,37 @@ void Interface::DropDown::deserialize(std::string const& data) {
 	//Temporary Variables
 	int btntype;
 	int alignstyle;
+	size_t size;
 
 	//Output Stream From String
 	triggerButton.deserialize(iss);
 	dropDownContainer.deserialize(iss)
 		>> b_DropDownHidden >> b_MouseOverDropDown
-		>> btntype >> alignstyle;
+		>> btntype >> alignstyle >> size;
 
 	buttonType = static_cast<DropDownBtnType>(btntype);
 	alignmentStyle = static_cast<DropDownAlign>(alignstyle);
 
-	for (std::string& key : dropDownButtonsKey) {
-		iss >> key;
-		dropDownButtons.at(key).deserialize(iss);
+	dropDownButtonsKey.clear();
+	dropDownButtons.clear();
+
+	for (size_t i{ 0 }; i < size; i++) {
+		//Extracting String Identifier
+		size_t sizeofstr;
+		std::string identifier;
+		iss >> sizeofstr;
+
+		iss.seekg(1, std::ios::cur);
+
+		for (size_t j{ 0 }; j < sizeofstr; j++) {
+			char charstr;
+			iss.get(charstr);
+			identifier += charstr;
+		}
+
+		dropDownButtonsKey.emplace_back(identifier);
+		dropDownButtons.emplace(std::piecewise_construct, std::forward_as_tuple(dropDownButtonsKey.at(dropDownButtonsKey.size() - 1)), std::forward_as_tuple());
+		dropDownButtons.at(dropDownButtonsKey.at(dropDownButtonsKey.size() - 1)).deserialize(iss);
 	}
 }
 
@@ -773,19 +825,38 @@ std::istringstream& Interface::DropDown::deserialize(std::istringstream& stream)
 	//Temporary Variables
 	int btntype;
 	int alignstyle;
+	size_t size;
 
 	//Output Stream From String
 	triggerButton.deserialize(stream);
 	dropDownContainer.deserialize(stream)
 		>> b_DropDownHidden >> b_MouseOverDropDown
-		>> btntype >> alignstyle;
+		>> btntype >> alignstyle >> size;
 
 	buttonType = static_cast<DropDownBtnType>(btntype);
 	alignmentStyle = static_cast<DropDownAlign>(alignstyle);
 
-	for (std::string& key : dropDownButtonsKey) {
-		stream >> key;
-		dropDownButtons.at(key).deserialize(stream);
+	dropDownButtonsKey.clear();
+	dropDownButtons.clear();
+
+	for (size_t i{ 0 }; i < size; i++) {
+		//Extracting String Identifier
+		size_t sizeofstr;
+		std::string identifier;
+		stream >> sizeofstr;
+
+		for (size_t j{ 0 }; j < sizeofstr; j++) {
+
+			stream.seekg(1, std::ios::cur);
+
+			char charstr;
+			stream.get(charstr);
+			identifier += charstr;
+		}
+
+		dropDownButtonsKey.emplace_back(identifier);
+		dropDownButtons.emplace(std::piecewise_construct, std::forward_as_tuple(dropDownButtonsKey.at(dropDownButtonsKey.size() - 1)), std::forward_as_tuple());
+		dropDownButtons.at(dropDownButtonsKey.at(dropDownButtonsKey.size() - 1)).deserialize(stream);
 	}
 
 	return stream;

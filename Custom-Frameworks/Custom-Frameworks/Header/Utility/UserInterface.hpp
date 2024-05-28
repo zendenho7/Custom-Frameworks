@@ -196,16 +196,19 @@ namespace Interface {
 		sf::Vector2f componentsArea;
 
 		//Panel Key & Type Storage
-		std::vector<std::pair<std::string, std::pair<PanelComponentTypes, float>>> panelComponentsKey;
+		std::vector<std::pair<std::string, PanelComponentTypes>> panelComponentsKey;
 
 		//Panel Sprite Storage
-		std::unordered_map<std::string, Drawables::D_Sprite> panelSprites;
+		std::unordered_map<std::string, std::pair<Drawables::D_Sprite, float>> panelSprites;
 
 		//Panel Text Storage
-		std::unordered_map<std::string, Drawables::D_Text> panelTexts;
+		std::unordered_map<std::string, std::pair<Drawables::D_Text, float>> panelTexts;
 
 		//Panel Button Storage
-		std::unordered_map<std::string, RectButton> panelButtons;
+		std::unordered_map<std::string, std::pair<RectButton, float>> panelButtons;
+
+		//Panel Space Storage
+		std::unordered_map<std::string, float> panelSeparator;
 
 		//Calculate Components Scale
 		sf::Vector2f calculateComponentsScale(sf::Vector2f const& targetSize, sf::Vector2f const& currSize);

@@ -185,7 +185,7 @@ namespace Drawables {
 
 	public:
 		//Default Constructor
-		D_Text() = default;
+		D_Text();
 
 		/// <summary>
 		/// Constructor For D_Text

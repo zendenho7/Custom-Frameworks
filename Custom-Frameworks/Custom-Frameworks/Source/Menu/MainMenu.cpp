@@ -36,12 +36,12 @@ void MainMenu::State::Update() {
 		exGSManager->changeState(GSManager::GSTypes::GS_ANIMATION_SC);
 	}
 
-	////GOL Button
+	//GOL Button
 	if (mainmenuPanel->isButtonClicked("GAME OF LIFE")) {
 		exGSManager->changeState(GSManager::GSTypes::GS_GRID_SC);
 	}
 
-	////GOL Button
+	//GOL Button
 	if (mainmenuPanel->isButtonClicked("EXIT")) {
 		exGSManager->exitGame();
 	}

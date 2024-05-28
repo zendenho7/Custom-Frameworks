@@ -21,6 +21,13 @@ GitHub: https://github.com/zendenho7
 // Class: Text Drawable
 // ================================================================================
 
+Drawables::D_Text::D_Text() 
+	: D_Base<sf::Text>()
+{ 
+	setFont(exAssets->getPrimaryFont()); 
+	setCharacterSize(Drawables::DEF_CHAR_SIZE);
+}
+
 Drawables::D_Text::D_Text(std::string const& txt, sf::Font const& font, sf::Color const& color, sf::Vector2f const& pos, sf::Uint8 charSize, float rotation, Origin oPos)
 	: D_Base<sf::Text>()
 {
@@ -72,7 +79,7 @@ std::string Drawables::D_Text::serialize() const {
 	std::ostringstream oss;
 
 	//Output Stream From String
-	oss << D_Base<sf::Text>::serialize() << " " << static_cast<std::string>(getString()) << " " << getCharacterSize() << " "
+	oss << D_Base<sf::Text>::serialize() << " " << getString().getSize() << " " << static_cast<std::string>(getString()) << " " << getCharacterSize() << " "
 		<< getFillColor().r << " " << getFillColor().g << " " << getFillColor().b << " " << getFillColor().a << " "
 		<< getPosition().x << " " << getPosition().y << " " << getRotation() << " " << static_cast<int>(Custom_GetOrigin()) << " "
 		<< getLetterSpacing() << " " << getLineSpacing() << " " << getOutlineThickness() << " "
@@ -86,8 +93,8 @@ void Drawables::D_Text::deserialize(std::string const& data) {
 	std::istringstream iss(data);
 
 	//Temporary Variables
-	;
-	std::string str;
+	size_t sizeofstr;
+	sf::String str;
 	unsigned int charSize;
 	sf::Color color;
 	sf::Vector2f pos;
@@ -101,12 +108,19 @@ void Drawables::D_Text::deserialize(std::string const& data) {
 	sf::Uint32 style;
 
 	//Input Stream From String
-	D_Base<sf::Text>::deserialize(iss) >> str >> charSize >> color.r >> color.g >> color.b >> color.a
-		>> pos.x >> pos.y >> rotation >> oPos >> letterspacing >> linespacing >> outlinethickness
-		>> outlinecolor.r >> outlinecolor.g >> outlinecolor.b >> outlinecolor.a >> scale.x >> scale.y
-		>> style;
+	D_Base<sf::Text>::deserialize(iss) >> sizeofstr;
+	iss.seekg(1, std::ios::cur);
+	for (size_t i{ 0 }; i < sizeofstr; i++) {
+		char strchar;
+		iss.get(strchar);
+		str += strchar;
+	}
 
-	setFont(getFont() ? *getFont() : exAssets->getPrimaryFont());
+	iss >> charSize >> color.r >> color.g >> color.b >> color.a
+	>> pos.x >> pos.y >> rotation >> oPos >> letterspacing >> linespacing >> outlinethickness
+	>> outlinecolor.r >> outlinecolor.g >> outlinecolor.b >> outlinecolor.a >> scale.x >> scale.y
+	>> style;
+
 	setString(str);
 	setCharacterSize(charSize);
 	setFillColor(color);
@@ -125,8 +139,8 @@ void Drawables::D_Text::deserialize(std::string const& data) {
 
 std::istringstream& Drawables::D_Text::deserialize(std::istringstream& stream) {
 	//Temporary Variables
-	;
-	std::string str;
+	size_t sizeofstr;
+	sf::String str;
 	unsigned int charSize;
 	sf::Color color;
 	sf::Vector2f pos;
@@ -140,12 +154,19 @@ std::istringstream& Drawables::D_Text::deserialize(std::istringstream& stream) {
 	sf::Uint32 style;
 
 	//Input Stream From String
-	D_Base<sf::Text>::deserialize(stream) >> str >> charSize >> color.r >> color.g >> color.b >> color.a
+	D_Base<sf::Text>::deserialize(stream) >> sizeofstr;
+	stream.seekg(1, std::ios::cur);
+	for (size_t i{ 0 }; i < sizeofstr; i++) {
+		char strchar;
+		stream.get(strchar);
+		str += strchar;
+	}
+
+	stream >> charSize >> color.r >> color.g >> color.b >> color.a
 		>> pos.x >> pos.y >> rotation >> oPos >> letterspacing >> linespacing >> outlinethickness
 		>> outlinecolor.r >> outlinecolor.g >> outlinecolor.b >> outlinecolor.a >> scale.x >> scale.y
 		>> style;
 
-	setFont(getFont() ? *getFont() : exAssets->getPrimaryFont());
 	setString(str);
 	setCharacterSize(charSize);
 	setFillColor(color);
@@ -424,7 +445,6 @@ void Drawables::D_Rectangle::deserialize(std::string const& data) {
 	std::istringstream iss(data);
 
 	//Temporary Variables
-	;
 	sf::Color color;
 	sf::Vector2f size;
 	sf::Vector2f pos;
@@ -455,7 +475,6 @@ void Drawables::D_Rectangle::deserialize(std::string const& data) {
 
 std::istringstream& Drawables::D_Rectangle::deserialize(std::istringstream& stream) {
 	//Temporary Variables
-	;
 	sf::Color color;
 	sf::Vector2f size;
 	sf::Vector2f pos;

@@ -78,6 +78,8 @@ void GridSC::State::Init() {
 	helperDropDown->addButtons("CLEAR SAVED", sf::Color::White, sf::Color::Black);
 	helperDropDown->addButtons("MAIN MENU", sf::Color::White, sf::Color::Black);
 	helperDropDown->arrangeButtons(sf::Vector2f(10.0f, 10.0f), 10.0f, 10.0f, Interface::DropDownArrangement::VERTICAL);
+
+	helperDropDown->deserialize(helperDropDown->serialize());
 }
 
 void GridSC::State::Update() {
