@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Map.cpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This is the source file for Map objects defintions
 
@@ -264,7 +264,16 @@ void Map::Grid::setGridCellSize(sf::Vector2f const& cellsize) {
 }
 
 sf::Vector2f Map::Grid::getGridSize() const {
-	return gridSize;
+	return gridContainer.getGlobalBounds().getSize();
+}
+
+sf::Vector2f Map::Grid::getGridPos() const {
+	return gridContainer.getPosition();
+}
+
+void Map::Grid::setGridPos(sf::Vector2f const& pos) {
+	gridContainer.setPosition(pos);
+	reorganiseGrid();
 }
 
 sf::Vector2f Map::Grid::getGridBorder() const {

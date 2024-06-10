@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Animation.cpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This is the source file for Animation classes & object defintions
 

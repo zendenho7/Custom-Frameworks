@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Collision.cpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This is the source file for all collision systems definition
 

@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Animation.hpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This is the header file for Animation classes & object
 

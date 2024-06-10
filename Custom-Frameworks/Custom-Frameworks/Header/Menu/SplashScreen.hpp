@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         SplashScreen.hpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This is the header file of our SplashScreen game state
 

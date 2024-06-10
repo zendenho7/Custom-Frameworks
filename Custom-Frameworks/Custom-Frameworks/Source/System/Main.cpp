@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         main.cpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This file is the starting point of the application
 

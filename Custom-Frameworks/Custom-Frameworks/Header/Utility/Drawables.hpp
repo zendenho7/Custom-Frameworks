@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Drawables.hpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This is the header file for the drawables helper functions declarations
 

@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Load.cpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This file contains all the defintions of loading functionalities in the project
 

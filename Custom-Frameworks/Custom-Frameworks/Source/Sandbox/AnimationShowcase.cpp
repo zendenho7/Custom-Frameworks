@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         AnimationShowcase.cpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This file contains our Animation Showcase Definitions
 

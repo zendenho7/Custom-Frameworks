@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Utils.hpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This is the header file for this application's utility functions
 

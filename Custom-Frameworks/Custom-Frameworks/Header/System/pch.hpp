@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         pch.hpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This file includes all the external include header file
 

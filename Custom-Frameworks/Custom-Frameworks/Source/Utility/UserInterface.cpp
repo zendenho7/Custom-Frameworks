@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         UserInterface.cpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This is the source file for the defintion of user interface classes & objects
 

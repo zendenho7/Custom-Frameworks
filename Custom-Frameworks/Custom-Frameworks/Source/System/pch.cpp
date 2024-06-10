@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         pch.cpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This file is the point of compilation for all pch.hpp include file
 

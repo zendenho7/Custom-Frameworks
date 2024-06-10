@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         SplashScreen.cpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This file contains our SplashScreen game state
 

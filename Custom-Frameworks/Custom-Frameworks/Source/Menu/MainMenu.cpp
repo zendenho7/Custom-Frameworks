@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         MainMenu.cpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This file contains our main menu game state
 

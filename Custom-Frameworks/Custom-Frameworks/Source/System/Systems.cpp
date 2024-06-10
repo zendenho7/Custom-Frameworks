@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Systems.cpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This file contains the defintions of objects used to manage the application systems
 

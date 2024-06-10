@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         AnimationShowcase.hpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This is the header file of our Animation Showcase
 

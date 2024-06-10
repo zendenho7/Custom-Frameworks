@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Systems.hpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This file contains the declarations of objects used to manage the application systems
 

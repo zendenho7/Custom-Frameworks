@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Utils.cpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This file contains the definitions of utility functions
 

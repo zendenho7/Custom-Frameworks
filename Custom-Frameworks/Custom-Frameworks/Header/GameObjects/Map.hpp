@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         Map.hpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This is the header file for map objects declarations
 
@@ -126,6 +126,12 @@ namespace Map {
 
 		//Get Grid Size
 		sf::Vector2f getGridSize() const;
+
+		//Get Grid Pos
+		sf::Vector2f getGridPos() const;
+
+		//Set Grid Pos
+		void setGridPos(sf::Vector2f const& pos);
 
 		//Get Grid Border
 		sf::Vector2f getGridBorder() const;

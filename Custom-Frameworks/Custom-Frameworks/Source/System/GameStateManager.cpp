@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
 @file         GameStateManager.cpp
-@project      Custom Framworks
+@project      Custom Frameworks
 @author       Zen Ho
 @brief        This file manages all of the different gamestates in this application
 
